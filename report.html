@@ -540,7 +540,7 @@ html body #sirekapApp .kok-row{box-shadow:var(--sh)}
       <div class="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 class="font-display uppercase text-2xl font-bold tracking-wide text-brand-rose">Langkah 1 &middot; Kehadiran</h2>
-          <p class="text-sm text-neutral-400 mt-1">Pilih tanggal. Pemain yang main di hari itu (Sheet 6) otomatis tercatat hadir.</p>
+          <p class="text-sm text-neutral-400 mt-1">Pilih tanggal. Pemain yang main di hari itu otomatis tercatat hadir.</p>
         </div>
         <button onclick="mintaResetHariIni()" class="ghost-btn sm">Reset hari ini</button>
       </div>
@@ -556,8 +556,8 @@ html body #sirekapApp .kok-row{box-shadow:var(--sh)}
       </div>
 
       <div class="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-white/5 px-4 py-3">
-        <p id="sheet-status" class="text-xs text-neutral-300 min-h-[1rem] flex-1" aria-live="polite">Memuat data Sheet 6...</p>
-        <button onclick="muatUlangDariSheet()" class="ghost-btn sm">Muat dari Sheet 6</button>
+        <p id="sheet-status" class="text-xs text-neutral-300 min-h-[1rem] flex-1" aria-live="polite">Memuat data ...</p>
+        <button onclick="muatUlangDariSheet()" class="ghost-btn sm">Muat dari </button>
       </div>
 
       <div>
@@ -1969,7 +1969,7 @@ async function loadSheet6() {
         }
         sheetDays = days; sheetState = 'ok';
     } catch (e) {
-        console.warn('Sheet 6 gagal dimuat:', e);
+        console.warn(' gagal dimuat:', e);
         sheetState = 'error';
     }
 }
@@ -2031,7 +2031,7 @@ function ubahTanggal() {
     }
     const jalankan = () => { terapkanOtomatis(ymd, 'ganti'); renderAll(); simpanDataKeStorage(); simpanKokKeStorage(); };
     if (pristine()) { jalankan(); return; }
-    showConfirm('Ganti Tanggal', 'Kehadiran dan kok yang sudah Anda ubah akan diganti dengan data pertandingan tanggal ini dari Sheet 6. Lanjutkan?', jalankan, () => { inputTanggalSesi.value = tanggalAktif; });
+    showConfirm('Ganti Tanggal', 'Kehadiran dan kok yang sudah Anda ubah akan diganti dengan data pertandingan tanggal ini. Lanjutkan?', jalankan, () => { inputTanggalSesi.value = tanggalAktif; });
 }
 
 async function muatUlangDariSheet() {
@@ -2040,7 +2040,7 @@ async function muatUlangDariSheet() {
     if (sheetState !== 'ok') { renderAll(); return; }
     const jalankan = () => { terapkanOtomatis(ymd, 'gabung'); renderAll(); simpanDataKeStorage(); simpanKokKeStorage(); };
     if (pristine()) { jalankan(); return; }
-    showConfirm('Muat dari Sheet 6', 'Jumlah kok pemain yang ada di Sheet 6 akan ditimpa sesuai data terbaru. Pemain yang Anda tambah manual tetap dipertahankan.', jalankan);
+    showConfirm('Muat data', 'Jumlah kok pemain yang ada akan ditimpa sesuai data terbaru. Pemain yang Anda tambah manual tetap dipertahankan.', jalankan);
 }
 
 // =====================================================================
@@ -2050,15 +2050,15 @@ function updateSheetStatus() {
     const el = document.getElementById('sheet-status'); if (!el) return;
     const ymd = inputTanggalSesi.value;
     let t = '';
-    if (sheetState === 'loading') t = 'Memuat data Sheet 6...';
-    else if (sheetState === 'error') t = '<span class="text-rose-400">Sheet 6 gagal dimuat.</span> Pilih pemain secara manual atau tekan Muat dari Sheet 6.';
+    if (sheetState === 'loading') t = 'Memuat data...';
+    else if (sheetState === 'error') t = '<span class="text-rose-400">Gagal dimuat.</span> Pilih pemain secara manual atau tekan Muat.';
     else {
         const day = sheetDays.get(ymd);
-        if (!day) t = 'Belum ada pertandingan pada tanggal ini di Sheet 6. Pilih pemain dan isi kok secara manual.';
+        if (!day) t = 'Belum ada pertandingan pada tanggal ini. Pilih pemain dan isi kok secara manual.';
         else {
             const a = Object.keys(kokAuto);
             const tamu = a.filter(n => !canon(n));
-            t = `<span class="text-brand-rose font-semibold">${day.matches.length}</span> pertandingan di Sheet 6, ${a.length} pemain terbaca.` + (tamu.length ? ` Guest: ${esc(tamu.join(', '))}.` : '');
+            t = `<span class="text-brand-rose font-semibold">${day.matches.length}</span> pertandingan, ${a.length} pemain terbaca.` + (tamu.length ? ` Guest: ${esc(tamu.join(', '))}.` : '');
         }
     }
     if (rosterSource === 'fallback') t += ' <span class="text-amber-300">Roster Sheet1 gagal dimuat, memakai daftar cadangan tanpa foto.</span>';
@@ -2094,9 +2094,9 @@ function renderHadir() {
 
 function metaKok(n) {
     const a = kokAuto[n], v = kokVal[n] || 0;
-    if (a === undefined) return 'Tidak ada di Sheet 6, diisi manual';
-    if (v === a) return `Sheet 6: ${a} match`;
-    return `Sheet 6: ${a} match <span class="text-amber-300 font-semibold">diubah</span> <button type="button" data-act="reset" data-n="${esc(n)}" class="underline text-neutral-300 hover:text-white">kembalikan</button>`;
+    if (a === undefined) return 'Tidak ada data, diisi manual';
+    if (v === a) return `${a} match`;
+    return `${a} match <span class="text-amber-300 font-semibold">diubah</span> <button type="button" data-act="reset" data-n="${esc(n)}" class="underline text-neutral-300 hover:text-white">kembalikan</button>`;
 }
 function rowKokHTML(h) {
     const n = h.nama, v = kokVal[n] || 0;
@@ -2512,7 +2512,7 @@ function muatDataTersimpan() {
 // RESET, KONFIRMASI, SALIN WA
 // =====================================================================
 function mintaResetHariIni() {
-    showConfirm("Reset Hari Ini", "Kosongkan kehadiran, guest, dan kok, lalu muat ulang otomatis dari Sheet 6 untuk hari ini?", () => {
+    showConfirm("Reset Hari Ini", "Kosongkan kehadiran, guest, dan kok, lalu muat ulang otomatis untuk hari ini?", () => {
         if (idSesiEditing) { idSesiEditing = null; document.getElementById('banner-mode-edit').classList.add('hidden'); document.getElementById('text-btn-simpan').innerText = "Simpan transaksi ke riwayat"; }
         localStorage.removeItem(STORAGE_KEY + "_kok");
         hadir = []; kokVal = {}; kokAuto = {};

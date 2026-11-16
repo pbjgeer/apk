@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report | PB Jgeer</title>
+    <!-- Open Graph / WhatsApp Preview Meta Tags -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Input & Recap Pertandingan | PB Jgeer" />
+    <meta property="og:description" content="Portal input skor harian pertandingan ganda PB Jgeer. Mari ngesang dan bersenang-senang!" />
+    <meta property="og:url" content="https://amrylr.github.io/jgeerbadminton/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/amrylr/sirekapjgeer/d5ee3532961526eb61ee71dfd3696db33cdc10f6/LOGOJGEER.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="PB Jgeer Badminton" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { brand: { maroon: '#7A1020', rose: '#D6455D', dark: '#0B0B0B', card: '#161616' } },
+            fontFamily: { display: ['Oswald', 'sans-serif'], body: ['Inter', 'sans-serif'] },
+          },
+        },
+      };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
+    <style>
+    body { font-family: 'Inter', sans-serif; }
+    html { background: #0A0A0A; }
+    /* Layar loading seragam (logo PB Jgeer) */
+    #boot, #loadingOverlay { position: fixed; inset: 0; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.4rem; background: radial-gradient(40rem 30rem at 80% 0%, rgba(214,69,93,.35), transparent 65%), radial-gradient(40rem 30rem at 0% 100%, rgba(122,16,32,.7), transparent 65%), #0A0A0A; }
+    #boot { transition: opacity .45s ease, visibility .45s; }
+    #boot.done { opacity: 0; visibility: hidden; pointer-events: none; }
+    .bootlogo { position: relative; width: 8.5rem; height: 8.5rem; display: grid; place-items: center; }
+    .bootlogo:before { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 3px solid rgba(255,255,255,.08); border-top-color: #D6455D; border-right-color: #fbbf24; animation: bootspin 1.1s linear infinite; }
+    .bootlogo:after { content: ''; position: absolute; inset: -10px; border-radius: 50%; background: radial-gradient(circle, rgba(214,69,93,.35), transparent 68%); animation: bootglow 1.8s ease-in-out infinite; }
+    .bootlogo img { position: relative; z-index: 1; width: 5.6rem; height: 5.6rem; object-fit: contain; filter: drop-shadow(0 6px 14px rgba(0,0,0,.6)); animation: bootpulse 1.8s ease-in-out infinite; }
+    .boottxt { font: 600 .8rem Oswald, sans-serif; letter-spacing: .35em; text-transform: uppercase; color: #d4d4d8; animation: bootfade 1.8s ease-in-out infinite; }
+    @keyframes bootspin { to { transform: rotate(360deg); } }
+    @keyframes bootpulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.09); } }
+    @keyframes bootglow { 0%, 100% { opacity: .5; transform: scale(.95); } 50% { opacity: 1; transform: scale(1.08); } }
+    @keyframes bootfade { 0%, 100% { opacity: .45; } 50% { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) { .bootlogo:before, .bootlogo:after, .bootlogo img, .boottxt { animation: none !important; } }
+    input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    :root { --glass-line: rgba(255,255,255,.17); }
+    body { padding-bottom: 6.5rem; }
+    #toTop { bottom: calc(6rem + env(safe-area-inset-bottom)) !important; }
+    main { animation: popUp .38s cubic-bezier(.22,1,.36,1) both; }
+    @keyframes popUp { from { opacity: 0; transform: translateY(18px) scale(.985); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { main { animation: none; } }
+/* ===== DOCK NAVIGASI BAWAH (kaca) ===== */
+.dock{position:fixed;left:50%;bottom:calc(.75rem + env(safe-area-inset-bottom));z-index:60;transform:translateX(-50%);width:min(calc(100% - 1.5rem),34rem);display:flex;align-items:stretch;justify-content:space-between;gap:.15rem;padding:.4rem;border-radius:1.5rem;
+  background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.04)),rgba(18,8,11,.55);-webkit-backdrop-filter:blur(14px) saturate(170%);backdrop-filter:blur(14px) saturate(170%);border:1px solid rgba(255,255,255,.2);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 18px 40px -14px rgba(0,0,0,.85),0 6px 24px -10px rgba(122,16,32,.7);animation:dockIn .45s cubic-bezier(.22,1,.36,1) both}
+@keyframes dockIn{from{opacity:0;transform:translate(-50%,24px)}to{opacity:1;transform:translate(-50%,0)}}
+.dk{position:relative;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.25rem;padding:.5rem .1rem;border-radius:1.1rem;color:#b4b4bb;text-decoration:none;background:none;border:0;cursor:pointer;font:600 9.5px/1 Oswald,Inter,sans-serif;letter-spacing:.07em;text-transform:uppercase;-webkit-tap-highlight-color:transparent;transition:background .2s ease,color .2s ease,transform .15s ease,box-shadow .2s ease}
+.dk-ic{display:grid;place-items:center;width:1.5rem;height:1.5rem}
+.dk-ic svg{width:1.4rem;height:1.4rem;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.dk-ic img{width:1.55rem;height:1.55rem;object-fit:contain}
+.dk-lb{max-width:100%;overflow:hidden;white-space:nowrap}
+.dk:hover{color:#fff;background:rgba(255,255,255,.09)}.dk:active{transform:scale(.94)}
+.dk[aria-current="page"],.dk.on{color:#fff;background:linear-gradient(145deg,#8f1429,#D6455D);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 8px 18px -8px rgba(214,69,93,.9)}
+@media(min-width:640px){.dk{font-size:10.5px;padding:.55rem .1rem}}
+@media(max-width:380px){.dk{font-size:8.5px;letter-spacing:.02em}}
+@media(prefers-reduced-motion:reduce){.dock{animation:none!important}.dk{transition:none}}
+    /* Glassmorphism */
+    body::before { content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none; background:
+        radial-gradient(34rem 26rem at 90% -4%, rgba(214,69,93,.42), transparent 62%), radial-gradient(38rem 32rem at -10% 34%, rgba(122,16,32,.70), transparent 62%),
+        radial-gradient(30rem 24rem at 72% 58%, rgba(155,28,75,.30), transparent 64%), radial-gradient(34rem 26rem at 8% 100%, rgba(251,191,36,.14), transparent 64%),
+        radial-gradient(40rem 30rem at 105% 100%, rgba(122,16,32,.50), transparent 62%); }
+    main { position: relative; isolation: isolate; }
+    main::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background:
+        radial-gradient(26rem 22rem at 92% 6%, rgba(214,69,93,.45), transparent 65%), radial-gradient(28rem 24rem at 4% 22%, rgba(122,16,32,.75), transparent 65%),
+        radial-gradient(24rem 20rem at 96% 42%, rgba(155,28,75,.38), transparent 65%), radial-gradient(28rem 22rem at 2% 62%, rgba(251,191,36,.16), transparent 65%),
+        radial-gradient(28rem 24rem at 94% 80%, rgba(122,16,32,.70), transparent 65%); }
+    .glass-card, main .bg-brand-card { background: linear-gradient(145deg, rgba(255,255,255,.09), rgba(255,255,255,.03)); -webkit-backdrop-filter: blur(22px) saturate(180%); backdrop-filter: blur(22px) saturate(180%);
+        border: 1px solid var(--glass-line); box-shadow: inset 0 1px 0 rgba(255,255,255,.24), 0 24px 50px -26px rgba(0,0,0,.75); border-radius: 1.75rem; }
+    main .rounded-xl { border-radius: 1.25rem; } main .rounded-2xl { border-radius: 1.75rem; }
+    main .bg-black\/40, main .bg-black\/30 { background: rgba(255,255,255,.045); }
+    .page-hero { position: relative; overflow: hidden; max-width: 72rem; margin: 1.25rem max(.75rem, calc((100% - 72rem) / 2)) 0; border-radius: 2rem;
+        background: radial-gradient(28rem 14rem at 90% 0%, rgba(214,69,93,.38), transparent 70%), linear-gradient(135deg, rgba(122,16,32,.50), rgba(255,255,255,.06));
+        -webkit-backdrop-filter: blur(20px) saturate(160%); backdrop-filter: blur(20px) saturate(160%); border: 1px solid var(--glass-line); box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 30px 60px -35px rgba(122,16,32,.85); }
+    main h1 .text-brand-rose, main h2.grad { background: linear-gradient(90deg, #ff7f93, #fbbf24); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    main .h-1.w-20 { background: linear-gradient(90deg, #D6455D, #fbbf24); border-radius: 9999px; }
+    main select, main input[type="date"], main input[type="password"] { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.22); color-scheme: dark; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+    main select option { background: #1a0a0e; color: #fff; }
+    main [role="tablist"] { border-radius: 9999px; }
+    .tab-btn { transition: all .25s; border-radius: 9999px; }
+    .tab-btn[aria-selected="true"] { background: linear-gradient(135deg, rgba(122,16,32,.95), rgba(214,69,93,.75)); box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 8px 22px -8px rgba(214,69,93,.7); color: #fff; }
+    .tab-btn[aria-selected="false"] { color: #a3a3a3; } .tab-btn[aria-selected="false"]:hover { color: #fff; background: rgba(255,255,255,.06); }
+    .export-btn { border-radius: 9999px; padding: .6rem 1.2rem; font-family: 'Oswald', sans-serif; font-size: .85rem; font-weight: 600; letter-spacing: .1em; color: #fff; text-transform: uppercase;
+        background: linear-gradient(135deg, #7A1020, #D6455D); border: 1px solid rgba(255,255,255,.22); box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 12px 28px -14px rgba(214,69,93,.8); transition: background .2s, opacity .2s; }
+    .export-btn:hover:not(:disabled) { background: linear-gradient(135deg, #901529, #e85a72); } .export-btn:disabled { opacity: .5; cursor: wait; }
+    .ghost-btn { border-radius: 9999px; padding: .6rem 1.2rem; font-family: 'Oswald', sans-serif; font-size: .85rem; letter-spacing: .1em; text-transform: uppercase; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); transition: background .2s; }
+    .ghost-btn:hover { background: rgba(255,255,255,.16); }
+    .day-card { transition: transform .25s, border-color .25s; } .day-card:hover { transform: translateY(-3px); border-color: rgba(214,69,93,.6); }
+    #toTop { background: rgba(122,16,32,.55); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 10px 24px -10px rgba(0,0,0,.7); }
+    footer { -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); background: rgba(255,255,255,.03) !important; border-color: rgba(255,255,255,.08) !important; }
+    @media (prefers-reduced-motion: reduce) { .day-card:hover { transform: none; } }
+    .date-btn { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .1rem; border-radius: 1.25rem; color: #fff; cursor: pointer;
+        background: linear-gradient(145deg, rgba(255,255,255,.10), rgba(255,255,255,.03)); border: 1px solid rgba(255,255,255,.18); box-shadow: inset 0 1px 0 rgba(255,255,255,.22);
+        -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); transition: transform .2s, border-color .2s, background .2s; }
+    .date-btn:hover { transform: translateY(-2px); border-color: rgba(214,69,93,.6); }
+    .date-btn .dw, .date-btn .dm { font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: #d4d4d8; }
+    .date-btn b { font-family: 'Oswald', sans-serif; font-size: 1.9rem; line-height: 1; font-weight: 700; }
+    .date-btn i { font-style: normal; font-size: .6rem; margin-top: .2rem; padding: .05rem .5rem; border-radius: 9999px; background: rgba(214,69,93,.3); color: #ffd7de; }
+    .date-btn.active { background: linear-gradient(145deg, rgba(122,16,32,.95), rgba(214,69,93,.75)); border-color: rgba(255,255,255,.5); box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 12px 28px -10px rgba(214,69,93,.8); }
+    .date-btn.active i { background: rgba(255,255,255,.25); color: #fff; }
+</style>
+<!-- TEMA-TERANG -->
+<meta name="theme-color" content="#FFF8F5">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style id="tema-terang">
+/* ============================================================
+   TEMA TERANG • CERIA • MODERN (selaras dengan halaman turnamen)
+   ============================================================ */
+:root{--ink:#2B1B22;--mut:#85727B;--bg:#FFF8F5;--rose:#E4405F;--coral:#FF7A59;--gold:#F5A524;--mint:#16A34A;--line:rgba(43,27,34,.09);
+  --sh:0 1px 2px rgba(43,27,34,.05),0 14px 34px -16px rgba(214,69,93,.28);--sh2:0 2px 4px rgba(43,27,34,.06),0 22px 44px -18px rgba(214,69,93,.42);--grad:linear-gradient(135deg,#E4405F,#FF7A59);--glass-line:rgba(43,27,34,.09)}
+html,html body{background:var(--bg)!important}
+html body.text-white,html body{color:var(--ink)!important}
+html{scroll-behavior:smooth}
+html body{font-family:'Plus Jakarta Sans',Inter,system-ui,sans-serif!important;-webkit-font-smoothing:antialiased}
+html body::before{background:radial-gradient(34rem 26rem at 92% -6%,rgba(255,122,89,.24),transparent 62%),radial-gradient(34rem 30rem at -8% 30%,rgba(228,64,95,.13),transparent 62%),radial-gradient(30rem 24rem at 100% 70%,rgba(43,168,224,.11),transparent 64%),radial-gradient(32rem 26rem at 4% 102%,rgba(245,165,36,.18),transparent 64%)!important}
+html body main::before{background:none!important}
+/* Tipografi */
+html body .font-display,html body .font-display *{font-family:'Plus Jakarta Sans',Inter,sans-serif!important}
+html body .font-display{font-weight:700}
+html body :is(h1,h2,h3,h4).font-display{text-transform:none!important;letter-spacing:-.02em!important;font-weight:800}
+html body h1.font-display{letter-spacing:-.03em!important}
+html body .tracking-widest{letter-spacing:.14em}
+html body .tracking-\[0\.25em\],html body .tracking-\[0\.2em\]{letter-spacing:.2em}
+/* Warna teks */
+html body .text-white,html body .text-neutral-100{color:var(--ink)!important}
+html body .text-neutral-200,html body .text-zinc-200{color:#3F2D35!important}
+html body .text-neutral-300{color:#5E4B54!important}
+html body .text-neutral-400{color:var(--mut)!important}
+html body .text-neutral-500{color:#A8959E!important}
+html body .text-brand-rose,html body .hover\:text-brand-rose:hover{color:var(--rose)!important}
+html body .text-rose-500{color:#E11D48!important}
+html body .text-green-400,html body .text-emerald-400{color:#16A34A!important}
+html body .text-sky-400{color:#0284C7!important}
+html body .text-amber-400{color:#D97706!important}
+html body .text-amber-300{color:#B45309!important}
+html body .text-orange-300{color:#EA580C!important}
+html body .text-amber-100{color:#9A3412!important}
+html body .hover\:text-white:hover{color:var(--rose)!important}
+html body a.text-black,html body .text-black{color:#2B1B22!important}
+html body :is(h1,h2) .text-brand-rose{background:linear-gradient(90deg,#E4405F,#F5841F)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important}
+html body .info-strip .font-display.text-brand-rose{background:linear-gradient(90deg,#E4405F,#F5841F)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important}
+/* Kartu & permukaan */
+html body .bg-brand-dark,html body .bg-neutral-900{background-color:var(--bg)!important}
+html body .glass-card,html body main .bg-brand-card,html body .bg-brand-card{background:#fff!important;border:1px solid var(--line)!important;box-shadow:var(--sh)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html body main .rounded-2xl{border-radius:1.5rem}html body main .rounded-xl{border-radius:1.2rem}
+html body main a.bg-brand-card{transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .25s}
+html body main a.bg-brand-card:hover{transform:translateY(-4px);box-shadow:var(--sh2)!important;border-color:rgba(228,64,95,.45)!important;background:#fff!important}
+html body .bg-white\/5{background:#FFF3F0!important}
+html body .bg-white\/10{background:#FCE9EC!important}
+html body .bg-white\/15{background:#FBDDE3!important}
+html body .hover\:bg-white\/5:hover{background:#FFF1F3!important}
+html body .hover\:bg-white\/20:hover{background:#FBDDE3!important}
+html body :is(.bg-black\/30,.bg-black\/40,.bg-black\/50,.bg-black\/60){background:#FFF3F0!important}
+html body main :is(.bg-black\/30,.bg-black\/40,.bg-black\/50,.bg-black\/60){background:#FFF3F0!important}
+html body .fixed.inset-0.bg-black\/80{background:rgba(43,27,34,.55)!important}
+html body .bg-black\/80:not(.fixed){background:#F1E6E9!important}
+html body .bg-\[\#140a0d\]\/90{background:rgba(255,255,255,.92)!important}
+html body .bg-black{background-color:#F6ECEE}
+html body .aspect-video.bg-black,html body .aspect-\[4\/5\].bg-black,html body figure .bg-black{background-color:#000!important}
+html body :is(.border-white\/5,.border-white\/10,.border-white\/15,.border-white\/20,.border-white\/40){border-color:rgba(43,27,34,.1)!important}
+html body :is(input,select,textarea).border-white\/20,html body :is(input,select,textarea).border-white\/5{border-color:rgba(43,27,34,.16)!important}
+html body .divide-white\/5>:not([hidden])~:not([hidden]){border-color:rgba(43,27,34,.08)!important}
+html body .border-brand-maroon,html body .border-brand-maroon\/60{border-color:rgba(228,64,95,.28)!important}
+html body .border-t.border-brand-maroon\/60{border-color:var(--line)!important}
+html body :is(.hover\:border-brand-rose,.group:hover .group-hover\:border-brand-rose):hover,html body .group:hover .group-hover\:border-brand-rose{border-color:var(--rose)!important}
+html body .hover\:bg-brand-maroon\/50:hover{background:#FFE9EE!important}
+html body .bg-brand-maroon{background-image:var(--grad)!important;background-color:var(--rose)!important;border-color:transparent!important}
+html body main a.bg-brand-maroon{background:var(--grad)!important;border:0!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:0 22px 40px -20px rgba(228,64,95,.75)!important}
+html body .hover\:bg-brand-rose:hover{background-image:linear-gradient(135deg,#C81E45,#F2506B)!important}
+html body .bg-green-600{background:linear-gradient(135deg,#22C55E,#16A34A)!important;box-shadow:0 8px 16px -8px rgba(22,163,74,.8)!important}
+html body .hover\:bg-green-500:hover{filter:brightness(1.08)}
+html body .hover\:bg-black:hover{background:#FFF8F5!important}
+html body .bg-gradient-to-b.from-brand-maroon\/20{background-image:none!important}
+html body .bg-gradient-to-b.from-black\/30{background-image:linear-gradient(180deg,#FFF8F5,#FFEDEF)!important}
+html body .bg-gradient-to-r.from-amber-400{background-image:linear-gradient(90deg,#FBBF24,#FF9F43)!important}
+/* Input */
+html body main :is(select,input[type="date"],input[type="password"],input[type="text"],input[type="number"],textarea),html body :is(select,input[type="date"],input[type="password"],input[type="number"]){background:#FFFBF9!important;color:var(--ink)!important;border:1.5px solid rgba(43,27,34,.14)!important;color-scheme:light!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;transition:border-color .2s,box-shadow .2s,background .2s}
+html body :is(select,input,textarea):focus{outline:0!important;border-color:var(--rose)!important;background:#fff!important;box-shadow:0 0 0 4px rgba(228,64,95,.14)!important}
+html body input[readonly]{background:#F6ECEE!important}
+html body ::placeholder{color:#B8A8AF!important}
+html body select option,html body main select option{background:#fff!important;color:var(--ink)!important}
+html body input[type="checkbox"],html body input[type="range"]{accent-color:var(--rose)}
+/* Tombol umum */
+html body .export-btn,html body main .export-btn{background:var(--grad)!important;border:0!important;color:#fff!important;font-family:'Plus Jakarta Sans',sans-serif!important;font-weight:700!important;letter-spacing:.04em!important;box-shadow:0 12px 24px -12px rgba(228,64,95,.9)!important;transition:transform .18s cubic-bezier(.22,1,.36,1),box-shadow .2s,filter .2s!important}
+html body .export-btn:hover:not(:disabled){transform:translateY(-2px);filter:saturate(1.15);box-shadow:0 16px 28px -12px rgba(228,64,95,.95)!important;background:var(--grad)!important}
+html body .export-btn:active{transform:scale(.97)}
+html body :is(.ghost-btn,.ghost-pill){background:#fff!important;color:var(--ink)!important;border:1px solid rgba(43,27,34,.13)!important;font-family:'Plus Jakarta Sans',sans-serif!important;font-weight:700!important;letter-spacing:.03em!important;box-shadow:0 1px 2px rgba(43,27,34,.06);transition:transform .18s,box-shadow .2s,border-color .2s,color .2s!important}
+html body :is(.ghost-btn,.ghost-pill):hover{transform:translateY(-2px);border-color:rgba(228,64,95,.45)!important;color:var(--rose)!important;box-shadow:0 10px 20px -10px rgba(214,69,93,.5)}
+html body :is(a,button):not(.dk):not(.tab-btn):active{transition:transform .1s}
+html body button:not(.dk):not(.tab-btn):not([disabled]):active,html body a.rounded-full:active{transform:scale(.97)}
+/* Tab */
+html body .tab-btn{font-family:'Plus Jakarta Sans',sans-serif!important;font-weight:700;transition:background .25s,color .25s,box-shadow .25s,transform .15s}
+html body .tab-btn[aria-selected="false"]{color:var(--mut)!important;background:transparent!important}
+html body .tab-btn[aria-selected="false"]:hover{color:var(--rose)!important;background:#FFF1F3!important}
+html body .tab-btn[aria-selected="true"],html body main .tab-btn[aria-selected="true"]{background:var(--grad)!important;color:#fff!important;box-shadow:0 8px 18px -8px rgba(228,64,95,.9)!important}
+html body [role="tablist"]{background:#fff!important;border:1px solid var(--line)!important;box-shadow:var(--sh)}
+/* Hero & banner */
+html body .hero{position:relative;box-shadow:0 28px 50px -26px rgba(214,69,93,.7)}
+html body .hero .bg-gradient-to-b{background-image:linear-gradient(120deg,rgba(200,30,69,.9),rgba(228,64,95,.82) 50%,rgba(249,115,82,.76))!important}
+html body .hero:after{content:'🏸';position:absolute;z-index:1;right:1.4rem;bottom:2.2rem;font-size:3.4rem;line-height:1;transform-origin:50% 100%;animation:lbird 3.4s ease-in-out infinite;filter:drop-shadow(0 8px 10px rgba(120,10,30,.35));pointer-events:none}
+html body .hero .glass-card{background:rgba(255,255,255,.2)!important;border:1px solid rgba(255,255,255,.4)!important;-webkit-backdrop-filter:blur(10px)!important;backdrop-filter:blur(10px)!important;box-shadow:0 20px 40px -22px rgba(120,10,30,.6)!important}
+html body .hero a.border-white\/40{border-color:rgba(255,255,255,.7)!important}
+html body .hero a.border-white\/40:hover{background:rgba(255,255,255,.2);color:#fff!important}
+html body .hero .border-brand-rose\/70{border-color:rgba(255,255,255,.6)!important}
+html body .hero a.bg-brand-maroon{background:#fff!important;color:#B3203A!important;border:0!important;box-shadow:0 14px 26px -12px rgba(120,10,30,.7)!important}
+html body .hero a.bg-brand-maroon:hover{background:#FFF1F3!important;transform:translateY(-2px)}
+html body .page-hero{background:linear-gradient(120deg,#C81E45 0%,#E4405F 48%,#F97352 100%)!important;border:0!important;box-shadow:0 28px 50px -26px rgba(214,69,93,.7)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html body .page-hero>*{position:relative;z-index:1}
+html body .page-hero:before{content:'';position:absolute;z-index:0;right:-4rem;top:-6rem;width:15rem;height:15rem;border-radius:50%;background:rgba(255,255,255,.17);animation:lflo 7s ease-in-out infinite;pointer-events:none}
+html body .page-hero :is(.h-1,.h-1.w-20){background:rgba(255,255,255,.55)!important}
+@keyframes lflo{50%{transform:translate(-10px,14px)}}
+@keyframes lbird{0%,100%{transform:rotate(-14deg) translateY(0)}50%{transform:rotate(10deg) translateY(-10px)}}
+html body .info-strip{background:#fff!important;border:1px solid var(--line)!important;box-shadow:var(--sh)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html body .ev-hero{background:linear-gradient(120deg,#C81E45,#E4405F 55%,#F97352)!important;border:0!important;box-shadow:0 30px 50px -28px rgba(214,69,93,.8)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html body .ev-overlay{background:radial-gradient(24rem 14rem at 100% 0%,rgba(255,255,255,.2),transparent 70%),radial-gradient(20rem 12rem at 0% 100%,rgba(255,214,102,.28),transparent 70%)!important}
+html body .ev-chip,html body .hof-badge{background:rgba(255,255,255,.22)!important;border:1px solid rgba(255,255,255,.5)!important;font-family:'Plus Jakarta Sans',sans-serif!important;font-weight:700;letter-spacing:.14em!important}
+html body .ev-tile{background:rgba(255,255,255,.2)!important;border:1px solid rgba(255,255,255,.4)!important;transition:transform .25s cubic-bezier(.22,1,.36,1)}html body .ev-tile:hover{transform:translateY(-4px)}
+html body .ev-tile b{font-family:'Plus Jakarta Sans',sans-serif!important;font-weight:800;font-variant-numeric:tabular-nums}
+html body .hero .font-display.text-brand-rose{color:#FFE29A!important}
+/* Roster */
+html body .player-card{transition:transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s,border-color .3s}
+html body .player-card:hover{border-color:var(--rose)!important;box-shadow:var(--sh2)!important;transform:translateY(-6px)}
+html body .player-card>div.h-20{background:linear-gradient(135deg,#E4405F,#FF7A59 62%,#F5A524 150%)!important}
+html body .pl-ring{background:linear-gradient(145deg,#FF7A59,#E4405F 55%,#F5A524)!important}
+html body .pl-ring img{border-color:#fff!important;background:#FDE4E8!important}
+/* Leaderboard */
+html body .pod{background:linear-gradient(180deg,var(--bg),#fff 88%)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border:1.5px solid var(--c)!important;box-shadow:0 18px 34px -20px var(--c)!important;transition:transform .3s cubic-bezier(.22,1,.36,1)}
+html body .pod:hover{transform:translateY(-6px)}
+html body .pod-1{--c:#F5A524;--bg:rgba(245,165,36,.26)}html body .pod-2{--c:#94A3B8;--bg:rgba(148,163,184,.22)}html body .pod-3{--c:#D9803A;--bg:rgba(217,128,58,.2)}
+html body .pod-img{background:#fff!important}
+html body .pod-medal{filter:drop-shadow(0 4px 6px rgba(43,27,34,.25))}
+html body .pod-name{font-family:'Plus Jakarta Sans',sans-serif!important;font-weight:800;letter-spacing:0;color:var(--ink)}
+html body .pod-score{font-family:'Plus Jakarta Sans',sans-serif!important;font-weight:800;color:color-mix(in srgb,var(--c) 68%,#000)}
+html body .pod-label{color:#A8959E}html body .pod-meta{color:var(--mut)}html body .pod-meta .g{color:#16A34A}html body .pod-meta .r{color:#E11D48}
+html body [id^="pod-"]{background-image:none!important}
+html body .lb-row:hover{background:#FFF3F0!important}
+html body .lb-row:hover td:first-child{box-shadow:inset 3px 0 0 var(--rose)}
+html body .rank-pill{background:#FFE9EE!important;box-shadow:none!important;color:var(--rose)!important;font-family:'Plus Jakarta Sans',sans-serif!important;font-weight:800}
+html body .lb-row td .font-display,html body .lb-row td.font-display{font-family:'Plus Jakarta Sans',sans-serif!important}
+html body .lb-row td .font-display.uppercase{text-transform:none;letter-spacing:0}
+/* SOP & FAQ */
+html body details{transition:box-shadow .25s,border-color .25s}
+html body details[open]{box-shadow:var(--sh2)!important}
+html body details>summary:focus-visible{outline-color:var(--rose)!important}
+html body .doc-body strong.text-white{color:var(--ink)!important;font-weight:800}
+/* Galeri / Hall of Fame */
+html body .hof-card{box-shadow:0 24px 40px -24px rgba(43,27,34,.55)!important;border:0!important}
+html body .hof-card:hover{transform:translateY(-6px)!important;border-color:transparent!important}
+html body .hof-glass{background:rgba(255,255,255,.16)!important;border:1px solid rgba(255,255,255,.4)!important}
+html body .hof-glass :is(h3,p){text-shadow:0 1px 8px rgba(0,0,0,.35)}
+html body a.rounded-3xl.bg-brand-card:hover{transform:translateY(-6px)}
+html body .pl:hover .pl-ring{transform:translateY(-4px) scale(1.05)}
+html body .bg-gradient-to-br.from-brand-maroon\/70{background-image:linear-gradient(135deg,#FFC2CC,#FFE0C2)!important}
+html body .hof-card.bg-gradient-to-br{background-image:linear-gradient(135deg,#E4405F,#FF9A5B)!important}
+html body .hof-card .bg-gradient-to-t{background-image:linear-gradient(to top,rgba(70,12,28,.78),rgba(70,12,28,.05) 55%,rgba(70,12,28,.2))!important}
+html body .bg-gradient-to-r.from-brand-maroon\/80{background-image:linear-gradient(90deg,#FFE9EE,rgba(255,233,238,0))!important}
+/* Report: tombol tanggal & kartu hari */
+html body .date-btn{background:#fff!important;color:var(--ink)!important;border:1px solid var(--line)!important;box-shadow:var(--sh)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;transition:transform .22s cubic-bezier(.22,1,.36,1),box-shadow .22s,border-color .2s!important}
+html body .date-btn:hover{transform:translateY(-4px);border-color:rgba(228,64,95,.5)!important;box-shadow:var(--sh2)!important}
+html body .date-btn .dw,html body .date-btn .dm{color:var(--mut)!important}
+html body .date-btn b{font-family:'Plus Jakarta Sans',sans-serif!important;font-weight:800}
+html body .date-btn i{background:#FFE9EE!important;color:var(--rose)!important;font-weight:700}
+html body .date-btn.active{background:var(--grad)!important;border-color:transparent!important;box-shadow:0 14px 26px -12px rgba(228,64,95,.9)!important;color:#fff!important}
+html body .date-btn.active :is(.dw,.dm,b){color:#fff!important}
+html body .date-btn.active i{background:rgba(255,255,255,.28)!important;color:#fff!important}
+html body .day-card{transition:transform .25s cubic-bezier(.22,1,.36,1),border-color .25s,box-shadow .25s}
+html body .day-card:hover{transform:translateY(-4px);border-color:rgba(228,64,95,.5)!important;box-shadow:var(--sh2)!important}
+/* Footer & tombol ke atas */
+html body footer{background:transparent!important;border-color:var(--line)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html body #toTop{background:var(--grad)!important;border:0!important;box-shadow:0 12px 22px -10px rgba(228,64,95,.9)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+/* Zona berlatar warna: teks putih */
+html body :is(.hero,.page-hero,.ev-hero,.hof-card,.hof-glass,.bg-brand-maroon,.bg-green-600,.bg-brand-rose,.bg-gradient-to-r.from-purple-500,.export-btn,.tab-btn[aria-selected="true"],.dk.on,button[id="toTop"],.ev-chip,.hof-badge,.date-btn.active,[class*="from-black/85"],.ev-tile,.btn-grad){color:#fff!important}
+html body :is(.hero,.page-hero,.ev-hero,.hof-card,.hof-glass,.bg-brand-maroon,.bg-green-600,.bg-brand-rose,.bg-gradient-to-r.from-purple-500,.export-btn,.tab-btn[aria-selected="true"],.dk.on,button[id="toTop"],.ev-chip,.hof-badge,.date-btn.active,[class*="from-black/85"],.ev-tile,.btn-grad) :is(.text-white,.text-neutral-100,.text-neutral-200,.text-zinc-200,.text-neutral-300){color:#fff!important}
+html body :is(.hero,.page-hero,.ev-hero,.hof-card,.hof-glass,.bg-brand-maroon,.bg-green-600,.bg-brand-rose,.bg-gradient-to-r.from-purple-500,.export-btn,.tab-btn[aria-selected="true"],.dk.on,button[id="toTop"],.ev-chip,.hof-badge,.date-btn.active,[class*="from-black/85"],.ev-tile,.btn-grad) :is(.text-neutral-400,.text-neutral-500,.text-white\/80){color:rgba(255,255,255,.84)!important}
+html body :is(.hero,.page-hero,.ev-hero,.hof-card,.hof-glass,.bg-brand-maroon,.bg-green-600,.bg-brand-rose,.bg-gradient-to-r.from-purple-500,.export-btn,.tab-btn[aria-selected="true"],.dk.on,button[id="toTop"],.ev-chip,.hof-badge,.date-btn.active,[class*="from-black/85"],.ev-tile,.btn-grad) :is(.text-brand-rose,.text-amber-400,.text-amber-300,.text-orange-300){color:#FFE29A!important;background:none!important;-webkit-background-clip:border-box!important;background-clip:border-box!important}
+html body :is(.hero,.page-hero,.ev-hero,.hof-card,.hof-glass,.bg-brand-maroon,.bg-green-600,.bg-brand-rose,.bg-gradient-to-r.from-purple-500,.export-btn,.tab-btn[aria-selected="true"],.dk.on,button[id="toTop"],.ev-chip,.hof-badge,.date-btn.active,[class*="from-black/85"],.ev-tile,.btn-grad).bg-gradient-to-r.from-purple-500{color:#fff!important}
+html body .hero a.bg-brand-maroon.text-white{color:#B3203A!important}
+/* Loading */
+html body #boot,html body #loadingOverlay{background:radial-gradient(40rem 30rem at 85% 0%,rgba(255,122,89,.3),transparent 65%),radial-gradient(40rem 30rem at 0% 100%,rgba(228,64,95,.2),transparent 65%),#FFF8F5!important}
+html body .bootlogo:before{border:4px solid rgba(228,64,95,.12)!important;border-top-color:#E4405F!important;border-right-color:#F5A524!important}
+html body .bootlogo:after{background:radial-gradient(circle,rgba(255,122,89,.3),transparent 68%)!important}
+html body .bootlogo img{filter:drop-shadow(0 8px 14px rgba(180,40,70,.3))!important}
+html body .boottxt{font-family:'Plus Jakarta Sans',sans-serif!important;font-weight:800!important;color:var(--rose)!important}
+/* Dock kaca terang */
+html body .dock{border-radius:1.6rem;background:rgba(255,255,255,.82)!important;-webkit-backdrop-filter:blur(16px) saturate(180%);backdrop-filter:blur(16px) saturate(180%);border:1px solid rgba(255,255,255,.9)!important;box-shadow:0 0 0 1px rgba(43,27,34,.06),0 22px 40px -14px rgba(214,69,93,.5),0 6px 18px -8px rgba(43,27,34,.2)!important}
+html body .dk{overflow:hidden;color:#8F7C85;font-family:'Plus Jakarta Sans',Inter,sans-serif!important;font-weight:700;letter-spacing:.03em;border-radius:1.2rem;transition:background .25s ease,color .25s ease,transform .18s cubic-bezier(.22,1,.36,1),box-shadow .25s ease}
+html body .dk-ic{transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+html body .dk:hover{color:var(--rose);background:#FFF1F3}html body .dk:hover .dk-ic{transform:translateY(-2px) scale(1.12)}
+html body .dk[aria-current="page"],html body .dk.on{color:#fff!important;background:var(--grad)!important;box-shadow:0 10px 18px -8px rgba(228,64,95,.9)!important}
+html body .dk.on .dk-ic,html body .dk[aria-current="page"] .dk-ic{transform:scale(1.1)}
+/* Modal & toast */
+html body .fixed.inset-0.z-\[100\]{-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+html body .shadow-lg{box-shadow:0 14px 24px -14px rgba(214,69,93,.45)}
+/* Riak air & muncul saat digulir */
+.rp{position:absolute;border-radius:50%;background:rgba(255,255,255,.55);transform:scale(0);animation:lrp .55s ease-out forwards;pointer-events:none}
+html body :is(.ghost-btn,.ghost-pill,.tab-btn,.dk) .rp{background:rgba(228,64,95,.25)}
+@keyframes lrp{to{transform:scale(1);opacity:0}}
+html body .rv{opacity:0}html body .rv.in{opacity:1;animation:lrvIn .6s cubic-bezier(.22,1,.36,1) var(--d,0s) backwards}
+@keyframes lrvIn{from{opacity:0;transform:translateY(22px)}}
+@media(prefers-reduced-motion:reduce){html body .rv{opacity:1}html body .rv.in,html body .page-hero:before,html body .page-hero:after,html body .hero:after{animation:none!important}}
+@media(max-width:640px){html body .page-hero:after,html body .hero:after{font-size:2.4rem;opacity:.9}}
+
+html body :is(.export-btn,.ghost-btn,.ghost-pill,.tab-btn){position:relative;overflow:hidden}
+</style>
+<!-- /TEMA-TERANG -->
+<!-- PWA -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/favicon-64.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="PB Jgeer">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<!-- /PWA -->
+</head>
+<body class="bg-brand-dark text-white antialiased min-h-screen flex flex-col font-body">
+
+<div id="loadingOverlay" role="status" aria-live="polite" aria-label="Memuat"><div class="bootlogo"><img src="https://raw.githubusercontent.com/amrylr/sirekapjgeer/d5ee3532961526eb61ee71dfd3696db33cdc10f6/LOGOJGEER.png" alt=""></div><div class="boottxt">Memuat</div></div>
+
+<!-- DOCK NAVIGASI BAWAH (kaca) -->
+  <nav id="dock" class="dock" aria-label="Navigasi utama">
+    <a href="index.html#home" data-nav="home" class="dk" title="Home"><span class="dk-ic"><img src="https://raw.githubusercontent.com/amrylr/sirekapjgeer/d5ee3532961526eb61ee71dfd3696db33cdc10f6/LOGOJGEER.png" alt="" /></span><span class="dk-lb">Home</span></a>
+    <a href="index.html#roster" data-nav="roster" class="dk" title="Player"><span class="dk-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="dk-lb">Player</span></a>
+    <a href="index.html#leaderboard" data-nav="leaderboard" class="dk" title="Leaderboard"><span class="dk-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></span><span class="dk-lb">Ranking</span></a>
+    <a href="turnamen.html" data-nav="turnamen" class="dk" title="Turnamen"><span class="dk-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span><span class="dk-lb">Turnamen</span></a>
+    <a href="index.html#galeri" data-nav="galeri" class="dk" title="History &amp; Galeri"><span class="dk-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></span><span class="dk-lb">History</span></a>
+    <a href="index.html#sop" data-nav="sop" class="dk" title="SOP & Tata Tertib"><span class="dk-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M9 12h6M9 16h4"/></svg></span><span class="dk-lb">SOP</span></a>
+    <a href="report.html" data-nav="report" class="dk" aria-current="page" title="Report"><span class="dk-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg></span><span class="dk-lb">Report</span></a>
+  </nav>
+
+
+<main class="flex-1">
+<section class="page-hero">
+  <span class="absolute -right-8 -top-10 text-[16rem] leading-none opacity-[0.07] select-none" aria-hidden="true">🏸</span>
+  <div class="relative max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 text-center sm:text-left">
+    <p class="font-display uppercase tracking-[0.25em] text-xs sm:text-sm text-brand-rose">Season 2026</p>
+    <h1 class="mt-2 font-display font-bold uppercase text-4xl sm:text-6xl leading-tight">Input &amp; <span class="text-brand-rose">Recap</span></h1>
+    <div class="mt-4 h-1 w-20 bg-brand-maroon rounded mx-auto sm:mx-0"></div>
+    <p class="mt-5 max-w-2xl text-neutral-300 sm:text-lg mx-auto sm:mx-0">Catat skor harian, verifikasi, lalu unduh poster recap seluruh pertandingan per hari.</p>
+  </div>
+</section>
+<div class="max-w-5xl mx-auto px-4 sm:px-6 py-10 w-full">
+    
+    <!-- TABS -->
+    <div class="flex justify-center mb-10 overflow-x-auto pb-2">
+        <div role="tablist" class="inline-flex p-1.5 rounded-xl bg-black/40 border border-white/10 font-display uppercase tracking-wider text-sm sm:text-base whitespace-nowrap">
+            <button role="tab" id="btnPlayer" onclick="switchTab('player')" aria-selected="true" class="tab-btn px-6 py-2.5 font-semibold">Pemain</button>
+            <button role="tab" id="btnRecap" onclick="switchTab('recap')" aria-selected="false" class="tab-btn px-6 py-2.5 font-semibold">Match Recap</button>
+            <button role="tab" id="btnAdmin" onclick="switchTab('admin')" aria-selected="false" class="tab-btn px-6 py-2.5 font-semibold">Admin</button>
+        </div>
+    </div>
+    
+    <!-- HALAMAN PEMAIN -->
+    <div id="playerView" class="space-y-8">
+        <div class="glass-card p-6 sm:p-8">
+            <h2 class="font-display uppercase text-2xl font-bold tracking-wide mb-1 text-brand-rose">Input Pertandingan</h2>
+            <p class="text-sm text-neutral-400 mb-6">Data yang dikirim akan masuk ke antrean verifikasi Admin.</p>
+            
+            <form id="playerForm" class="space-y-6">
+                <div>
+                    <label class="text-xs text-neutral-400 uppercase tracking-widest block mb-1">Tanggal Pertandingan</label>
+                    <input type="date" id="p_tanggal" class="w-full rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-rose transition" required onchange="fetchHistory()">
+                </div>
+                
+                <div class="grid gap-6 md:grid-cols-2">
+                    <div class="bg-black/30 border border-white/5 p-5 rounded-xl">
+                        <label class="font-display uppercase tracking-widest text-brand-rose text-sm mb-3 block">Tim A</label>
+                        
+                        <!-- Kartu Pemain A1 -->
+                        <div onclick="openPlayerModal('p_tA_p1')" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mb-3 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                            <img id="img_p_tA_p1" src="https://ui-avatars.com/api/?name=Pilih&size=256&background=FDE4E8&color=E4405F&bold=true" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition bg-black">
+                            <span id="name_p_tA_p1" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 1</span>
+                        </div>
+                        <input type="hidden" id="p_tA_p1" required>
+
+                        <!-- Kartu Pemain A2 -->
+                        <div onclick="openPlayerModal('p_tA_p2')" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mb-5 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                            <img id="img_p_tA_p2" src="https://ui-avatars.com/api/?name=Pilih&size=256&background=FDE4E8&color=E4405F&bold=true" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition bg-black">
+                            <span id="name_p_tA_p2" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 2</span>
+                        </div>
+                        <input type="hidden" id="p_tA_p2" required>
+                        
+                        <label class="text-xs text-neutral-400 uppercase tracking-widest block mb-2">Skor Menang (Win)</label>
+                        <div class="flex gap-2 mb-2">
+                            <button type="button" id="btn-p_A-2" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'A', 2)">2</button>
+                            <button type="button" id="btn-p_A-1" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'A', 1)">1</button>
+                            <button type="button" id="btn-p_A-0" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'A', 0)">0</button>
+                        </div>
+                        <input type="number" id="p_scoreA" class="w-full bg-black/50 border border-white/5 rounded-lg px-3 py-2 text-neutral-400 font-bold outline-none cursor-not-allowed text-center" readonly required placeholder="Klik tombol skor">
+                    </div>
+
+                    <div class="bg-black/30 border border-white/5 p-5 rounded-xl">
+                        <label class="font-display uppercase tracking-widest text-neutral-300 text-sm mb-3 block">Tim B</label>
+                        
+                        <!-- Kartu Pemain B1 -->
+                        <div onclick="openPlayerModal('p_tB_p1')" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mb-3 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                            <img id="img_p_tB_p1" src="https://ui-avatars.com/api/?name=Pilih&size=256&background=FDE4E8&color=E4405F&bold=true" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition bg-black">
+                            <span id="name_p_tB_p1" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 1</span>
+                        </div>
+                        <input type="hidden" id="p_tB_p1" required>
+
+                        <!-- Kartu Pemain B2 -->
+                        <div onclick="openPlayerModal('p_tB_p2')" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mb-5 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                            <img id="img_p_tB_p2" src="https://ui-avatars.com/api/?name=Pilih&size=256&background=FDE4E8&color=E4405F&bold=true" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition bg-black">
+                            <span id="name_p_tB_p2" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 2</span>
+                        </div>
+                        <input type="hidden" id="p_tB_p2" required>
+                        
+                        <label class="text-xs text-neutral-400 uppercase tracking-widest block mb-2">Skor Menang (Win)</label>
+                        <div class="flex gap-2 mb-2">
+                            <button type="button" id="btn-p_B-2" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'B', 2)">2</button>
+                            <button type="button" id="btn-p_B-1" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'B', 1)">1</button>
+                            <button type="button" id="btn-p_B-0" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('p_', 'B', 0)">0</button>
+                        </div>
+                        <input type="number" id="p_scoreB" class="w-full bg-black/50 border border-white/5 rounded-lg px-3 py-2 text-neutral-400 font-bold outline-none cursor-not-allowed text-center" readonly required placeholder="Klik tombol skor">
+                    </div>
+                </div>
+                <button type="submit" class="export-btn w-full py-4 text-center block !text-lg !rounded-xl shadow-lg border-0">Kirim Antrean</button>
+            </form>
+        </div>
+
+        <!-- Riwayat Tabel -->
+        <div class="glass-card overflow-hidden">
+            <div class="px-6 py-5 bg-gradient-to-r from-brand-maroon/80 to-transparent border-b border-white/10">
+                <h2 class="font-display uppercase text-xl font-bold tracking-wide">Riwayat Hari Ini (Terverifikasi)</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left whitespace-nowrap">
+                    <thead>
+                        <tr class="font-display uppercase tracking-widest text-xs text-neutral-400 border-b border-white/10 bg-black/40">
+                            <th class="px-6 py-4">Nama Pemain</th>
+                            <th class="px-4 py-4 text-center text-green-400">Win</th>
+                            <th class="px-4 py-4 text-center text-rose-500">Lose</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody" class="divide-y divide-white/5"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- HALAMAN ADMIN -->
+    <div id="adminView" class="hidden space-y-8">
+        <div id="adminLogin" class="max-w-md mx-auto glass-card p-8 text-center">
+            <span class="text-4xl mb-4 block" aria-hidden="true">🛡️</span>
+            <h2 class="font-display uppercase text-2xl font-bold tracking-wide mb-6">Akses Admin</h2>
+            <input type="password" id="adminPwd" placeholder="Masukkan Password" class="w-full rounded-xl px-4 py-3 text-white text-center tracking-widest mb-4 outline-none">
+            <button onclick="checkAdmin()" class="export-btn w-full py-3 block text-center !rounded-xl border-0">Buka Kunci</button>
+        </div>
+
+        <div id="adminDashboard" class="hidden space-y-8">
+            <div class="glass-card p-6 sm:p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="font-display uppercase text-2xl font-bold tracking-wide">Antrean Verifikasi</h2>
+                    <div class="flex flex-wrap justify-end gap-2">
+                        <button id="btnVerifyAll" onclick="verifyAll()" class="hidden text-xs flex items-center gap-1 bg-green-600 hover:bg-green-500 text-white font-semibold px-3 py-1.5 rounded-full transition shadow-lg">✔ Terima Semua</button>
+                        <button onclick="loadPending()" class="text-xs flex items-center gap-1 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full transition">🔄 Refresh</button>
+                    </div>
+                </div>
+                <div id="pendingList" class="space-y-4"></div>
+            </div>
+
+            <div class="glass-card p-5 sm:p-8">
+                <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
+                    <div>
+                        <h2 class="font-display uppercase text-2xl font-bold tracking-wide">Kelola Match Recap</h2>
+                        <p class="text-xs text-neutral-400 mt-1">Ubah pemain, skor, atau tanggal, atau hapus match. Setiap perubahan otomatis menarik kembali poin lama dari klasemen.</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <input type="date" id="mgDate" class="rounded-lg px-3 py-1.5 text-white outline-none text-sm">
+                        <button onclick="loadManage()" class="ghost-btn">Muat</button>
+                        <button onclick="loadManage(true)" class="ghost-btn">Terbaru</button>
+                    </div>
+                </div>
+                <p id="mgStatus" class="text-xs text-neutral-400 min-h-[1rem] mb-2" aria-live="polite"></p>
+                <div id="mgList" class="max-h-[34rem] overflow-y-auto pr-1"></div>
+            </div>
+
+            <div class="glass-card border-brand-maroon/60 p-6 sm:p-8 relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-brand-maroon text-white text-xs font-bold px-3 py-1 rounded-bl-lg shadow-lg">NO VERIFY</div>
+                <h2 class="font-display uppercase text-2xl font-bold tracking-wide mb-1 text-brand-rose">Input Langsung</h2>
+                <p class="text-sm text-neutral-400 mb-6">Data akan langsung dikalkulasikan ke klasemen.</p>
+                
+                <form id="adminDirectForm" class="space-y-6">
+                    <div>
+                        <label class="text-xs text-neutral-400 uppercase tracking-widest block mb-1">Tanggal</label>
+                        <input type="date" id="a_tanggal" class="w-full rounded-xl px-4 py-3 text-white outline-none" required>
+                    </div>
+                    
+                    <div class="grid gap-6 md:grid-cols-2">
+                        <div class="bg-black/30 border border-white/5 p-5 rounded-xl">
+                            <label class="font-display uppercase tracking-widest text-brand-rose text-sm mb-3 block">Tim A</label>
+                            
+                            <div onclick="openPlayerModal('a_tA_p1')" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mb-3 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                                <img id="img_a_tA_p1" src="https://ui-avatars.com/api/?name=Pilih&size=256&background=FDE4E8&color=E4405F&bold=true" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition bg-black">
+                                <span id="name_a_tA_p1" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 1</span>
+                            </div>
+                            <input type="hidden" id="a_tA_p1" required>
+
+                            <div onclick="openPlayerModal('a_tA_p2')" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mb-5 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                                <img id="img_a_tA_p2" src="https://ui-avatars.com/api/?name=Pilih&size=256&background=FDE4E8&color=E4405F&bold=true" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition bg-black">
+                                <span id="name_a_tA_p2" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 2</span>
+                            </div>
+                            <input type="hidden" id="a_tA_p2" required>
+
+                            <div class="flex gap-2 mb-2">
+                                <button type="button" id="btn-a_A-2" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'A', 2)">2</button>
+                                <button type="button" id="btn-a_A-1" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'A', 1)">1</button>
+                                <button type="button" id="btn-a_A-0" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'A', 0)">0</button>
+                            </div>
+                            <input type="number" id="a_scoreA" class="w-full bg-black/50 border border-white/5 rounded-lg px-3 py-2 text-neutral-400 font-bold outline-none cursor-not-allowed text-center" readonly required placeholder="Klik skor di atas">
+                        </div>
+                        
+                        <div class="bg-black/30 border border-white/5 p-5 rounded-xl">
+                            <label class="font-display uppercase tracking-widest text-neutral-300 text-sm mb-3 block">Tim B</label>
+                            
+                            <div onclick="openPlayerModal('a_tB_p1')" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mb-3 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                                <img id="img_a_tB_p1" src="https://ui-avatars.com/api/?name=Pilih&size=256&background=FDE4E8&color=E4405F&bold=true" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition bg-black">
+                                <span id="name_a_tB_p1" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 1</span>
+                            </div>
+                            <input type="hidden" id="a_tB_p1" required>
+
+                            <div onclick="openPlayerModal('a_tB_p2')" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 mb-5 cursor-pointer flex items-center gap-4 hover:border-brand-rose transition group">
+                                <img id="img_a_tB_p2" src="https://ui-avatars.com/api/?name=Pilih&size=256&background=FDE4E8&color=E4405F&bold=true" class="w-12 h-12 rounded-full object-cover border border-white/20 group-hover:border-brand-rose transition bg-black">
+                                <span id="name_a_tB_p2" class="text-neutral-400 font-semibold uppercase tracking-wide">Pilih Pemain 2</span>
+                            </div>
+                            <input type="hidden" id="a_tB_p2" required>
+
+                            <div class="flex gap-2 mb-2">
+                                <button type="button" id="btn-a_B-2" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'B', 2)">2</button>
+                                <button type="button" id="btn-a_B-1" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'B', 1)">1</button>
+                                <button type="button" id="btn-a_B-0" class="flex-1 py-2 rounded-lg font-bold bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-brand-rose transition" onclick="setScore('a_', 'B', 0)">0</button>
+                            </div>
+                            <input type="number" id="a_scoreB" class="w-full bg-black/50 border border-white/5 rounded-lg px-3 py-2 text-neutral-400 font-bold outline-none cursor-not-allowed text-center" readonly required placeholder="Klik skor di atas">
+                        </div>
+                    </div>
+                    <button type="submit" class="export-btn w-full py-4 text-center block !text-lg !rounded-xl shadow-lg border-0 bg-brand-maroon hover:bg-brand-rose">Input Langsung ke Valid</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- HALAMAN MATCH RECAP -->
+    <div id="recapView" class="hidden space-y-8">
+        <div class="glass-card p-6 sm:p-8">
+            <div class="flex flex-wrap items-start justify-between gap-3 mb-6">
+                <div>
+                    <h2 class="grad font-display uppercase text-2xl font-bold tracking-wide mb-1 text-brand-rose">Poster Match Recap</h2>
+                    <p class="text-sm text-neutral-400">Pilih tanggal untuk melihat rekap pertandingan, lalu unduh posternya. Satu poster (format Story Instagram 9:16) berisi seluruh pertandingan hari itu.</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="bagikanRecap()" class="ghost-btn" title="Bagikan link langsung ke Match Recap">🔗 Bagikan</button>
+                    <button onclick="loadRecapData()" class="ghost-btn">🔄 Muat Ulang</button>
+                </div>
+            </div>
+            <label class="flex flex-wrap items-center gap-3 rounded-xl bg-white/5 px-4 py-3 text-xs text-neutral-300 mb-3">
+                Maksimal pertandingan per poster
+                <select id="recapSplit" class="rounded-lg px-3 py-1.5 text-white outline-none">
+                    <option value="9">Maks. 9 (otomatis pecah jika lebih)</option><option value="8">Maks. 8</option><option value="6">Maks. 6</option>
+                </select>
+            </label>
+            <p id="recapStatus" class="text-xs text-neutral-400 min-h-[1rem] mb-3" aria-live="polite">Memuat...</p>
+            <div id="recapList" class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3 max-h-[26rem] overflow-y-auto p-1"></div>
+        </div>
+        <div id="recapDetail" class="glass-card p-5 sm:p-8 hidden"></div>
+    </div>
+
+    <!-- MODAL PREVIEW POSTER -->
+    <div id="posterModal" class="hidden fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="glass-card w-full max-w-md p-4 flex flex-col max-h-[92vh]">
+            <div class="overflow-y-auto rounded-2xl"><img id="posterImg" alt="Preview poster" class="w-full rounded-2xl"></div>
+            <div class="flex gap-3 mt-4">
+                <button class="export-btn flex-1" onclick="downloadPoster(curDay, this)">Download HD</button>
+                <button class="ghost-btn" onclick="document.getElementById('posterModal').classList.add('hidden')">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PILIH PEMAIN -->
+    <div id="playerModal" class="hidden fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4 backdrop-blur-md transition-opacity">
+        <div class="glass-card w-full max-w-2xl border border-white/10 p-6 flex flex-col h-[75vh]">
+            <div class="flex justify-between items-center mb-4 border-b border-white/10 pb-3">
+                <h3 class="font-display uppercase text-xl font-bold tracking-wide text-white">Pilih Pemain</h3>
+                <button onclick="closePlayerModal()" class="text-neutral-400 hover:text-brand-rose text-3xl font-bold transition">&times;</button>
+            </div>
+            <div id="playerGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 overflow-y-auto pr-2 pb-4">
+                <!-- Grid diisi JS -->
+            </div>
+        </div>
+    </div>
+
+</div>
+</main>
+
+<footer class="border-t">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-neutral-400">
+    <p class="font-display uppercase tracking-widest text-white">PB <span class="text-brand-rose">Jgeer</span></p><p>&copy; 2026 PB Jgeer</p>
+  </div>
+</footer>
+<button id="toTop" class="hidden fixed bottom-5 right-5 z-40 w-11 h-11 rounded-full text-white border border-brand-rose/50 hover:bg-brand-rose transition" aria-label="Kembali ke atas">
+  <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m6 15 6-6 6 6"/></svg>
+</button>
+
+<script>
+    // =====================================================================
+    // KONFIGURASI UMUM
+    // =====================================================================
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzjQxPCSFAvAQEiK-p-HdkgkcRguZ_pXt5DtL0McQSExXGY4cmviN3PBnOmA6nOD5AN/exec"; 
+    
+    // GID SHEET 6 untuk Fitur Recap Poster
+    const SHEET_ID = '1kgZAmiJjMhBfk9Sk8vHUtS0OCq6wr1_4-egr_KpIfao';
+    const SHEET_RECAP = { gid: '245165715' };
+    const pad = n => String(n).padStart(2, '0');
+    const toNum = v => { const n = parseFloat(str(v).replace(',', '.')); return isFinite(n) ? n : 0; };
+    
+    const LOGO_URL = 'https://raw.githubusercontent.com/amrylr/sirekapjgeer/d5ee3532961526eb61ee71dfd3696db33cdc10f6/LOGOJGEER.png';
+    const GITHUB_ROSTER_BASE = 'https://raw.githubusercontent.com/amrylr/roster/main/';
+
+    // Utility text format & url parsing
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+    const str = v => (v == null ? '' : String(v).trim());
+    const norm = v => str(v).toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+
+    function ghRaw(u, base) {
+        u = String(u == null ? '' : u).trim();
+        if (!u) return '';
+        const m = u.match(/^https?:\/\/github\.com\/([^/]+)\/([^/]+)\/(?:blob|raw)\/(.+)$/i);
+        if (m) return `https://raw.githubusercontent.com/${m[1]}/${m[2]}/${m[3].split('?')[0]}`;
+        if (/^(https?:\/\/|data:)/i.test(u)) return u;
+        return base + encodeURI(u.replace(/^\/+/, ''));
+    }
+
+    function driveThumb(url, w = 256) {
+        const m = String(url).match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:export=view&)?id=)([\w-]+)/);
+        if (m) return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w${w}`; 
+        return ghRaw(url, GITHUB_ROSTER_BASE); 
+    }
+    
+    const avatar = (name, size = 256) => `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&size=${size}&background=FDE4E8&color=E4405F&bold=true`;
+
+    // State Globals
+    const tzOffset = (new Date()).getTimezoneOffset() * 60000; 
+    const localDate = new Date(Date.now() - tzOffset);
+    const todayYMD = localDate.toISOString().split('T')[0]; 
+    
+    const pTanggal = document.getElementById('p_tanggal');
+    const aTanggal = document.getElementById('a_tanggal');
+    
+    pTanggal.value = todayYMD; pTanggal.max = todayYMD; 
+    aTanggal.value = todayYMD; aTanggal.max = todayYMD;
+
+    // Tamu: bisa dipilih di form. Pertandingan yang melibatkan tamu tetap dikirim (hasil pemain terdata tetap tercatat);
+    // nama tamu ikut dikirim di slot pemain dan ditandai lewat data.tamu agar bisa diabaikan oleh Apps Script / tidak ditampilkan di riwayat.
+    const GUEST_NAMES = ['Fulan 1', 'Fulan 2', 'Fulan 3'];
+    let globalPlayers = [];
+    let currentSelectTarget = "";
+    const photoMap = new Map();
+    let recapMatches = [];
+    let ADMIN_PASS = '';
+
+    function showLoading(show) { document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none'; }
+    
+    // Inisialisasi
+    window.onload = function() {
+        loadRoster();
+        bukaDariHash();
+        fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "getInitData", date: todayYMD}) })
+        .then(res => res.json()).then(res => {
+            if(res.status === "success") {
+                populateSelects(res.players);
+                renderHistory(res.history);
+                showLoading(false);
+            }
+        }).catch(err => { 
+            console.log(err); alert("Gagal memuat data."); showLoading(false); 
+        });
+    }
+
+    function populateSelects(playersData) { globalPlayers = playersData; }   // foto diambil dari roster (GitHub), bukan dari Drive
+
+    function findTables(grid) {
+        const tables = [];
+        grid.forEach((row, r) => row.forEach((cell, c) => {
+            if (!/^nama/.test(norm(cell))) return;
+            const headers = []; for (let cc = c; cc < row.length && str(row[cc]) !== ''; cc++) headers.push({ key: norm(row[cc]), col: cc });
+            const rows = []; for (let rr_ = r + 1; rr_ < grid.length && str((grid[rr_] || [])[c]) !== ''; rr_++) rows.push(grid[rr_]);
+            tables.push({ r, c, headers, rows });
+        }));
+        return tables;
+    }
+    function extractRoster(grid) {
+        const t = findTables(grid)[0]; if (!t) return [];
+        const h = t.headers.find(x => /foto|photo|gambar|avatar|image|img/.test(x.key) && x.col !== t.c);
+        return t.rows.map(r => ({ nama: str(r[t.c]), foto: h ? str(r[h.col]) : '' })).filter(p => p.nama);
+    }
+    async function loadRoster() {
+        try {
+            const list = extractRoster(await fetchGrid({ gid: '0' }));
+            photoMap.clear(); list.forEach(p => { if (p.foto) photoMap.set(norm(p.nama), p.foto); });
+            if (!globalPlayers.length) globalPlayers = list.map(p => ({ name: p.nama }));
+        } catch (e) { console.warn('Roster gagal dimuat:', e); }
+    }
+
+    // =====================================================================
+    // LOGIKA UI INPUT & ADMIN
+    // =====================================================================
+    function openPlayerModal(targetId) {
+        currentSelectTarget = targetId;
+        renderPlayerGrid();
+        document.getElementById('playerModal').classList.remove('hidden');
+    }
+
+    function closePlayerModal() {
+        document.getElementById('playerModal').classList.add('hidden');
+        currentSelectTarget = "";
+    }
+
+    function renderPlayerGrid() {
+        const grid = document.getElementById('playerGrid');
+        grid.innerHTML = "";
+        const prefix = currentSelectTarget.substring(0, 2); 
+        
+        const selectedNames = [
+            document.getElementById(prefix + 'tA_p1').value,
+            document.getElementById(prefix + 'tA_p2').value,
+            document.getElementById(prefix + 'tB_p1').value,
+            document.getElementById(prefix + 'tB_p2').value
+        ];
+
+        const listAll = [...globalPlayers, ...GUEST_NAMES.map(n => ({ name: n, guest: true }))];
+        listAll.forEach((p, idx) => {
+            if (p.guest && (idx === 0 || !listAll[idx - 1].guest)) grid.innerHTML += `<p class="col-span-full font-display uppercase tracking-widest text-xs text-amber-300 pt-2 border-t border-white/10">Tamu <span class="text-neutral-400 normal-case tracking-normal">(hasil tamu tidak dicatat)</span></p>`;
+            const isSelected = selectedNames.includes(p.name);
+            const bgClass = isSelected ? "bg-black/80 opacity-40 cursor-not-allowed border-white/5" : "bg-black/40 hover:bg-brand-maroon/50 cursor-pointer border-white/10 hover:border-brand-rose";
+            const src = p.guest ? avatar(p.name, 256) : photoFor(p.name, 256);
+            
+            const cardHtml = `
+                <div onclick="${isSelected ? '' : `selectPlayer('${p.name}', '${src}')`}" 
+                     class="flex flex-col items-center p-3 border rounded-xl transition ${bgClass} ${p.guest ? 'border-dashed' : ''}">
+                    <img src="${esc(src)}" loading="lazy" referrerpolicy="no-referrer" class="w-14 h-14 rounded-full object-cover mb-2 border border-white/20 shadow-lg bg-black">
+                    <span class="font-display uppercase tracking-wider text-xs text-center font-bold ${isSelected ? 'text-neutral-500' : 'text-white'} leading-tight">${esc(p.name)}</span>
+                </div>
+            `;
+            grid.innerHTML += cardHtml;
+        });
+    }
+
+    function selectPlayer(name, photoSrc) {
+        document.getElementById(currentSelectTarget).value = name;
+        document.getElementById('name_' + currentSelectTarget).innerText = name;
+        document.getElementById('name_' + currentSelectTarget).classList.replace('text-neutral-400', 'text-white');
+        document.getElementById('img_' + currentSelectTarget).src = photoSrc;
+        closePlayerModal();
+    }
+
+    function setScore(prefix, team, val) {
+        const opponent = team === 'A' ? 'B' : 'A';
+        document.getElementById(prefix + 'score' + team).value = val;
+        
+        if (val === 2) document.getElementById(prefix + 'score' + opponent).value = 0;
+        else if (val === 1) document.getElementById(prefix + 'score' + opponent).value = 1;
+        else if (val === 0) document.getElementById(prefix + 'score' + opponent).value = 2;
+        
+        ['A', 'B'].forEach(t => {
+            const currentVal = document.getElementById(prefix + 'score' + t).value;
+            [0, 1, 2].forEach(v => {
+                const btn = document.getElementById(`btn-${prefix}${t}-${v}`);
+                if (String(v) === currentVal) {
+                    btn.classList.add('bg-brand-rose', 'border-brand-rose', 'text-white');
+                    btn.classList.remove('bg-white/5', 'border-white/10', 'text-neutral-400');
+                } else {
+                    btn.classList.remove('bg-brand-rose', 'border-brand-rose', 'text-white');
+                    btn.classList.add('bg-white/5', 'border-white/10', 'text-neutral-400');
+                }
+            });
+        });
+    }
+
+    function resetScoreButtons(prefix) {
+        ['A', 'B'].forEach(t => {
+            [0, 1, 2].forEach(v => {
+                const btn = document.getElementById(`btn-${prefix}${t}-${v}`);
+                btn.classList.remove('bg-brand-rose', 'border-brand-rose', 'text-white');
+                btn.classList.add('bg-white/5', 'border-white/10', 'text-neutral-400');
+            });
+        });
+    }
+
+    function fetchHistory() {
+        showLoading(true);
+        const selectedDate = document.getElementById('p_tanggal').value; 
+        fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "getHistory", date: selectedDate}) })
+        .then(res => res.json()).then(res => {
+            renderHistory(res.history); showLoading(false);
+        }).catch(() => showLoading(false));
+    }
+
+    function renderHistory(data) {
+        const tbody = document.getElementById('historyTableBody');
+        tbody.innerHTML = "";
+        const validData = data.filter(row => row[1] && row[1].trim() !== "" && !GUEST_NAMES.includes(row[1].trim()));
+
+        if(validData.length === 0) { 
+            tbody.innerHTML = "<tr><td colspan='3' class='text-center py-8 text-neutral-500 italic'>Belum ada pertandingan terverifikasi pada tanggal ini</td></tr>"; 
+            return; 
+        }
+        validData.forEach(row => {
+            tbody.innerHTML += `
+            <tr class="hover:bg-white/5 transition border-b border-white/5">
+                <td class="px-6 py-4 font-semibold">${esc(row[1])}</td>
+                <td class="px-4 py-4 text-center font-bold text-green-400">${row[4]}</td>
+                <td class="px-4 py-4 text-center font-bold text-rose-500">${row[5]}</td>
+            </tr>`;
+        });
+    }
+
+    document.getElementById('playerForm').addEventListener('submit', function(e) { 
+        e.preventDefault(); if(validateSelections('p_')) submitMatchData('p_', 'submitPending'); 
+    });
+    
+    document.getElementById('adminDirectForm').addEventListener('submit', function(e) { 
+        e.preventDefault(); if(validateSelections('a_')) submitMatchData('a_', 'submitDirect'); 
+    });
+
+    function validateSelections(prefix) {
+        const inputs = ['tA_p1', 'tA_p2', 'tB_p1', 'tB_p2'];
+        for(let id of inputs) {
+            if(!document.getElementById(prefix + id).value) { alert("Harap lengkapi semua 4 pemain terlebih dahulu!"); return false; }
+        }
+        return true;
+    }
+
+    function submitMatchData(prefix, actionType) {
+        showLoading(true);
+        const dateVal = document.getElementById(prefix+'tanggal').value;
+        const dObj = new Date(dateVal);
+        const blnList = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        
+        const payload = {
+            action: actionType,
+            data: {
+                tanggal: dateVal, bulan: blnList[dObj.getMonth()], tahun: dObj.getFullYear(),
+                tA_p1: document.getElementById(prefix+'tA_p1').value, tA_p2: document.getElementById(prefix+'tA_p2').value,
+                scoreA: document.getElementById(prefix+'scoreA').value,
+                tB_p1: document.getElementById(prefix+'tB_p1').value, tB_p2: document.getElementById(prefix+'tB_p2').value,
+                scoreB: document.getElementById(prefix+'scoreB').value
+            }
+        };
+
+        const tamu = [payload.data.tA_p1, payload.data.tA_p2, payload.data.tB_p1, payload.data.tB_p2].filter(n => GUEST_NAMES.includes(n));
+        if (tamu.length) payload.data.tamu = tamu;   // penanda untuk server: pemain ini hanya tamu
+
+        fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify(payload) })
+        .then(res => res.json()).then(res => {
+            showLoading(false); alert("Data Berhasil Dikirim!");
+            if(actionType === 'submitDirect') loadPending(); 
+            if(actionType === 'submitPending') fetchHistory(); 
+            
+            document.getElementById(prefix === 'p_' ? 'playerForm' : 'adminDirectForm').reset();
+            document.getElementById(prefix+'tanggal').value = dateVal; resetScoreButtons(prefix); 
+            
+            ['tA_p1', 'tA_p2', 'tB_p1', 'tB_p2'].forEach(id => {
+                document.getElementById(prefix + id).value = "";
+                document.getElementById('name_' + prefix + id).innerText = "Pilih Pemain";
+                document.getElementById('name_' + prefix + id).classList.replace('text-white', 'text-neutral-400');
+                document.getElementById('img_' + prefix + id).src = avatar("Pilih", 256);
+            });
+        }).catch(() => { alert("Error submit data"); showLoading(false); });
+    }
+
+    // Tautan langsung ke tab: report.html#recap (Match Recap), #admin, atau tanpa hash (Pemain)
+    const TAB_HASH = { player: '', admin: '#admin', recap: '#recap' };
+    function bukaDariHash() {
+        const t = (location.hash || '').slice(1);
+        if (t === 'recap' || t === 'admin') switchTab(t, true);
+        else if (t === '' && document.getElementById('playerView').style.display === 'none') switchTab('player', true);
+    }
+    window.addEventListener('hashchange', bukaDariHash);
+
+    function bagikanRecap() {
+        const url = location.origin && location.origin !== 'null' ? location.origin + location.pathname + '#recap' : location.href.split('#')[0] + '#recap';
+        const salin = () => { (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(() => alert('Link Match Recap disalin:\n' + url)).catch(() => prompt('Salin link Match Recap:', url)); };
+        if (navigator.share) navigator.share({ title: 'Match Recap | PB Jgeer', text: 'Lihat rekap pertandingan PB Jgeer', url }).catch(e => { if (e && e.name !== 'AbortError') salin(); });
+        else salin();
+    }
+
+    function switchTab(tab, dariHash) {
+        ['player', 'admin', 'recap'].forEach(t => {
+            const btn = document.getElementById('btn' + t.charAt(0).toUpperCase() + t.slice(1));
+            if(btn) btn.setAttribute('aria-selected', tab === t ? 'true' : 'false');
+        });
+        
+        document.getElementById('playerView').style.display = tab === 'player' ? 'block' : 'none';
+        document.getElementById('adminView').style.display = tab === 'admin' ? 'block' : 'none';
+        document.getElementById('recapView').style.display = tab === 'recap' ? 'block' : 'none';
+        
+        if (!dariHash) { const hs = TAB_HASH[tab] || ''; try { history.replaceState(null, '', location.pathname + location.search + hs); } catch (e) { location.hash = hs; } }
+        if (tab === 'player') fetchHistory();
+        if (tab === 'recap' && recapMatches.length === 0) loadRecapData();
+    }
+
+    function checkAdmin() {
+        if(document.getElementById('adminPwd').value === "ytta") {
+            ADMIN_PASS = document.getElementById('adminPwd').value;
+            document.getElementById('adminLogin').style.display = 'none';
+            document.getElementById('adminDashboard').style.display = 'block';
+            loadPending();
+            document.getElementById('mgDate').value = todayYMD; loadManage();
+        } else { alert("Password Salah!"); }
+    }
+
+    function loadPending() {
+        const list = document.getElementById('pendingList');
+        list.innerHTML = `<p class="text-neutral-400 italic">Memuat antrean...</p>`;
+        
+        fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "getPending"}) })
+        .then(res => res.json()).then(res => {
+            list.innerHTML = "";
+            if(res.pending.length === 0) { list.innerHTML = `<p class="text-neutral-500">Tidak ada antrean verifikasi.</p>`; syncVerifyAll(); return; }
+            
+            res.pending.forEach(row => {
+                list.innerHTML += `
+                    <div class="bg-black/40 border-l-4 border-brand-rose p-4 sm:p-5 rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4" id="card-${row[0]}">
+                        <div>
+                            <span class="text-xs text-neutral-400 uppercase tracking-widest block mb-1">Tanggal: ${row[1]}</span>
+                            <p class="text-sm sm:text-base">
+                                <strong class="text-white">${row[4]} & ${row[5]}</strong> <span class="text-green-400 font-bold">(${row[6]})</span> 
+                                <span class="mx-2 text-neutral-500">VS</span> 
+                                <strong class="text-white">${row[7]} & ${row[8]}</strong> <span class="text-green-400 font-bold">(${row[9]})</span>
+                            </p>
+                        </div>
+                        <div class="flex gap-2 w-full sm:w-auto mt-2 sm:mt-0">
+                            <button class="flex-1 sm:flex-none bg-green-600 hover:bg-green-500 text-white px-5 py-2 rounded font-semibold transition shadow-lg text-sm" onclick="verifyMatch('${row[0]}')">Setujui</button>
+                            <button class="flex-1 sm:flex-none bg-white/5 border border-white/10 hover:bg-brand-rose hover:border-brand-rose text-neutral-300 hover:text-white px-5 py-2 rounded font-semibold transition shadow-lg text-sm" onclick="deleteMatch('${row[0]}')">Tolak</button>
+                        </div>
+                    </div>`;
+            });
+            syncVerifyAll();
+        }).catch(() => { list.innerHTML = `<p class="text-rose-500">Gagal memuat antrean.</p>`; });
+    }
+
+    // Tombol "Terima Semua" hanya tampil jika masih ada antrean
+    function syncVerifyAll() {
+        const n = [...document.querySelectorAll('#pendingList [id^="card-"]')].filter(c => c.style.display !== 'none').length;
+        document.getElementById('btnVerifyAll').classList.toggle('hidden', n === 0);
+        return n;
+    }
+
+    // Panggilan aksi admin (password dikirim & diperiksa di server)
+    async function adminCall(body) {
+        const r = await fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({ ...body, pass: ADMIN_PASS }) });
+        let res; try { res = await r.json(); } catch (e) { throw new Error('Apps Script belum diperbarui ke V1.2 (aksi tidak dikenali). Salin kode terbaru lalu deploy ulang.'); }
+        if (res.status !== 'success') throw new Error(res.message || 'Gagal memproses.');
+        return res;
+    }
+
+    async function verifyAll() {
+        const n = syncVerifyAll();
+        if (!n || !confirm(`Terima semua ${n} antrean sekaligus? Skor langsung masuk klasemen.`)) return;
+        showLoading(true);
+        try {
+            let done;
+            try { done = (await adminCall({ action: "verifyAll" })).count; }
+            catch (err) {
+                if (/Password/i.test(err.message)) throw err;
+                // Cadangan: Apps Script lama belum punya verifyAll -> setujui satu per satu
+                const pend = (await (await fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "getPending"}) })).json()).pending || [];
+                done = 0; for (const row of pend) { await fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "verifyMatch", id: row[0]}) }).then(r => r.json()); done++; }
+            }
+            alert(`${done} pertandingan disetujui.`);
+        } catch (err) { alert(err.message); }
+        showLoading(false); loadPending(); fetchHistory(); loadManage(lastManageAll);
+    }
+
+    function verifyMatch(id) {
+        showLoading(true);
+        fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "verifyMatch", id: id}) }).then(res => res.json()).then(res => {
+            showLoading(false); if(res.status === "success") { document.getElementById(`card-${id}`).style.display = 'none'; syncVerifyAll(); fetchHistory(); loadManage(lastManageAll); }
+        });
+    }
+
+    function deleteMatch(id) {
+        if(!confirm("Yakin ingin menolak dan menghapus data antrean ini?")) return;
+        showLoading(true);
+        fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "deleteMatch", id: id}) }).then(res => res.json()).then(res => {
+            showLoading(false); if(res.status === "success") { document.getElementById(`card-${id}`).style.display = 'none'; syncVerifyAll(); }
+        });
+    }
+
+
+    // =====================================================================
+    // KELOLA MATCH RECAP (admin): ubah pemain/skor/tanggal atau hapus (poin ditarik kembali di server)
+    // =====================================================================
+    let mgRows = new Map(), lastManageAll = false;
+
+    async function loadManage(all) {
+        lastManageAll = all === true;
+        const st = document.getElementById('mgStatus'), list = document.getElementById('mgList');
+        const date = document.getElementById('mgDate').value;
+        if (!all && !date) { st.textContent = 'Pilih tanggal dulu.'; return; }
+        st.textContent = 'Memuat match...'; list.innerHTML = '';
+        try {
+            const res = await adminCall(all ? { action: 'getRecap', limit: 150 } : { action: 'getRecap', date });
+            mgRows = new Map(res.matches.map(r => [r[0], r]));
+            renderManage(res.matches, all);
+        } catch (err) { st.innerHTML = `<span class="text-rose-500">${esc(err.message)}</span>`; }
+    }
+
+    function renderManage(rows, all) {
+        const st = document.getElementById('mgStatus'), list = document.getElementById('mgList');
+        if (!rows.length) { st.textContent = all ? 'Belum ada match.' : 'Tidak ada match pada tanggal ini.'; list.innerHTML = ''; return; }
+        st.textContent = `${rows.length} match${all ? ' terbaru' : ''}.`;
+        const days = new Map();
+        rows.forEach(r => { if (!days.has(r[1])) days.set(r[1], []); days.get(r[1]).push(r); });
+        list.innerHTML = [...days.entries()].sort((a, b) => b[0].localeCompare(a[0])).map(([ymd, ms]) => {
+            const d = parseTgl(ymd), lb = d ? `${HARI[d.getDay()]}, ${d.getDate()} ${BLN[d.getMonth()]} ${d.getFullYear()}` : ymd;
+            return `<p class="font-display uppercase text-[11px] tracking-[0.2em] text-brand-rose pt-3 pb-1 sticky top-0 bg-[#140a0d]/90 backdrop-blur z-10">${esc(lb)} · ${ms.length} match</p>` +
+                ms.map((r, k) => mgRowHTML(r, k + 1)).join('');
+        }).join('');
+    }
+
+    function mgRowHTML(r, no) {
+        const [id, , , , a1, a2, sa, b1, b2, sb] = r, aw = sa > sb, bw = sb > sa;
+        const nm = (x, y) => `${esc(x)} &amp; ${esc(y)}`;
+        return `<div class="mg-row flex items-center gap-2 py-2 border-b border-white/5 text-sm" data-id="${esc(id)}" data-no="${no}">
+            <span class="w-6 flex-none text-center text-[11px] text-neutral-500 font-display">${pad(no)}</span>
+            <div class="min-w-0 flex-1">
+                <div class="flex justify-between gap-2"><span class="truncate ${aw ? 'text-emerald-400 font-semibold' : 'text-white'}">${nm(a1, a2)}</span><b class="${aw ? 'text-emerald-400' : 'text-white'}">${sa}</b></div>
+                <div class="flex justify-between gap-2"><span class="truncate ${bw ? 'text-emerald-400 font-semibold' : 'text-white'}">${nm(b1, b2)}</span><b class="${bw ? 'text-emerald-400' : 'text-white'}">${sb}</b></div>
+            </div>
+            <button data-act="edit" data-id="${esc(id)}" class="flex-none px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs" title="Ubah">✎</button>
+            <button data-act="del" data-id="${esc(id)}" class="flex-none px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-brand-rose text-xs" title="Hapus">🗑</button>
+        </div>`;
+    }
+
+    function mgEditHTML(r, no) {
+        const [id, ymd, , , a1, a2, sa, b1, b2, sb] = r;
+        const names = [...new Set([...globalPlayers.map(p => p.name), ...GUEST_NAMES])];
+        const opts = sel => (names.includes(sel) ? names : [...names, sel]).map(n => `<option value="${esc(n)}" ${n === sel ? 'selected' : ''}>${esc(n)}</option>`).join('');
+        const sc = v => [0, 1, 2].map(n => `<option ${n === +v ? 'selected' : ''}>${n}</option>`).join('');
+        const cls = 'w-full min-w-0 rounded-lg px-2 py-1.5 text-white text-sm outline-none';
+        return `<div class="mg-row py-3 border-b border-white/10 bg-white/5 rounded-xl px-3 my-1" data-id="${esc(id)}" data-no="${no}">
+            <div class="grid grid-cols-[1fr_1fr_3.5rem] gap-2 mb-2">
+                <select class="${cls}" data-f="a1">${opts(a1)}</select><select class="${cls}" data-f="a2">${opts(a2)}</select><select class="${cls} text-center" data-f="sa">${sc(sa)}</select>
+                <select class="${cls}" data-f="b1">${opts(b1)}</select><select class="${cls}" data-f="b2">${opts(b2)}</select><select class="${cls} text-center" data-f="sb">${sc(sb)}</select>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+                <input type="date" data-f="tgl" value="${esc(ymd)}" max="${todayYMD}" class="rounded-lg px-2 py-1.5 text-white text-sm outline-none">
+                <div class="flex gap-2">
+                    <button data-act="cancel" data-id="${esc(id)}" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs">Batal</button>
+                    <button data-act="save" data-id="${esc(id)}" class="px-4 py-1.5 rounded-lg bg-green-600 hover:bg-green-500 text-white text-xs font-semibold">Simpan</button>
+                </div>
+            </div></div>`;
+    }
+
+    document.getElementById('mgList').addEventListener('click', async e => {
+        const b = e.target.closest('button[data-act]'); if (!b) return;
+        const id = b.dataset.id, row = b.closest('.mg-row'), r = mgRows.get(id); if (!r) return;
+        if (b.dataset.act === 'edit') { row.outerHTML = mgEditHTML(r, +row.dataset.no); return; }
+        if (b.dataset.act === 'cancel') { row.outerHTML = mgRowHTML(r, +row.dataset.no); return; }
+        if (b.dataset.act === 'del') {
+            if (!confirm(`Hapus match ini?\n${r[4]} & ${r[5]} (${r[6]}) vs ${r[7]} & ${r[8]} (${r[9]})\n\nPoin para pemain akan dikurangi kembali dari klasemen.`)) return;
+            showLoading(true);
+            try { await adminCall({ action: 'deleteVerified', id }); afterManageChange(); }
+            catch (err) { alert(err.message); showLoading(false); }
+            return;
+        }
+        if (b.dataset.act === 'save') {
+            const f = k => row.querySelector(`[data-f="${k}"]`).value;
+            const p = [f('a1'), f('a2'), f('b1'), f('b2')];
+            const real = p.filter(n => !GUEST_NAMES.includes(n));
+            if (new Set(real).size !== real.length) { alert('Satu pemain tidak boleh dipilih dua kali dalam satu match.'); return; }
+            const ymd = f('tgl'); if (!ymd) { alert('Tanggal wajib diisi.'); return; }
+            const [y, m] = ymd.split('-').map(Number);
+            showLoading(true);
+            try {
+                await adminCall({ action: 'updateMatch', id, data: { tanggal: ymd, bulan: BLN[m - 1], tahun: y, tA_p1: p[0], tA_p2: p[1], scoreA: f('sa'), tB_p1: p[2], tB_p2: p[3], scoreB: f('sb') } });
+                afterManageChange();
+            } catch (err) { alert(err.message); showLoading(false); }
+        }
+    });
+
+    function afterManageChange() {
+        recapDays = []; fetchHistory();
+        loadManage(lastManageAll).finally(() => showLoading(false));
+    }
+
+    // =====================================================================
+    // FITUR UNDUH POSTER MATCH RECAP (DARI SPREADSHEET SHEET 6)
+    // =====================================================================
+    
+    // Fetch CSV helper
+    function parseCSV(text) {
+        const rows = []; let row = [], cell = '', q = false;
+        for (let i = 0; i < text.length; i++) {
+            const ch = text[i];
+            if (q) { if (ch === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += ch; }
+            else if (ch === '"') q = true;
+            else if (ch === ',') { row.push(cell); cell = ''; }
+            else if (ch === '\n' || ch === '\r') {
+                if (ch === '\r' && text[i + 1] === '\n') i++;
+                row.push(cell); rows.push(row); row = []; cell = '';
+            } else cell += ch;
+        }
+        if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+        return rows;
+    }
+    
+    async function fetchCSV(url) {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return parseCSV(await res.text());
+    }
+
+    function jsonpGrid(url) {
+        return new Promise((resolve, reject) => {
+            const cb = '__gv' + Math.random().toString(36).slice(2);
+            const s = document.createElement('script');
+            const done = () => { clearTimeout(timer); delete window[cb]; s.remove(); };
+            const timer = setTimeout(() => { done(); reject(new Error('timeout')); }, 10000);
+            window[cb] = r => {
+                done();
+                if (!r || r.status !== 'ok') { reject(new Error('gviz error')); return; }
+                const val = c => !c ? '' : (c.v != null ? (typeof c.v === 'string' && /^Date\(/.test(c.v) && c.f ? c.f : c.v) : (c.f ?? ''));
+                const grid = r.table.rows.map(row => row.c.map(val));
+                const labels = r.table.cols.map(c => c.label || '');
+                if (labels.some(Boolean)) grid.unshift(labels);
+                resolve(grid);
+            };
+            s.onerror = () => { done(); reject(new Error('script diblokir')); };
+            s.src = url + (url.includes('?') ? '&' : '?') + 'headers=0&tqx=responseHandler:' + cb;
+            document.head.appendChild(s);
+        });
+    }
+
+    async function fetchGrid(cfg) {
+        const base = `https://docs.google.com/spreadsheets/d/${SHEET_ID}`;
+        const targets = cfg.gid ? [`gid=${cfg.gid}`] : [];
+        for (const tg of targets) {
+            try { const g = await fetchCSV(`${base}/export?format=csv&${tg}`); if (g.length) return g; } catch(e){}
+            try { const g = await fetchCSV(`${base}/gviz/tq?tqx=out:csv&${tg}`); if (g.length) return g; } catch(e){}
+            try { const g = await jsonpGrid(`${base}/gviz/tq?${tg}`); if (g.length) return g; } catch(e){}
+        }
+        throw new Error("Gagal load data Spreadsheet.");
+    }
+
+    const HARI = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+    const BLN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+    let recapDays = [], curDay = -1;
+
+    function parseTgl(v) {
+        v = str(v); let m;
+        if ((m = v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))) return new Date(+m[1], m[2] - 1, +m[3]);
+        if ((m = v.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})/))) return new Date(+m[3], m[2] - 1, +m[1]);
+        if ((m = v.match(/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/))) { const i = BLN.findIndex(b => b.toLowerCase().slice(0, 3) === m[2].toLowerCase().slice(0, 3)); if (i >= 0) return new Date(+m[3], i, +m[1]); }
+        const d = new Date(v); return isNaN(d) ? null : d;
+    }
+
+    async function loadRecapData() {
+        const list = document.getElementById('recapList'), st = document.getElementById('recapStatus');
+        st.textContent = 'Mengambil data pertandingan...'; list.innerHTML = '';
+        try {
+            const grid = await fetchGrid(SHEET_RECAP);
+            const h = grid[0].map(s => String(s).toLowerCase().replace(/[^a-z0-9]/g, ''));
+            const f = (re, d) => { const i = h.findIndex(x => re.test(x)); return i >= 0 ? i : d; };
+            const A = '(tima|teama|pemaina|playera|^a)\\D*', B = '(timb|teamb|pemainb|playerb|^b)\\D*';
+            const c = { t: f(/tanggal|tgl|date/, 1), a1: f(new RegExp(A + '1$'), 4), a2: f(new RegExp(A + '2$'), 5), sa: f(/(skor|score).*a$/, 6),
+                        b1: f(new RegExp(B + '1$'), 7), b2: f(new RegExp(B + '2$'), 8), sb: f(/(skor|score).*b$/, 9) };
+            const days = new Map();
+            for (let i = 1; i < grid.length; i++) {
+                const r = grid[i], d = parseTgl(r[c.t]);
+                if (!d || !str(r[c.a1]) || !str(r[c.b1])) continue;
+                const key = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+                if (!days.has(key)) days.set(key, { key, date: d, matches: [] });
+                days.get(key).matches.push({ A1: str(r[c.a1]), A2: str(r[c.a2]), B1: str(r[c.b1]), B2: str(r[c.b2]), a: toNum(r[c.sa]), b: toNum(r[c.sb]) });
+            }
+            recapDays = [...days.values()].sort((x, y) => y.date - x.date).map(d => ({ ...d,
+                label: `${HARI[d.date.getDay()]}, ${d.date.getDate()} ${BLN[d.date.getMonth()]} ${d.date.getFullYear()}`,
+                players: new Set(d.matches.flatMap(m => [m.A1, m.A2, m.B1, m.B2]).filter(Boolean)).size }));
+            if (!recapDays.length) { st.textContent = 'Tidak ada pertandingan terbaca. Header sheet: ' + grid[0].join(' | '); return; }
+            st.textContent = `${recapDays.length} hari pertandingan ditemukan.`;
+            list.innerHTML = recapDays.map((d, i) => `
+                <button type="button" class="date-btn" data-i="${i}" aria-pressed="false" onclick="selectDay(${i}, true)">
+                    <span class="dw">${HARI[d.date.getDay()].slice(0, 3)}</span><b>${d.date.getDate()}</b><span class="dm">${BLN[d.date.getMonth()].slice(0, 3)} ${d.date.getFullYear()}</span><i>${d.matches.length} match</i>
+                </button>`).join('');
+            selectDay(0);
+        } catch (err) { console.error(err); st.innerHTML = `<span class="text-rose-500">Gagal memuat data: ${esc(err.message)}</span>`; }
+    }
+
+    function selectDay(i, scroll) {
+        const d = recapDays[i]; if (!d) return;
+        document.querySelectorAll('.date-btn').forEach(b => { const on = +b.dataset.i === i; b.classList.toggle('active', on); b.setAttribute('aria-pressed', on); });
+        const av = n => `<img src="${esc(photoFor(n, 96))}" alt="" loading="lazy" onerror="this.onerror=null;this.src='${esc(avatar(n, 96))}'" class="w-8 h-8 rounded-full object-cover ring-2 ring-white/30 flex-none">`;
+        const team = (a, b, win, right) => [a, b].map(n => `<div class="flex items-center gap-2 min-w-0 ${right ? 'flex-row-reverse text-right' : ''}">${av(n)}<span class="truncate text-sm sm:text-base font-semibold ${win ? 'text-emerald-400' : 'text-white'}">${esc(n)}</span></div>`).join('');
+        const rows = d.matches.map((m, k) => {
+            const aw = m.a > m.b, bw = m.b > m.a, cl = (w) => w ? 'text-emerald-400' : (m.a === m.b ? 'text-amber-300' : 'text-white');
+            return `<div class="bg-white/5 border border-white/10 rounded-2xl p-3 sm:p-4">
+                <p class="font-display uppercase text-[10px] tracking-[0.2em] text-neutral-400 text-center mb-2">Match ${pad(k + 1)}</p>
+                <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4">
+                    <div class="flex flex-col gap-1.5 min-w-0">${team(m.A1, m.A2, aw, false)}</div>
+                    <div class="font-display text-3xl sm:text-4xl font-bold whitespace-nowrap"><span class="${cl(aw)}">${m.a}</span><span class="text-brand-rose mx-1">–</span><span class="${cl(bw)}">${m.b}</span></div>
+                    <div class="flex flex-col gap-1.5 min-w-0">${team(m.B1, m.B2, bw, true)}</div>
+                </div></div>`;
+        }).join('');
+        const el = document.getElementById('recapDetail'); el.classList.remove('hidden');
+        el.innerHTML = `<div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+                <div><h3 class="font-display uppercase text-xl sm:text-2xl font-bold">${esc(d.label)}</h3><p class="text-sm text-neutral-400"><span class="text-brand-rose font-semibold">${d.matches.length}</span> pertandingan &middot; ${d.players} pemain</p></div>
+                <div class="flex gap-2"><button class="ghost-btn" onclick="previewPoster(${i}, this)">Preview</button><button class="export-btn" onclick="downloadPoster(${i}, this)">📥 Download Poster</button></div>
+            </div><div class="space-y-3">${rows}</div>`;
+        if (scroll) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Tools Penggambar Canvas
+    function fetchDataURL(url) {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 10000);
+        return fetch(url, { mode: 'cors', referrerPolicy: 'no-referrer', signal: ctrl.signal })
+            .then(r => { if (!r.ok) throw new Error('http'); return r.blob(); })
+            .then(b => new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.onerror = rej; fr.readAsDataURL(b); }))
+            .catch(() => null).finally(() => clearTimeout(timer));
+    }
+    
+    function loadImage(src) {
+        return new Promise(res => { if (!src) return res(null); const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = src; });
+    }
+
+    function initialsAvatar(name, size = 256) {
+        const c = document.createElement('canvas'); c.width = c.height = size; const g = c.getContext('2d');
+        g.fillStyle = '#1c1c1c'; g.fillRect(0, 0, size, size);
+        const parts = str(name).split(/\s+/).filter(Boolean);
+        const ini = ((parts[0] || '?')[0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
+        g.fillStyle = '#D6455D'; g.font = `700 ${size * 0.42}px Oswald, sans-serif`;
+        g.textAlign = 'center'; g.textBaseline = 'middle';
+        g.fillText(ini, size / 2, size / 2 + size * 0.03);
+        return c.toDataURL('image/png');
+    }
+
+    const photoFor = (name, w = 400) => { const f = photoMap.get(norm(name)); return f ? driveThumb(f, w) : avatar(name, w); };
+    async function posterPhoto(name) {
+        if (!photoMap.get(norm(name))) return initialsAvatar(name);
+        return (await fetchDataURL(photoFor(name, 400))) || initialsAvatar(name);
+    }
+
+    function rr(ctx, x, y, w, h, r) {
+        const [tl, tr, br, bl] = Array.isArray(r) ? r : [r, r, r, r];
+        ctx.beginPath(); ctx.moveTo(x + tl, y);
+        ctx.lineTo(x + w - tr, y); ctx.arcTo(x + w, y, x + w, y + tr, tr);
+        ctx.lineTo(x + w, y + h - br); ctx.arcTo(x + w, y + h, x + w - br, y + h, br);
+        ctx.lineTo(x + bl, y + h); ctx.arcTo(x, y + h, x, y + h - bl, bl);
+        ctx.lineTo(x, y + tl); ctx.arcTo(x, y, x + tl, y, tl);
+        ctx.closePath();
+    }
+
+    function drawCircleImage(ctx, img, cx, cy, r) {
+        ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.closePath(); ctx.clip();
+        if (img) {
+            const s = Math.min(img.width, img.height);
+            const sx = (img.width - s) / 2; const sy = (img.height - s) * 0.2;
+            ctx.drawImage(img, sx, sy, s, s, cx - r, cy - r, r * 2, r * 2);
+        } else { ctx.fillStyle = '#1c1c1c'; ctx.fillRect(cx - r, cy - r, r * 2, r * 2); }
+        ctx.restore();
+    }
+
+    function drawTexture(ctx, W, H) {
+        const t = document.createElement('canvas'); t.width = t.height = 8; const g = t.getContext('2d');
+        g.fillStyle = 'rgba(255,255,255,1)';  g.fillRect(0, 0, 4, 4); g.fillRect(4, 4, 4, 4);
+        g.fillStyle = 'rgba(255,255,255,.4)'; g.fillRect(4, 0, 4, 4); g.fillRect(0, 4, 4, 4);
+        ctx.save(); ctx.globalAlpha = 0.035; ctx.fillStyle = ctx.createPattern(t, 'repeat'); ctx.fillRect(0, 0, W, H);
+        const n = document.createElement('canvas'); n.width = n.height = 220;
+        const nx = n.getContext('2d'), id = nx.createImageData(220, 220);
+        for (let i = 0; i < id.data.length; i += 4) { const v = Math.random() * 255; id.data[i] = id.data[i+1] = id.data[i+2] = v; id.data[i+3] = 255; }
+        nx.putImageData(id, 0, 0);
+        ctx.globalAlpha = 0.03; ctx.fillStyle = ctx.createPattern(n, 'repeat'); ctx.fillRect(0, 0, W, H);
+        ctx.restore();
+    }
+
+    function drawCourt(ctx, W, H) {
+        const sc = ctx.getTransform().a;
+        const m = 46, x0 = m, x1 = W - m, y0 = m, y1 = H - m;
+        const cw = x1 - x0, ch = y1 - y0, net = y0 + ch / 2;
+        const side = cw * 0.075, svc = (ch / 2) * 0.295, back = (ch / 2) * 0.114;
+        ctx.save(); ctx.lineJoin = 'round';
+        ctx.strokeStyle = 'rgba(251,191,36,.30)'; ctx.lineWidth = 3;
+        ctx.shadowColor = 'rgba(251,191,36,.55)'; ctx.shadowBlur = 12 * sc;
+        ctx.strokeRect(x0, y0, cw, ch);
+        ctx.strokeStyle = 'rgba(255,92,116,.26)'; ctx.lineWidth = 3;
+        ctx.shadowColor = 'rgba(255,70,100,.6)'; ctx.shadowBlur = 12 * sc;
+        ctx.beginPath();
+        ctx.moveTo(x0 + side, y0); ctx.lineTo(x0 + side, y1); ctx.moveTo(x1 - side, y0); ctx.lineTo(x1 - side, y1);
+        ctx.moveTo(x0, net - svc); ctx.lineTo(x1, net - svc); ctx.moveTo(x0, net + svc); ctx.lineTo(x1, net + svc);
+        ctx.moveTo(x0, y0 + back); ctx.lineTo(x1, y0 + back); ctx.moveTo(x0, y1 - back); ctx.lineTo(x1, y1 - back);
+        ctx.moveTo(W / 2, y0); ctx.lineTo(W / 2, net - svc); ctx.moveTo(W / 2, net + svc); ctx.lineTo(W / 2, y1);
+        ctx.stroke();
+        ctx.shadowBlur = 0; ctx.setLineDash([14, 10]);
+        ctx.strokeStyle = 'rgba(255,255,255,.14)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x0 - 8, net + 7); ctx.lineTo(x1 + 8, net + 7); ctx.stroke();
+        ctx.strokeStyle = 'rgba(255,255,255,.34)'; ctx.lineWidth = 4; ctx.shadowColor = 'rgba(255,255,255,.5)'; ctx.shadowBlur = 10 * sc;
+        ctx.beginPath(); ctx.moveTo(x0 - 8, net - 7); ctx.lineTo(x1 + 8, net - 7); ctx.stroke();
+        ctx.restore();
+    }
+
+    const FD = "Oswald, 'Arial Narrow', sans-serif", FB = "Inter, Arial, sans-serif";
+    const spacedW = (ctx, t, sp) => [...t].reduce((a, ch) => a + ctx.measureText(ch).width, 0) + sp * Math.max([...t].length - 1, 0);
+    const spaced = (ctx, t, x, y, sp) => { let cx = x; for (const ch of [...t]) { ctx.fillText(ch, cx, y); cx += ctx.measureText(ch).width + sp; } };
+    function fitFont(ctx, text, maxW, size, weight) { let s = size; ctx.font = `${weight} ${s}px ${FD}`; while (ctx.measureText(text).width > maxW && s > 14) { s--; ctx.font = `${weight} ${s}px ${FD}`; } return s; }
+    function drawInstagram(ctx, x, y, s, color) {
+        ctx.save(); ctx.translate(x, y); ctx.scale(s / 24, s / 24); ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.lineCap = 'round';
+        rr(ctx, 3, 3, 18, 18, 5); ctx.stroke(); ctx.beginPath(); ctx.arc(12, 12, 4, 0, Math.PI * 2); ctx.stroke();
+        ctx.beginPath(); ctx.arc(17.5, 6.5, 1.1, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill(); ctx.restore();
+    }
+    function drawSpotlight(ctx, cx, bottomY, spread) {
+        ctx.save(); ctx.globalCompositeOperation = 'screen';
+        for (let i = 0; i < 6; i++) {
+            const k = 0.55 + i * 0.09, gr = ctx.createLinearGradient(0, 0, 0, bottomY);
+            gr.addColorStop(0, 'rgba(255,236,205,.033)'); gr.addColorStop(.6, 'rgba(255,222,180,.02)'); gr.addColorStop(1, 'rgba(255,205,150,0)');
+            ctx.fillStyle = gr; ctx.beginPath(); ctx.moveTo(cx - 70 * k, 0); ctx.lineTo(cx + 70 * k, 0); ctx.lineTo(cx + spread * k, bottomY); ctx.lineTo(cx - spread * k, bottomY); ctx.closePath(); ctx.fill();
+        }
+        ctx.restore();
+    }
+    // Blur latar (turun-skala berulang, jalan di semua browser termasuk Safari) untuk efek kaca buram
+    function blurred(src) {
+        let c = src;
+        for (let i = 0; i < 3; i++) { const n = document.createElement('canvas'); n.width = Math.max(8, c.width >> 1); n.height = Math.max(8, c.height >> 1); const g = n.getContext('2d'); g.imageSmoothingQuality = 'high'; g.drawImage(c, 0, 0, n.width, n.height); c = n; }
+        return c;
+    }
+    // Kartu kaca: latar yang diburamkan + lapisan putih transparan + tepi bercahaya
+    function glass(ctx, blur, W, H, SC, x, y, w, h, r, tint = .10, edge = .30) {
+        ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = 30 * SC; ctx.shadowOffsetY = 12 * SC; rr(ctx, x, y, w, h, r); ctx.fillStyle = '#12060a'; ctx.fill(); ctx.restore();
+        ctx.save(); rr(ctx, x, y, w, h, r); ctx.clip(); ctx.drawImage(blur, 0, 0, W, H);
+        const g = ctx.createLinearGradient(x, y, x + w, y + h); g.addColorStop(0, `rgba(255,255,255,${tint + .07})`); g.addColorStop(1, `rgba(255,255,255,${tint * .35})`);
+        ctx.fillStyle = g; ctx.fillRect(x, y, w, h); ctx.restore();
+        ctx.save(); rr(ctx, x + .75, y + .75, w - 1.5, h - 1.5, r);
+        const b = ctx.createLinearGradient(x, y, x, y + h); b.addColorStop(0, `rgba(255,255,255,${edge + .2})`); b.addColorStop(.5, `rgba(255,255,255,${edge * .5})`); b.addColorStop(1, `rgba(255,255,255,${edge * .7})`);
+        ctx.strokeStyle = b; ctx.lineWidth = 1.5; ctx.stroke(); ctx.restore();
+    }
+    const photoCache = new Map();
+    function posterImg(name) {
+        const k = norm(name);
+        if (!photoCache.has(k)) photoCache.set(k, (async () => loadImage((photoMap.get(k) && await fetchDataURL(photoFor(name, 300))) || initialsAvatar(name)))());
+        return photoCache.get(k);
+    }
+
+    async function renderPoster(day, list, part, parts, SC) {
+        const W = 1080, H = 1920, PX = 60, CW = W - PX * 2, GAP = 18, TOP = 520, BOT = H - 250;   // Story 9:16, area aman UI Instagram
+        const CH = Math.max(108, Math.min(150, Math.floor((BOT - TOP + GAP) / list.length) - GAP)), kf = CH / 150, content = list.length * (CH + GAP) - GAP;
+        if (document.fonts && document.fonts.load) await Promise.all(['700 96px Oswald', '600 30px Oswald', '600 24px Inter', '500 24px Inter'].map(f => document.fonts.load(f).catch(() => null)));
+        const names = [...new Set(list.flatMap(m => [m.A1, m.A2, m.B1, m.B2]).filter(Boolean))];
+        const [logo, ...pics] = await Promise.all([fetchDataURL(LOGO_URL).then(loadImage), ...names.map(posterImg)]);
+        const img = n => pics[names.indexOf(n)];
+        const mk = () => { const c = document.createElement('canvas'); c.width = W * SC; c.height = H * SC; const x = c.getContext('2d'); x.scale(SC, SC); x.textBaseline = 'alphabetic'; return [c, x]; };
+
+        // Latar: radial #0A0A0A -> #2B0A11, tekstur, cahaya warna (agar efek kaca terlihat), garis lapangan, spotlight
+        const [bgc, bg] = mk();
+        const gr = bg.createRadialGradient(W / 2, H * .28, 0, W / 2, H * .28, Math.hypot(W / 2, H * .8)); gr.addColorStop(0, '#0A0A0A'); gr.addColorStop(.45, '#13070A'); gr.addColorStop(1, '#2B0A11');
+        bg.fillStyle = gr; bg.fillRect(0, 0, W, H);
+        drawTexture(bg, W, H);
+        [[W * .95, H * .06, 520, 'rgba(214,69,93,.50)'], [0, H * .30, 560, 'rgba(122,16,32,.80)'], [W, H * .52, 480, 'rgba(155,28,75,.42)'], [W * .05, H * .78, 480, 'rgba(251,191,36,.20)'], [W * .92, H * .96, 560, 'rgba(122,16,32,.75)']]
+            .forEach(([x, y, r, col]) => { const g = bg.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, col); g.addColorStop(1, 'rgba(0,0,0,0)'); bg.fillStyle = g; bg.fillRect(0, 0, W, H); });
+        drawCourt(bg, W, H); drawSpotlight(bg, W / 2, TOP - 20, 380);
+        const blur = blurred(bgc);
+        const [cv, ctx] = mk(); ctx.drawImage(bgc, 0, 0, W, H);
+
+        // Header
+        const top = 150, logoH = 70;
+        ctx.font = `700 44px ${FD}`; const wPB = spacedW(ctx, 'PB ', 4), wJG = spacedW(ctx, 'JGEER', 4), lw = logo ? logoH * logo.width / logo.height : 0;
+        let bx = (W - (lw + (logo ? 18 : 0) + wPB + 4 + wJG)) / 2;
+        if (logo) { ctx.drawImage(logo, bx, top, lw, logoH); bx += lw + 18; }
+        ctx.textAlign = 'left'; ctx.fillStyle = '#fff'; spaced(ctx, 'PB ', bx, top + logoH / 2 + 15, 4); ctx.fillStyle = '#D6455D'; spaced(ctx, 'JGEER', bx + wPB + 4, top + logoH / 2 + 15, 4);
+        const ts = fitFont(ctx, 'MATCH RECAP', 860, 120, 700), wM = ctx.measureText('MATCH ').width, wR = ctx.measureText('RECAP').width, tb = top + logoH + 14 + Math.round(ts * .85);
+        ctx.save(); ctx.shadowColor = 'rgba(214,69,93,.55)'; ctx.shadowBlur = 30 * SC; ctx.fillStyle = '#fff'; ctx.fillText('MATCH ', (W - wM - wR) / 2, tb); ctx.fillStyle = '#D6455D'; ctx.fillText('RECAP', (W - wM - wR) / 2 + wM, tb); ctx.restore();
+        const dTxt = day.label.toUpperCase(); ctx.font = `600 28px ${FD}`;
+        const cw = spacedW(ctx, dTxt, 5) + 72, cx0 = (W - cw) / 2, cy0 = tb + 28;
+        glass(ctx, blur, W, H, SC, cx0, cy0, cw, 56, 28, .12, .34); ctx.fillStyle = '#fff'; ctx.textAlign = 'left'; spaced(ctx, dTxt, cx0 + 36, cy0 + 38, 5);
+        const sum = `${day.matches.length} PERTANDINGAN  ·  ${day.players} PEMAIN` + (parts > 1 ? `  ·  PART ${part}/${parts}` : '');
+        ctx.font = `500 24px ${FB}`; ctx.fillStyle = 'rgba(255,255,255,.75)'; spaced(ctx, sum, (W - spacedW(ctx, sum, 3)) / 2, cy0 + 56 + 44, 3);
+
+        // Kartu pertandingan
+        const y0 = TOP + Math.max(0, (BOT - TOP - content) / 2), cy = i => y0 + i * (CH + GAP);
+        const WIN = '#4ade80', DRAW = '#fbbf24';
+        const avatarAt = (im, x, y, r, col) => {
+            ctx.save(); ctx.shadowColor = col === '#fff' ? 'rgba(214,69,93,.35)' : col + '66'; ctx.shadowBlur = 22 * SC; ctx.beginPath(); ctx.arc(x, y, r + 3, 0, Math.PI * 2); ctx.fillStyle = '#12060a'; ctx.fill(); ctx.restore();
+            drawCircleImage(ctx, im, x, y, r); ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.lineWidth = 4; ctx.strokeStyle = col; ctx.stroke();
+        };
+        list.forEach((m, i) => {
+            const x = PX, y = cy(i), mid = y + CH / 2, a = m.a, b = m.b, aw = a > b, bw = b > a, dr = a === b;
+            const cA = aw ? WIN : dr ? DRAW : '#fff', cB = bw ? WIN : dr ? DRAW : '#fff';
+            glass(ctx, blur, W, H, SC, x, y, CW, CH, 32, .10, .30);
+            if (!dr) {   // semburat hijau di sisi pemenang
+                ctx.save(); rr(ctx, x, y, CW, CH, 32); ctx.clip();
+                const wx = aw ? x : x + CW, wg = ctx.createLinearGradient(wx, 0, x + CW / 2, 0); wg.addColorStop(0, 'rgba(74,222,128,.20)'); wg.addColorStop(1, 'rgba(74,222,128,0)'); ctx.fillStyle = wg; ctx.fillRect(x, y, CW, CH); ctx.restore();
+            }
+            const ar = 34 * kf, ax = 68 * kf, ad = 62 * kf, nx = 186 * kf;
+            avatarAt(img(m.A1), x + ax, mid, ar, cA); avatarAt(img(m.A2), x + ax + ad, mid, ar, cA);
+            avatarAt(img(m.B1), x + CW - ax - ad, mid, ar, cB); avatarAt(img(m.B2), x + CW - ax, mid, ar, cB);
+            const nameMax = CW / 2 - 90 - nx;
+            [[m.A1, 'left', x + nx, cA, aw], [m.A2, 'left', x + nx, cA, aw], [m.B1, 'right', x + CW - nx, cB, bw], [m.B2, 'right', x + CW - nx, cB, bw]].forEach(([n, al, nx, col, won], k) => {
+                const t = String(n).toUpperCase(); fitFont(ctx, t, nameMax, 28 * kf, 600); ctx.textAlign = al; ctx.fillStyle = won ? col : 'rgba(255,255,255,.92)'; ctx.fillText(t, nx, mid + (k % 2 ? 34 * kf : -6 * kf));
+            });
+            ctx.textAlign = 'center'; ctx.font = `600 15px ${FB}`; ctx.fillStyle = 'rgba(255,255,255,.55)'; const lb = `MATCH ${pad(i + 1)}`; spaced(ctx, lb, x + CW / 2 - spacedW(ctx, lb, 3) / 2, y + 38 * kf, 3);
+            ctx.textAlign = 'left'; ctx.font = `700 ${Math.round(66 * kf)}px ${FD}`; const segs = [[String(a), cA], [' – ', '#D6455D'], [String(b), cB]], tw = segs.reduce((s, [t]) => s + ctx.measureText(t).width, 0);
+            let sx = x + CW / 2 - tw / 2; ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 8 * SC; segs.forEach(([t, c]) => { ctx.fillStyle = c; ctx.fillText(t, sx, y + 108 * kf); sx += ctx.measureText(t).width; }); ctx.restore();
+        });
+
+        // Footer (jauh dari tepi bawah agar tidak tertutup kolom balasan Story)
+        ctx.font = `600 26px ${FB}`; const user = 'jgeer_badminton', uw = ctx.measureText(user).width, fx = (W - (30 + 12 + uw)) / 2, fy = H - 200;
+        drawInstagram(ctx, fx, fy - 15, 30, '#D6455D'); ctx.fillStyle = '#d4d4d8'; ctx.textAlign = 'left'; ctx.fillText(user, fx + 42, fy + 9);
+        return cv;
+    }
+
+    const chunks = day => { const n = +document.getElementById('recapSplit').value || 9, out = []; for (let k = 0; k < day.matches.length; k += n) out.push(day.matches.slice(k, k + n)); return out; };
+    const toBlob = cv => new Promise((res, rej) => cv.toBlob(b => b ? res(b) : rej(new Error('toBlob gagal')), 'image/png'));
+
+    async function previewPoster(i, btn) {
+        const day = recapDays[i], old = btn.innerText; btn.disabled = true; btn.innerText = 'Memproses...';
+        try {
+            const p = chunks(day); curDay = i;
+            document.getElementById('posterImg').src = URL.createObjectURL(await toBlob(await renderPoster(day, p[0], 1, p.length, 1)));
+            document.getElementById('posterModal').classList.remove('hidden');
+        } catch (e) { console.error(e); alert('Gagal membuat preview: ' + e.message); }
+        btn.disabled = false; btn.innerText = old;
+    }
+
+    async function downloadPoster(i, btn) {
+        const day = recapDays[i], p = chunks(day), old = btn.innerText; btn.disabled = true; btn.innerText = 'Memproses...';
+        try {
+            for (let k = 0; k < p.length; k++) {
+                let cv; try { cv = await renderPoster(day, p[k], k + 1, p.length, 2); } catch (e) { cv = await renderPoster(day, p[k], k + 1, p.length, 1); }   // 2160 px (HD)
+                const a = document.createElement('a'); a.href = URL.createObjectURL(await toBlob(cv));
+                a.download = `jgeer-match-recap-${day.key}${p.length > 1 ? '-part' + (k + 1) : ''}.png`;
+                document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+                await new Promise(r => setTimeout(r, 400));
+            }
+        } catch (e) { console.error(e); alert('Gagal membuat poster: ' + e.message); }
+        btn.disabled = false; btn.innerText = old;
+    }
+
+    // Tombol ke atas
+    const tt = document.getElementById('toTop');
+    addEventListener('scroll', () => { tt.classList.toggle('hidden', scrollY < 400); }, { passive: true });
+    tt.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
+</script>
+<!-- TEMA-TERANG-JS -->
+<script>/* TEMA TERANG: interaksi ringan (riak tombol, muncul saat digulir, hitung naik) */
+(() => {
+  const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.addEventListener('pointerdown', e => {
+    const b = e.target.closest('.export-btn,.ghost-btn,.ghost-pill,.tab-btn,.dk'); if (!b || b.disabled || REDUCE) return;
+    const r = b.getBoundingClientRect(), d = Math.max(r.width, r.height) * 1.6, s = document.createElement('span'); s.className = 'rp';
+    s.style.cssText = `width:${d}px;height:${d}px;left:${e.clientX - r.left - d / 2}px;top:${e.clientY - r.top - d / 2}px`; b.appendChild(s); setTimeout(() => s.remove(), 600);
+  });
+  function countUp(el) { const m = /^(\d+)(.*)$/.exec(el.textContent.trim()); if (!m || REDUCE) return; const n = +m[1], t0 = performance.now(), D = 900;
+    const tick = t => { const k = Math.min(1, (t - t0) / D), e = 1 - Math.pow(1 - k, 3); el.textContent = Math.round(n * e) + m[2]; if (k < 1) requestAnimationFrame(tick); }; requestAnimationFrame(tick); }
+  if (REDUCE || !('IntersectionObserver' in window)) return;
+  const SEL = '.player-card,.pl,.hof-card,.pod,.info-strip>div>div,main section .bg-brand-card,main details,.date-btn,.day-card,.ev-tile';
+  const io = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; const t = e.target; t.classList.add('in'); io.unobserve(t);
+    if (t.matches('.info-strip>div>div')) { const n = t.querySelector('.font-display.text-brand-rose'); if (n && /^\d+x?$/.test(n.textContent.trim())) countUp(n); } }), { threshold: .1 });
+  const prep = root => { if (root.nodeType !== 1) return; const list = [...(root.matches(SEL) ? [root] : []), ...root.querySelectorAll(SEL)]; let i = 0;
+    list.forEach(el => { if (el.classList.contains('rv') || el.closest('.fixed')) return; el.classList.add('rv'); el.style.setProperty('--d', Math.min(i++, 8) * .05 + 's'); io.observe(el); }); };
+  const start = () => { const m = document.querySelector('main'); if (!m) return; prep(m); new MutationObserver(ms => ms.forEach(x => x.addedNodes.forEach(prep))).observe(m, { childList: true, subtree: true }); };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();
+</script>
+<!-- /TEMA-TERANG-JS -->
+<!-- PWA-JS -->
+<script>
+(() => {
+  // Daftarkan service worker (hanya berjalan di https / localhost)
+  if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  const standalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) && !/crios|fxios/i.test(navigator.userAgent);
+  let deferred = null;
+  const sync = () => document.querySelectorAll('[data-install]').forEach(el => { el.hidden = standalone() || !(deferred || ios); });
+  addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; sync(); });
+  addEventListener('appinstalled', () => { deferred = null; sync(); });
+  function sheet(html) {
+    document.getElementById('pwaSheet')?.remove();
+    const d = document.createElement('div'); d.id = 'pwaSheet';
+    d.style.cssText = 'position:fixed;inset:0;z-index:400;background:rgba(43,27,34,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;padding:1rem';
+    d.innerHTML = '<div style="background:#fff;color:#2B1B22;border-radius:1.5rem;padding:1.4rem;max-width:26rem;width:100%;box-shadow:0 30px 60px -20px rgba(0,0,0,.5);font:500 14px/1.6 \'Plus Jakarta Sans\',Inter,sans-serif">' + html + '<button style="margin-top:1rem;width:100%;padding:.7rem;border:0;border-radius:9999px;background:linear-gradient(135deg,#E4405F,#FF7A59);color:#fff;font:700 14px Inter,sans-serif;cursor:pointer">Mengerti</button></div>';
+    d.addEventListener('click', e => { if (e.target === d || e.target.tagName === 'BUTTON') d.remove(); }); document.body.appendChild(d);
+  }
+  document.addEventListener('click', async e => {
+    if (!e.target.closest('[data-install]')) return;
+    if (deferred) { deferred.prompt(); try { await deferred.userChoice; } catch (_) {} deferred = null; sync(); }
+    else if (ios) sheet('<b style="font-size:16px">Pasang di iPhone</b><ol style="margin:.6rem 0 0 1.1rem;padding:0"><li>Buka halaman ini lewat <b>Safari</b>.</li><li>Ketuk ikon <b>Bagikan</b> (kotak dengan panah ke atas).</li><li>Pilih <b>Tambah ke Layar Utama</b>.</li></ol>');
+  });
+  document.addEventListener('DOMContentLoaded', sync); sync();
+})();
+</script>
+<!-- /PWA-JS -->
+</body>
+</html>

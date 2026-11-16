@@ -2,7 +2,17 @@
 <html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#7A1020">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="PB Jgeer">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="icon" type="image/png" sizes="48x48" href="icons/favicon-48.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <script src="pwa.js"></script>
     <title>Report | PB Jgeer</title>
     <!-- Open Graph / WhatsApp Preview Meta Tags -->
     <meta property="og:type" content="website" />
@@ -312,15 +322,56 @@ html body .rv{opacity:0}html body .rv.in{opacity:1;animation:lrvIn .6s cubic-bez
 html body :is(.export-btn,.ghost-btn,.ghost-pill,.tab-btn){position:relative;overflow:hidden}
 </style>
 <!-- /TEMA-TERANG -->
-<!-- PWA -->
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" href="icons/favicon-64.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="PB Jgeer">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<!-- /PWA -->
+<style id="sirekap-terang">
+/* Sirekap di dalam report: ikut tema terang halaman lain (variabel dari lapisan "tema-terang") */
+html body .sk-status{display:inline-flex;align-items:center;gap:.5rem;padding:.4rem .9rem;border-radius:999px;font-size:.72rem;font-weight:700;background:#fff;color:var(--mut);border:1px solid var(--line);box-shadow:var(--sh)}
+html body .ghost-btn.sm,html body .export-btn.sm{padding:.45rem .95rem!important;font-size:.72rem!important}
+html body #btnSirekap .lock-ic{font-size:.8em}
+
+/* Pilihan tanggal (chip hari dengan pertandingan) */
+html body .date-btn{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.1rem;border-radius:1.25rem;cursor:pointer;color:var(--ink)!important;background:#fff;border:1px solid var(--line);box-shadow:var(--sh);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .25s,background .25s}
+html body .date-btn:hover{transform:translateY(-3px);border-color:rgba(228,64,95,.5);box-shadow:var(--sh2)}
+html body .date-btn:active{transform:scale(.96)}
+html body .date-btn .dw,html body .date-btn .dm{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)!important;font-weight:700}
+html body .date-btn b{font-family:'Plus Jakarta Sans','Oswald',sans-serif;font-size:1.6rem;line-height:1;font-weight:800}
+html body .date-btn i{font-style:normal;font-size:.58rem;margin-top:.2rem;padding:.05rem .5rem;border-radius:9999px;background:#FCE9EC;color:var(--rose);font-weight:700}
+html body .date-btn.active{background:var(--grad);border-color:transparent;color:#fff!important;box-shadow:0 16px 28px -14px rgba(228,64,95,.95)}
+html body .date-btn.active .dw,html body .date-btn.active .dm{color:rgba(255,255,255,.9)!important}
+html body .date-btn.active i{background:rgba(255,255,255,.28);color:#fff}
+
+/* Tombol jumlah kok */
+html body .kbtn{padding:.45rem 0;border-radius:.7rem;font-weight:800;font-size:.8rem;background:#FFF3F0;border:1px solid var(--line);color:var(--mut);cursor:pointer;transition:transform .15s,color .15s,border-color .15s,background .15s}
+html body .kbtn:hover{color:var(--rose);border-color:rgba(228,64,95,.5);background:#FFF1F3}
+html body .kbtn:active{transform:scale(.92)}
+html body .kbtn.on{background:var(--grad);border-color:transparent;color:#fff;box-shadow:0 8px 16px -8px rgba(228,64,95,.9)}
+html body .step-btn{width:2.2rem;height:2.2rem;border-radius:.8rem;font-weight:800;background:#fff;border:1px solid rgba(43,27,34,.14);color:var(--ink);cursor:pointer;transition:background .2s,transform .15s,border-color .2s}
+html body .step-btn:hover{background:#FFF1F3;border-color:rgba(228,64,95,.5);color:var(--rose)}
+html body .step-btn:active{transform:scale(.92)}
+
+/* Kartu pemain (hadir & modal pilih pemain) */
+html body .pcard{display:flex;flex-direction:column;align-items:center;padding:.75rem .5rem;border-radius:1.25rem;border:1px solid var(--line);background:#fff;box-shadow:var(--sh);cursor:pointer;position:relative;transition:transform .25s cubic-bezier(.22,1,.36,1),border-color .2s,background .2s,box-shadow .25s}
+html body .pcard:hover{border-color:rgba(228,64,95,.55);background:#FFF8F9;transform:translateY(-3px);box-shadow:var(--sh2)}
+html body .pcard:active{transform:scale(.97)}
+html body .pcard.on{border-color:var(--rose);background:linear-gradient(145deg,#FFE9EE,#FFF3F0)}
+html body .pcard.guest{border-style:dashed}
+html body .pcard .tick{position:absolute;top:.35rem;right:.35rem;width:1.15rem;height:1.15rem;border-radius:9999px;background:var(--grad);color:#fff;font-size:.65rem;display:none;align-items:center;justify-content:center;font-weight:800}
+html body .pcard.on .tick{display:flex}
+html body .pcard img,html body .kok-row img{background:#F6ECEE;border-color:rgba(43,27,34,.12)!important;box-shadow:none}
+html body .pcard button[data-rm]{color:var(--mut)}
+html body .pcard button[data-rm]:hover{color:var(--rose)}
+
+/* Preview WhatsApp, kotak keterangan, header riwayat */
+html body #wa-preview{background:#FFF8F5!important;border:1px solid var(--line)!important;color:#3F2D35!important}
+html body #view-riwayat .bg-gradient-to-r{background-image:linear-gradient(90deg,#FFE9EE,rgba(255,255,255,0))!important}
+html body #sirekapApp .border-amber-400\/30,html body #sirekapApp .border-amber-400\/40{border-color:rgba(217,119,6,.35)!important}
+html body #sirekapApp .bg-amber-400\/5{background:#FFF7E6!important}
+html body .text-amber-200{color:#9A3412!important}
+html body .text-rose-400{color:#E11D48!important}
+html body #sirekapApp .border-amber-400\/20{border-color:rgba(217,119,6,.25)!important}
+html body #skPlayerModal .glass-card,html body #modal-confirm .glass-card{background:#fff!important}
+html body #sirekapApp .kok-row{box-shadow:var(--sh)}
+
+</style>
 </head>
 <body class="bg-brand-dark text-white antialiased min-h-screen flex flex-col font-body">
 
@@ -345,7 +396,7 @@ html body :is(.export-btn,.ghost-btn,.ghost-pill,.tab-btn){position:relative;ove
     <p class="font-display uppercase tracking-[0.25em] text-xs sm:text-sm text-brand-rose">Season 2026</p>
     <h1 class="mt-2 font-display font-bold uppercase text-4xl sm:text-6xl leading-tight">Input &amp; <span class="text-brand-rose">Recap</span></h1>
     <div class="mt-4 h-1 w-20 bg-brand-maroon rounded mx-auto sm:mx-0"></div>
-    <p class="mt-5 max-w-2xl text-neutral-300 sm:text-lg mx-auto sm:mx-0">Catat skor harian, verifikasi, lalu unduh poster recap seluruh pertandingan per hari.</p>
+    <p class="mt-5 max-w-2xl text-neutral-300 sm:text-lg mx-auto sm:mx-0">Catat skor harian, verifikasi, rekap kok &amp; kas (Sirekap), lalu unduh poster recap seluruh pertandingan per hari.</p>
   </div>
 </section>
 <div class="max-w-5xl mx-auto px-4 sm:px-6 py-10 w-full">
@@ -353,9 +404,10 @@ html body :is(.export-btn,.ghost-btn,.ghost-pill,.tab-btn){position:relative;ove
     <!-- TABS -->
     <div class="flex justify-center mb-10 overflow-x-auto pb-2">
         <div role="tablist" class="inline-flex p-1.5 rounded-xl bg-black/40 border border-white/10 font-display uppercase tracking-wider text-sm sm:text-base whitespace-nowrap">
-            <button role="tab" id="btnPlayer" onclick="switchTab('player')" aria-selected="true" class="tab-btn px-6 py-2.5 font-semibold">Pemain</button>
-            <button role="tab" id="btnRecap" onclick="switchTab('recap')" aria-selected="false" class="tab-btn px-6 py-2.5 font-semibold">Match Recap</button>
-            <button role="tab" id="btnAdmin" onclick="switchTab('admin')" aria-selected="false" class="tab-btn px-6 py-2.5 font-semibold">Admin</button>
+            <button role="tab" id="btnPlayer" onclick="switchTab('player')" aria-selected="true" class="tab-btn px-4 sm:px-6 py-2.5 font-semibold">Pemain</button>
+            <button role="tab" id="btnRecap" onclick="switchTab('recap')" aria-selected="false" class="tab-btn px-4 sm:px-6 py-2.5 font-semibold">Match Recap</button>
+            <button role="tab" id="btnAdmin" onclick="switchTab('admin')" aria-selected="false" class="tab-btn px-4 sm:px-6 py-2.5 font-semibold">Admin</button>
+            <button role="tab" id="btnSirekap" onclick="switchTab('sirekap')" aria-selected="false" class="tab-btn px-4 sm:px-6 py-2.5 font-semibold">Sirekap<span class="lock-ic" aria-hidden="true"> 🔒</span></button>
         </div>
     </div>
     
@@ -448,13 +500,177 @@ html body :is(.export-btn,.ghost-btn,.ghost-pill,.tab-btn){position:relative;ove
         </div>
     </div>
 
+
+    <!-- HALAMAN SIREKAP (khusus admin) -->
+    <div id="sirekapView" class="hidden space-y-8">
+        <div id="sirekapLogin" class="max-w-md mx-auto glass-card p-8 text-center">
+            <span class="text-4xl mb-4 block" aria-hidden="true">🔒</span>
+            <h2 class="font-display uppercase text-2xl font-bold tracking-wide mb-2">Sirekap Admin</h2>
+            <p class="text-sm text-neutral-400 mb-6">Rekap kok dan kas hanya bisa dibuka admin. Password sama dengan tab Admin.</p>
+            <input type="password" id="sirekapPwd" placeholder="Masukkan Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')checkAdmin('sirekap')" class="w-full rounded-xl px-4 py-3 text-white text-center tracking-widest mb-4 outline-none">
+            <button onclick="checkAdmin('sirekap')" class="export-btn w-full py-3 block text-center !rounded-xl border-0">Buka Kunci</button>
+        </div>
+
+        <div id="sirekapApp" class="hidden max-w-3xl mx-auto w-full space-y-8">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <div class="sk-status">
+                    <span class="w-2 h-2 rounded-full bg-amber-400" id="status-dot"></span>
+                    <span id="status-text">Menghubungkan...</span>
+                </div>
+                <button onclick="adminKeluar()" class="ghost-btn sm">Keluar admin</button>
+            </div>
+  <!-- TABS -->
+  <div class="flex justify-center mb-8 overflow-x-auto pb-2">
+    <div role="tablist" class="inline-flex p-1.5 rounded-xl bg-black/40 border border-white/10 font-display uppercase tracking-wider text-sm sm:text-base whitespace-nowrap">
+      <button role="tab" id="tab-rekap" onclick="gantiTab('rekap')" aria-selected="true" class="tab-btn px-5 sm:px-6 py-2.5 font-semibold">Input Rekap</button>
+      <button role="tab" id="tab-riwayat" onclick="gantiTab('riwayat')" aria-selected="false" class="tab-btn px-5 sm:px-6 py-2.5 font-semibold">Riwayat</button>
+    </div>
+  </div>
+
+  <!-- VIEW 1: INPUT REKAP -->
+  <div id="view-rekap" class="space-y-8">
+
+    <div id="banner-mode-edit" class="hidden glass-card px-5 py-4 flex flex-wrap justify-between items-center gap-3 text-sm border-amber-400/40">
+      <span id="label-mode-edit" class="text-amber-200 font-medium">Sedang merevisi sesi transaksi</span>
+      <button onclick="batalEditSesi()" class="ghost-btn sm">Batal edit</button>
+    </div>
+
+    <!-- LANGKAH 1 -->
+    <div id="section-absensi" class="glass-card p-6 sm:p-8 space-y-6">
+      <div class="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h2 class="font-display uppercase text-2xl font-bold tracking-wide text-brand-rose">Langkah 1 &middot; Kehadiran</h2>
+          <p class="text-sm text-neutral-400 mt-1">Pilih tanggal. Pemain yang main di hari itu (Sheet 6) otomatis tercatat hadir.</p>
+        </div>
+        <button onclick="mintaResetHariIni()" class="ghost-btn sm">Reset hari ini</button>
+      </div>
+
+      <div>
+        <label for="input-tanggal-sesi" class="text-xs text-neutral-400 uppercase tracking-widest block mb-1">Tanggal sesi</label>
+        <input type="date" id="input-tanggal-sesi" class="w-full rounded-xl px-4 py-3 text-white" onchange="ubahTanggal()">
+      </div>
+
+      <div id="day-chips-wrap" class="hidden">
+        <p class="text-xs text-neutral-400 uppercase tracking-widest mb-2">Hari dengan pertandingan</p>
+        <div id="day-chips" class="grid grid-cols-4 sm:grid-cols-6 gap-2.5"></div>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-white/5 px-4 py-3">
+        <p id="sheet-status" class="text-xs text-neutral-300 min-h-[1rem] flex-1" aria-live="polite">Memuat data Sheet 6...</p>
+        <button onclick="muatUlangDariSheet()" class="ghost-btn sm">Muat dari Sheet 6</button>
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <p class="font-display uppercase tracking-widest text-sm text-neutral-200">Pemain hadir</p>
+          <span id="selected-count" class="text-xs text-neutral-400 font-medium">0 hadir</span>
+        </div>
+        <div id="hadir-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3"></div>
+        <button onclick="bukaModalPemain()" class="ghost-btn w-full mt-4 !rounded-xl">+ Pilih pemain / tambah guest</button>
+      </div>
+
+      <button onclick="lanjutKeHitung()" id="btn-lanjut" disabled class="export-btn w-full py-4 text-center block !text-lg !rounded-xl shadow-lg">Lanjut ke input kok</button>
+    </div>
+
+    <!-- LANGKAH 2 -->
+    <div id="section-hitung" class="hidden space-y-8">
+      <div class="glass-card p-6 sm:p-8 space-y-6">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 class="font-display uppercase text-2xl font-bold tracking-wide text-brand-rose">Langkah 2 &middot; Kok &amp; Kas</h2>
+            <p id="label-tanggal-hitung" class="text-sm text-neutral-400 mt-1"></p>
+          </div>
+          <button onclick="kembaliKeAbsen()" class="ghost-btn sm">Edit kehadiran</button>
+        </div>
+
+        <div>
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <p class="font-display uppercase tracking-widest text-sm text-neutral-200">Jumlah kok per pemain <span class="text-neutral-500 normal-case tracking-normal">(Rp 5.000 / kok)</span></p>
+            <button onclick="kembalikanSemuaKokOtomatis()" class="ghost-btn sm">Kembalikan ke otomatis</button>
+          </div>
+          <div class="space-y-3 max-h-[34rem] overflow-y-auto pr-1" id="input-kok-container"></div>
+        </div>
+      </div>
+
+      <div class="glass-card p-6 sm:p-8 space-y-6">
+        <div>
+          <label for="input-kas-terakhir" class="font-display uppercase tracking-widest text-sm text-neutral-200 block mb-2">Saldo kas awal / terakhir</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-sm font-semibold text-neutral-400">Rp</span>
+            <input type="number" id="input-kas-terakhir" placeholder="0" value="0" oninput="hitungTotal(); simpanDataKeStorage();" class="w-full pl-11 pr-4 py-3 rounded-xl text-white font-semibold">
+          </div>
+          <p class="text-[11px] text-neutral-500 mt-1.5">Saldo kas sebelum main. Pemasukan hari ini ditambahkan di bawah.</p>
+        </div>
+
+        <div>
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <label for="input-pemasukan" class="font-display uppercase tracking-widest text-sm text-neutral-200">Pemasukan kas hari ini</label>
+            <div class="flex items-center gap-2">
+              <span id="badge-pemasukan" class="text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-neutral-300">Otomatis</span>
+              <button id="btn-reset-pemasukan" onclick="resetPemasukan()" class="hidden ghost-btn sm">Otomatis</button>
+            </div>
+          </div>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-sm font-semibold text-neutral-400">Rp</span>
+            <input type="number" id="input-pemasukan" min="0" oninput="ubahPemasukan()" class="w-full pl-11 pr-4 py-3 rounded-xl text-white font-semibold">
+          </div>
+          <p class="text-[11px] text-neutral-500 mt-1.5">Otomatis Rp 4.000 &times; total kok. Ubah angkanya jika pemasukan berbeda.</p>
+
+          <div id="box-alasan" class="hidden mt-4 rounded-xl border border-amber-400/30 bg-amber-400/5 p-4 space-y-3" style="border-radius:1.25rem">
+            <div class="text-xs text-amber-200 space-y-1.5">
+              <div class="flex justify-between"><span>Seharusnya (otomatis)</span><span id="alasan-seharusnya" class="font-semibold"></span></div>
+              <div class="flex justify-between"><span>Diganti menjadi</span><span id="alasan-diganti" class="font-semibold"></span></div>
+              <div class="flex justify-between border-t border-amber-400/20 pt-1.5"><span>Selisih</span><span id="alasan-selisih" class="font-bold"></span></div>
+            </div>
+            <div>
+              <label for="input-alasan" class="text-xs text-neutral-300 uppercase tracking-widest block mb-1">Keterangan alasan perubahan</label>
+              <input type="text" id="input-alasan" maxlength="120" autocomplete="off" placeholder="Contoh: 1 kok bocor, tidak dihitung" class="w-full rounded-xl px-4 py-2.5 text-white text-sm">
+              <p id="err-alasan" class="hidden text-xs text-rose-400 mt-1.5">Isi keterangan alasan perubahan sebelum menyimpan.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-black/30 border border-white/10 rounded-xl p-5 space-y-3">
+          <div class="flex justify-between text-sm text-neutral-300"><span>Total kok terpakai</span><span id="summary-total-kok" class="font-bold text-white">0 pcs</span></div>
+          <div class="flex justify-between text-sm text-neutral-300"><span>Total patungan pemain</span><span id="summary-total-patungan" class="font-bold text-white">Rp 0</span></div>
+          <div class="flex justify-between text-sm text-neutral-300 border-t border-white/10 pt-3"><span>Kas terakhir</span><span id="summary-kas-terakhir" class="font-semibold text-white">Rp 0</span></div>
+          <div class="flex justify-between text-sm text-neutral-300"><span>Pemasukan kas hari ini</span><span id="summary-insentif-kas" class="font-bold text-emerald-400">+ Rp 0</span></div>
+          <div class="flex justify-between items-baseline border-t border-white/20 pt-3"><span class="font-display uppercase tracking-widest text-sm">Total kas terbaru</span><span id="summary-total-kas-akhir" class="font-display text-2xl font-bold text-brand-rose">Rp 0</span></div>
+        </div>
+      </div>
+
+      <div class="glass-card p-6 sm:p-8 space-y-4">
+        <label class="font-display uppercase tracking-widest text-sm text-neutral-200 block">Preview pesan WhatsApp</label>
+        <textarea id="wa-preview" readonly rows="12" class="w-full p-4 rounded-xl text-xs font-mono text-neutral-200 focus:outline-none"></textarea>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <button id="btn-simpan-sesi" onclick="simpanSesiKeRiwayat()" class="export-btn w-full py-3.5 !rounded-xl"><span id="text-btn-simpan">Simpan transaksi ke riwayat</span></button>
+          <button onclick="salinKeWA()" class="ghost-btn w-full py-3.5 !rounded-xl">Salin laporan WhatsApp</button>
+        </div>
+        <p id="copy-notification" class="text-center text-xs text-emerald-400 font-medium hidden">Berhasil disalin. Siap ditempel ke WhatsApp.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 2: RIWAYAT -->
+  <div id="view-riwayat" class="hidden space-y-4">
+    <div class="glass-card overflow-hidden">
+      <div class="px-6 py-5 bg-gradient-to-r from-brand-maroon/80 to-transparent border-b border-white/10 flex items-center justify-between">
+        <h2 class="font-display uppercase text-xl font-bold tracking-wide">Transaksi tersimpan</h2>
+        <span id="riwayat-count" class="text-xs text-neutral-300">0 transaksi</span>
+      </div>
+      <div id="list-riwayat-container" class="p-4 sm:p-6 space-y-4 max-h-[44rem] overflow-y-auto"></div>
+    </div>
+  </div>
+        </div>
+    </div>
+
     <!-- HALAMAN ADMIN -->
     <div id="adminView" class="hidden space-y-8">
         <div id="adminLogin" class="max-w-md mx-auto glass-card p-8 text-center">
             <span class="text-4xl mb-4 block" aria-hidden="true">🛡️</span>
             <h2 class="font-display uppercase text-2xl font-bold tracking-wide mb-6">Akses Admin</h2>
-            <input type="password" id="adminPwd" placeholder="Masukkan Password" class="w-full rounded-xl px-4 py-3 text-white text-center tracking-widest mb-4 outline-none">
-            <button onclick="checkAdmin()" class="export-btn w-full py-3 block text-center !rounded-xl border-0">Buka Kunci</button>
+            <input type="password" id="adminPwd" placeholder="Masukkan Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')checkAdmin('admin')" class="w-full rounded-xl px-4 py-3 text-white text-center tracking-widest mb-4 outline-none">
+            <button onclick="checkAdmin('admin')" class="export-btn w-full py-3 block text-center !rounded-xl border-0">Buka Kunci</button>
         </div>
 
         <div id="adminDashboard" class="hidden space-y-8">
@@ -464,6 +680,7 @@ html body :is(.export-btn,.ghost-btn,.ghost-pill,.tab-btn){position:relative;ove
                     <div class="flex flex-wrap justify-end gap-2">
                         <button id="btnVerifyAll" onclick="verifyAll()" class="hidden text-xs flex items-center gap-1 bg-green-600 hover:bg-green-500 text-white font-semibold px-3 py-1.5 rounded-full transition shadow-lg">✔ Terima Semua</button>
                         <button onclick="loadPending()" class="text-xs flex items-center gap-1 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full transition">🔄 Refresh</button>
+                        <button onclick="adminKeluar()" class="text-xs flex items-center gap-1 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full transition">Keluar</button>
                     </div>
                 </div>
                 <div id="pendingList" class="space-y-4"></div>
@@ -606,6 +823,40 @@ html body :is(.export-btn,.ghost-btn,.ghost-pill,.tab-btn){position:relative;ove
     <p class="font-display uppercase tracking-widest text-white">PB <span class="text-brand-rose">Jgeer</span></p><p>&copy; 2026 PB Jgeer</p>
   </div>
 </footer>
+<!-- MODAL PILIH PEMAIN -->
+<div id="skPlayerModal" class="hidden fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4 backdrop-blur-md">
+  <div class="glass-card w-full max-w-2xl p-6 flex flex-col h-[82vh]">
+    <div class="flex justify-between items-center mb-3 border-b border-white/10 pb-3">
+      <h3 class="font-display uppercase text-xl font-bold tracking-wide">Pilih Pemain</h3>
+      <button onclick="tutupModalPemain()" class="text-neutral-400 hover:text-brand-rose text-3xl font-bold transition leading-none" aria-label="Tutup">&times;</button>
+    </div>
+    <div class="flex gap-2 mb-3">
+      <button onclick="pilihSemua(true)" class="ghost-btn sm">Pilih semua anggota</button>
+      <button onclick="pilihSemua(false)" class="ghost-btn sm">Batalkan semua</button>
+    </div>
+    <div id="skPlayerGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 overflow-y-auto pr-2 pb-3 flex-1 content-start"></div>
+    <div class="border-t border-white/10 pt-3 mt-2 space-y-3">
+      <div class="flex gap-2">
+        <input type="text" id="input-guest" placeholder="Nama guest lain..." class="flex-1 min-w-0 rounded-xl px-4 py-2.5 text-white text-sm">
+        <button onclick="tambahGuest()" class="ghost-btn sm">Tambah guest</button>
+      </div>
+      <button onclick="tutupModalPemain()" class="export-btn w-full py-3 !rounded-xl">Selesai</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL KONFIRMASI -->
+<div id="modal-confirm" class="hidden fixed inset-0 bg-black/80 z-[110] flex items-center justify-center p-4 backdrop-blur-md">
+  <div class="glass-card max-w-sm w-full p-6 space-y-4">
+    <h3 id="confirm-title" class="font-display uppercase text-lg font-bold tracking-wide">Konfirmasi</h3>
+    <p id="confirm-message" class="text-sm text-neutral-300 leading-relaxed">Apakah Anda yakin?</p>
+    <div class="flex justify-end gap-2 pt-1">
+      <button id="btn-cancel-confirm" class="ghost-btn sm">Batal</button>
+      <button id="btn-ok-confirm" class="export-btn sm">Ya, lanjutkan</button>
+    </div>
+  </div>
+</div>
+
 <button id="toTop" class="hidden fixed bottom-5 right-5 z-40 w-11 h-11 rounded-full text-white border border-brand-rose/50 hover:bg-brand-rose transition" aria-label="Kembali ke atas">
   <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m6 15 6-6 6 6"/></svg>
 </button>
@@ -664,6 +915,7 @@ html body :is(.export-btn,.ghost-btn,.ghost-pill,.tab-btn){position:relative;ove
     let globalPlayers = [];
     let currentSelectTarget = "";
     const photoMap = new Map();
+    let rosterReady = Promise.resolve();   // poster menunggu roster selesai dimuat
     let recapMatches = [];
     let ADMIN_PASS = '';
 
@@ -671,7 +923,8 @@ html body :is(.export-btn,.ghost-btn,.ghost-pill,.tab-btn){position:relative;ove
     
     // Inisialisasi
     window.onload = function() {
-        loadRoster();
+        pulihkanAdmin();
+        rosterReady = loadRoster();
         bukaDariHash();
         fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify({action: "getInitData", date: todayYMD}) })
         .then(res => res.json()).then(res => {
@@ -878,10 +1131,10 @@ html body :is(.export-btn,.ghost-btn,.ghost-pill,.tab-btn){position:relative;ove
     }
 
     // Tautan langsung ke tab: report.html#recap (Match Recap), #admin, atau tanpa hash (Pemain)
-    const TAB_HASH = { player: '', admin: '#admin', recap: '#recap' };
+    const TAB_HASH = { player: '', admin: '#admin', recap: '#recap', sirekap: '#sirekap' };
     function bukaDariHash() {
         const t = (location.hash || '').slice(1);
-        if (t === 'recap' || t === 'admin') switchTab(t, true);
+        if (t === 'recap' || t === 'admin' || t === 'sirekap') switchTab(t, true);
         else if (t === '' && document.getElementById('playerView').style.display === 'none') switchTab('player', true);
     }
     window.addEventListener('hashchange', bukaDariHash);
@@ -894,7 +1147,7 @@ html body :is(.export-btn,.ghost-btn,.ghost-pill,.tab-btn){position:relative;ove
     }
 
     function switchTab(tab, dariHash) {
-        ['player', 'admin', 'recap'].forEach(t => {
+        ['player', 'admin', 'recap', 'sirekap'].forEach(t => {
             const btn = document.getElementById('btn' + t.charAt(0).toUpperCase() + t.slice(1));
             if(btn) btn.setAttribute('aria-selected', tab === t ? 'true' : 'false');
         });
@@ -902,20 +1155,70 @@ html body :is(.export-btn,.ghost-btn,.ghost-pill,.tab-btn){position:relative;ove
         document.getElementById('playerView').style.display = tab === 'player' ? 'block' : 'none';
         document.getElementById('adminView').style.display = tab === 'admin' ? 'block' : 'none';
         document.getElementById('recapView').style.display = tab === 'recap' ? 'block' : 'none';
+        document.getElementById('sirekapView').style.display = tab === 'sirekap' ? 'block' : 'none';
         
         if (!dariHash) { const hs = TAB_HASH[tab] || ''; try { history.replaceState(null, '', location.pathname + location.search + hs); } catch (e) { location.hash = hs; } }
         if (tab === 'player') fetchHistory();
         if (tab === 'recap' && recapMatches.length === 0) loadRecapData();
+        if (tab === 'admin') ensureAdminData();
+        if (tab === 'sirekap' && ADMIN_PASS && window.__skStart) window.__skStart();
     }
 
-    function checkAdmin() {
-        if(document.getElementById('adminPwd').value === "ytta") {
-            ADMIN_PASS = document.getElementById('adminPwd').value;
-            document.getElementById('adminLogin').style.display = 'none';
-            document.getElementById('adminDashboard').style.display = 'block';
-            loadPending();
-            document.getElementById('mgDate').value = todayYMD; loadManage();
+    // =====================================================================
+    // LOGIN ADMIN (satu login untuk tab Admin & Sirekap, diingat di HP ini sampai Keluar)
+    // =====================================================================
+    const ADMIN_KEY = 'jgeer_admin_v1';
+    let adminDataLoaded = false;
+
+    function adminTabAktif() { return document.getElementById('adminView').style.display === 'block'; }
+    function sirekapTabAktif() { return document.getElementById('sirekapView').style.display === 'block'; }
+
+    function ensureAdminData() {
+        if (!ADMIN_PASS || adminDataLoaded) return;
+        adminDataLoaded = true;
+        loadPending();
+        document.getElementById('mgDate').value = todayYMD; loadManage();
+    }
+
+    function terapkanStatusAdmin() {
+        const on = !!ADMIN_PASS;
+        document.getElementById('adminLogin').style.display = on ? 'none' : '';
+        document.getElementById('adminDashboard').style.display = on ? 'block' : 'none';
+        document.getElementById('sirekapLogin').style.display = on ? 'none' : '';
+        document.getElementById('sirekapApp').classList.toggle('hidden', !on);
+        document.querySelectorAll('#btnSirekap .lock-ic').forEach(el => el.style.display = on ? 'none' : '');
+    }
+
+    function bukaKunciAdmin(pass, simpan) {
+        ADMIN_PASS = pass;
+        if (simpan) { try { localStorage.setItem(ADMIN_KEY, JSON.stringify({ p: pass })); } catch (e) {} }
+        terapkanStatusAdmin();
+        if (adminTabAktif()) ensureAdminData();
+        if (sirekapTabAktif() && window.__skStart) window.__skStart();
+    }
+
+    function checkAdmin(sumber) {
+        const el = document.getElementById(sumber === 'sirekap' ? 'sirekapPwd' : 'adminPwd');
+        if (el.value === "ytta") {
+            bukaKunciAdmin(el.value, true);
+            el.value = '';
         } else { alert("Password Salah!"); }
+    }
+
+    function adminKeluar() {
+        if (!confirm('Keluar dari mode admin di HP ini? Admin dan Sirekap akan terkunci lagi.')) return;
+        try { localStorage.removeItem(ADMIN_KEY); } catch (e) {}
+        ADMIN_PASS = ''; adminDataLoaded = false;
+        terapkanStatusAdmin();
+    }
+
+    function pulihkanAdmin() {
+        try {
+            const s = JSON.parse(localStorage.getItem(ADMIN_KEY) || 'null');
+            if (s && s.p === "ytta") { ADMIN_PASS = s.p; }
+            else if (s) { localStorage.removeItem(ADMIN_KEY); }
+        } catch (e) {}
+        terapkanStatusAdmin();
     }
 
     function loadPending() {
@@ -1344,11 +1647,17 @@ html body :is(.export-btn,.ghost-btn,.ghost-pill,.tab-btn){position:relative;ove
     const photoCache = new Map();
     function posterImg(name) {
         const k = norm(name);
-        if (!photoCache.has(k)) photoCache.set(k, (async () => loadImage((photoMap.get(k) && await fetchDataURL(photoFor(name, 300))) || initialsAvatar(name)))());
+        if (!photoMap.get(k)) return loadImage(initialsAvatar(name));   // roster belum ada: jangan disimpan, coba lagi nanti
+        if (!photoCache.has(k)) photoCache.set(k, (async () => {
+            const d = await fetchDataURL(photoFor(name, 300)), im = d ? await loadImage(d) : null;
+            if (!im) { photoCache.delete(k); return loadImage(initialsAvatar(name)); }   // gagal: boleh dicoba lagi
+            return im;
+        })());
         return photoCache.get(k);
     }
 
     async function renderPoster(day, list, part, parts, SC) {
+        await rosterReady;
         const W = 1080, H = 1920, PX = 60, CW = W - PX * 2, GAP = 18, TOP = 520, BOT = H - 250;   // Story 9:16, area aman UI Instagram
         const CH = Math.max(108, Math.min(150, Math.floor((BOT - TOP + GAP) / list.length) - GAP)), kf = CH / 150, content = list.length * (CH + GAP) - GAP;
         if (document.fonts && document.fonts.load) await Promise.all(['700 96px Oswald', '600 30px Oswald', '600 24px Inter', '500 24px Inter'].map(f => document.fonts.load(f).catch(() => null)));
@@ -1447,6 +1756,890 @@ html body :is(.export-btn,.ghost-btn,.ghost-pill,.tab-btn){position:relative;ove
     addEventListener('scroll', () => { tt.classList.toggle('hidden', scrollY < 400); }, { passive: true });
     tt.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
 </script>
+<script>
+/* =====================================================================
+   SIREKAP (digabung dari sirekap.html) — berjalan di dalam lingkup sendiri
+   ===================================================================== */
+(function () {
+
+// =====================================================================
+// KONFIGURASI
+// =====================================================================
+const SHEET_ID = '1kgZAmiJjMhBfk9Sk8vHUtS0OCq6wr1_4-egr_KpIfao';
+const SHEET_ROSTER = { gid: '0' };          // Sheet1: roster (nama + foto)
+const SHEET_RECAP  = { gid: '245165715' };  // Sheet6: pertandingan terverifikasi
+const GITHUB_ROSTER_BASE = 'https://raw.githubusercontent.com/amrylr/roster/main/';
+
+const PATUNGAN_PER_KOK = 5000;
+const INSENTIF_KAS_PER_KOK = 4000;
+const STORAGE_KEY = "badminton_calc_data_maroon_v5";   // tidak diubah
+const RIWAYAT_KEY = "badminton_calc_riwayat_v5";       // tidak diubah
+const GUEST_NAMES = ['Fulan 1', 'Fulan 2', 'Fulan 3'];
+
+// Cadangan bila Sheet1 gagal dimuat (hanya nama, tanpa foto)
+const FALLBACK_ROSTER = ['Amry','Sofi','Fany','Anong','Utuy','Nanjar','Ade','Solahudin','Ikbal','Robby','Nana','Aden','Suyanto','Ali','Herlan','Juan','Udin','Abrew','Denis','Doni','Faisal','Ihsan','Yuswan','Indra','Maul','Rafli','Hendi','Rei','Aldin','Yunus','Fattan','Aldi','Anjal','Tebe','Ramdony'];
+
+const HARI = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+const BLN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+
+// =====================================================================
+// STATE
+// =====================================================================
+let roster = FALLBACK_ROSTER.map(n => ({ nama: n, foto: '' }));
+let rosterSource = 'loading';      // loading | sheet | fallback
+const photoMap = new Map();
+let sheetDays = new Map();         // 'YYYY-MM-DD' -> { key, date, matches[] }
+let sheetState = 'loading';        // loading | ok | error
+
+let hadir = [];                    // [{ nama, guest }]
+let kokVal = {};                   // nama -> jumlah kok yang dipakai (bisa diubah manual)
+let kokAuto = {};                  // nama -> jumlah match di Sheet 6 pada tanggal aktif
+let pemasukanManual = null;        // null = otomatis (Rp 4.000 x kok)
+let alasanPemasukan = '';          // keterangan bila pemasukan diubah dari otomatis
+let tanggalAktif = '';
+
+let riwayatTransaksi = [];
+let idSesiEditing = null;
+let pendingConfirmCallback = null;
+let pendingCancelCallback = null;
+
+const inputKasTerakhir = document.getElementById('input-kas-terakhir');
+const inputPemasukan = document.getElementById('input-pemasukan');
+const inputAlasan = document.getElementById('input-alasan');
+const inputGuest = document.getElementById('input-guest');
+const inputTanggalSesi = document.getElementById('input-tanggal-sesi');
+const btnLanjut = document.getElementById('btn-lanjut');
+
+// =====================================================================
+// UTILITAS
+// =====================================================================
+const pad = n => String(n).padStart(2, '0');
+const str = v => (v == null ? '' : String(v).trim());
+const norm = v => str(v).toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+const toNum = v => { const n = parseFloat(str(v).replace(',', '.')); return isFinite(n) ? n : 0; };
+const fmtNum = n => Number(Number(n).toFixed(2));
+function formatRupiah(angka) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka); }
+
+function ghRaw(u, base) {
+    u = String(u == null ? '' : u).trim();
+    if (!u) return '';
+    const m = u.match(/^https?:\/\/github\.com\/([^/]+)\/([^/]+)\/(?:blob|raw)\/(.+)$/i);
+    if (m) return `https://raw.githubusercontent.com/${m[1]}/${m[2]}/${m[3].split('?')[0]}`;
+    if (/^(https?:\/\/|data:)/i.test(u)) return u;
+    return base + encodeURI(u.replace(/^\/+/, ''));
+}
+function driveThumb(url, w = 256) {
+    const m = String(url).match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:export=view&)?id=)([\w-]+)/);
+    if (m) return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w${w}`;
+    return ghRaw(url, GITHUB_ROSTER_BASE);
+}
+const avatar = (name, size = 256) => `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&size=${size}&background=161616&color=D6455D&bold=true`;
+const photoFor = (name, w = 256) => { const f = photoMap.get(norm(name)); return f ? driveThumb(f, w) : avatar(name, w); };
+function imgTag(nama, cls) {
+    return `<img src="${esc(photoFor(nama))}" data-fb="${esc(avatar(nama))}" alt="" loading="lazy" referrerpolicy="no-referrer" class="${cls}">`;
+}
+// Foto gagal dimuat -> pakai avatar inisial
+document.addEventListener('error', e => {
+    const t = e.target;
+    if (t && t.tagName === 'IMG' && t.dataset.fb && !t.dataset.done) { t.dataset.done = '1'; t.src = t.dataset.fb; }
+}, true);
+
+const canon = name => { const r = roster.find(p => norm(p.nama) === norm(name)); return r ? r.nama : null; };
+
+function labelTanggal(ymd) {
+    const p = String(ymd || '').split('-');
+    if (p.length !== 3) return '';
+    return new Date(p[0], p[1] - 1, p[2]).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
+function setTanggalHariIni() {
+    const t = new Date();
+    inputTanggalSesi.value = `${t.getFullYear()}-${pad(t.getMonth() + 1)}-${pad(t.getDate())}`;
+}
+
+// =====================================================================
+// AMBIL DATA SPREADSHEET (roster Sheet1 + pertandingan Sheet 6)
+// =====================================================================
+function parseCSV(text) {
+    const rows = []; let row = [], cell = '', q = false;
+    for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (q) { if (ch === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += ch; }
+        else if (ch === '"') q = true;
+        else if (ch === ',') { row.push(cell); cell = ''; }
+        else if (ch === '\n' || ch === '\r') {
+            if (ch === '\r' && text[i + 1] === '\n') i++;
+            row.push(cell); rows.push(row); row = []; cell = '';
+        } else cell += ch;
+    }
+    if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+    return rows;
+}
+async function fetchCSV(url) {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return parseCSV(await res.text());
+}
+function jsonpGrid(url) {
+    return new Promise((resolve, reject) => {
+        const cb = '__gv' + Math.random().toString(36).slice(2);
+        const s = document.createElement('script');
+        const done = () => { clearTimeout(timer); delete window[cb]; s.remove(); };
+        const timer = setTimeout(() => { done(); reject(new Error('timeout')); }, 10000);
+        window[cb] = r => {
+            done();
+            if (!r || r.status !== 'ok') { reject(new Error('gviz error')); return; }
+            const val = c => !c ? '' : (c.v != null ? (typeof c.v === 'string' && /^Date\(/.test(c.v) && c.f ? c.f : c.v) : (c.f ?? ''));
+            const grid = r.table.rows.map(row => row.c.map(val));
+            const labels = r.table.cols.map(c => c.label || '');
+            if (labels.some(Boolean)) grid.unshift(labels);
+            resolve(grid);
+        };
+        s.onerror = () => { done(); reject(new Error('script diblokir')); };
+        s.src = url + (url.includes('?') ? '&' : '?') + 'headers=0&tqx=responseHandler:' + cb;
+        document.head.appendChild(s);
+    });
+}
+async function fetchGrid(cfg) {
+    const base = `https://docs.google.com/spreadsheets/d/${SHEET_ID}`;
+    const targets = cfg.gid ? [`gid=${cfg.gid}`] : [];
+    for (const tg of targets) {
+        try { const g = await fetchCSV(`${base}/export?format=csv&${tg}`); if (g.length) return g; } catch (e) {}
+        try { const g = await fetchCSV(`${base}/gviz/tq?tqx=out:csv&${tg}`); if (g.length) return g; } catch (e) {}
+        try { const g = await jsonpGrid(`${base}/gviz/tq?${tg}`); if (g.length) return g; } catch (e) {}
+    }
+    throw new Error('Gagal load data Spreadsheet.');
+}
+function parseTgl(v) {
+    // Sheet kadang menyimpan tanggal sebagai teks berawalan kutip, mis. '2026-11-14
+    v = str(v).replace(/^[\s'"‘’“”`´\u200B\uFEFF]+|[\s'"‘’“”`´\u200B\uFEFF]+$/g, ''); let m;
+    if ((m = v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))) return new Date(+m[1], m[2] - 1, +m[3]);
+    if ((m = v.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})/))) return new Date(+m[3], m[2] - 1, +m[1]);
+    if ((m = v.match(/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/))) { const i = BLN.findIndex(b => b.toLowerCase().slice(0, 3) === m[2].toLowerCase().slice(0, 3)); if (i >= 0) return new Date(+m[3], i, +m[1]); }
+    const d = new Date(v); return isNaN(d) ? null : d;
+}
+function findTables(grid) {
+    const tables = [];
+    grid.forEach((row, r) => row.forEach((cell, c) => {
+        if (!/^nama/.test(norm(cell))) return;
+        const headers = []; for (let cc = c; cc < row.length && str(row[cc]) !== ''; cc++) headers.push({ key: norm(row[cc]), col: cc });
+        const rows = []; for (let rr_ = r + 1; rr_ < grid.length && str((grid[rr_] || [])[c]) !== ''; rr_++) rows.push(grid[rr_]);
+        tables.push({ r, c, headers, rows });
+    }));
+    return tables;
+}
+function extractRoster(grid) {
+    const t = findTables(grid)[0]; if (!t) return [];
+    const h = t.headers.find(x => /foto|photo|gambar|avatar|image|img/.test(x.key) && x.col !== t.c);
+    return t.rows.map(r => ({ nama: str(r[t.c]), foto: h ? str(r[h.col]) : '' })).filter(p => p.nama);
+}
+
+async function loadRoster() {
+    try {
+        const list = extractRoster(await fetchGrid(SHEET_ROSTER));
+        if (!list.length) throw new Error('roster kosong');
+        const seen = new Set();
+        roster = list.filter(p => { const k = norm(p.nama); if (seen.has(k)) return false; seen.add(k); return true; });
+        rosterSource = 'sheet';
+    } catch (e) {
+        console.warn('Roster gagal dimuat:', e);
+        roster = FALLBACK_ROSTER.map(n => ({ nama: n, foto: '' }));
+        rosterSource = 'fallback';
+    }
+    photoMap.clear();
+    roster.forEach(p => { if (p.foto) photoMap.set(norm(p.nama), p.foto); });
+}
+
+async function loadSheet6() {
+    sheetState = 'loading'; updateSheetStatus();
+    try {
+        const grid = await fetchGrid(SHEET_RECAP);
+        const h = grid[0].map(s => String(s).toLowerCase().replace(/[^a-z0-9]/g, ''));
+        const f = (re, d) => { const i = h.findIndex(x => re.test(x)); return i >= 0 ? i : d; };
+        const A = '(tima|teama|pemaina|playera|^a)\\D*', B = '(timb|teamb|pemainb|playerb|^b)\\D*';
+        const c = { t: f(/tanggal|tgl|date/, 1), a1: f(new RegExp(A + '1$'), 4), a2: f(new RegExp(A + '2$'), 5), sa: f(/(skor|score).*a$/, 6),
+                    b1: f(new RegExp(B + '1$'), 7), b2: f(new RegExp(B + '2$'), 8), sb: f(/(skor|score).*b$/, 9) };
+        const days = new Map();
+        for (let i = 1; i < grid.length; i++) {
+            const r = grid[i], d = parseTgl(r[c.t]);
+            if (!d || !str(r[c.a1]) || !str(r[c.b1])) continue;
+            const key = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+            if (!days.has(key)) days.set(key, { key, date: d, matches: [] });
+            days.get(key).matches.push({ A1: str(r[c.a1]), A2: str(r[c.a2]), B1: str(r[c.b1]), B2: str(r[c.b2]), a: toNum(r[c.sa]), b: toNum(r[c.sb]) });
+        }
+        sheetDays = days; sheetState = 'ok';
+    } catch (e) {
+        console.warn('Sheet 6 gagal dimuat:', e);
+        sheetState = 'error';
+    }
+}
+
+// =====================================================================
+// KOK OTOMATIS: 1 pertandingan = 1 kok untuk tiap pemain yang ikut main
+// =====================================================================
+function hitungAuto(ymd) {
+    const counts = {}; const day = sheetDays.get(ymd);
+    if (!day) return { counts, matches: 0 };
+    day.matches.forEach(m => [m.A1, m.A2, m.B1, m.B2].forEach(raw => {
+        const n = str(raw); if (!n) return;
+        const k = canon(n) || n;
+        counts[k] = (counts[k] || 0) + 1;
+    }));
+    return { counts, matches: day.matches.length };
+}
+
+function urutkanHadir() {
+    const order = new Map(roster.map((p, i) => [p.nama, i]));
+    const rank = n => order.has(n) ? order.get(n) : 1e6;
+    const m = hadir.filter(h => !h.guest).sort((a, b) => rank(a.nama) - rank(b.nama));
+    hadir = [...m, ...hadir.filter(h => h.guest)];
+}
+
+// mode 'ganti': kehadiran & kok diganti penuh sesuai Sheet 6
+// mode 'gabung': pemain Sheet 6 ditimpa, pemain yang ditambah manual tetap ada
+function terapkanOtomatis(ymd, mode) {
+    const { counts } = hitungAuto(ymd);
+    kokAuto = { ...counts }; tanggalAktif = ymd;
+    const names = Object.keys(counts);
+    const auto = [
+        ...roster.map(p => p.nama).filter(n => counts[n] !== undefined).map(n => ({ nama: n, guest: false })),
+        ...names.filter(n => !canon(n)).sort((a, b) => a.localeCompare(b)).map(n => ({ nama: n, guest: true }))
+    ];
+    if (mode === 'gabung') {
+        const extra = hadir.filter(h => counts[h.nama] === undefined);
+        hadir = [...auto, ...extra];
+        names.forEach(n => { kokVal[n] = counts[n]; });
+    } else {
+        hadir = auto; kokVal = { ...counts }; pemasukanManual = null; alasanPemasukan = '';
+    }
+    urutkanHadir();
+}
+
+// true bila tidak ada hasil edit manual yang akan hilang
+function pristine() {
+    if (hadir.length === 0) return true;
+    const an = Object.keys(kokAuto);
+    if (hadir.length !== an.length) return false;
+    return hadir.every(h => kokAuto[h.nama] !== undefined && (kokVal[h.nama] || 0) === kokAuto[h.nama]) && pemasukanManual === null;
+}
+
+function ubahTanggal() {
+    const ymd = inputTanggalSesi.value;
+    if (!ymd) { inputTanggalSesi.value = tanggalAktif; return; }
+    if (idSesiEditing) {   // mode revisi: tanggal diganti tanpa mengisi ulang
+        tanggalAktif = ymd; kokAuto = hitungAuto(ymd).counts; renderAll(); simpanDataKeStorage(); return;
+    }
+    const jalankan = () => { terapkanOtomatis(ymd, 'ganti'); renderAll(); simpanDataKeStorage(); simpanKokKeStorage(); };
+    if (pristine()) { jalankan(); return; }
+    showConfirm('Ganti Tanggal', 'Kehadiran dan kok yang sudah Anda ubah akan diganti dengan data pertandingan tanggal ini dari Sheet 6. Lanjutkan?', jalankan, () => { inputTanggalSesi.value = tanggalAktif; });
+}
+
+async function muatUlangDariSheet() {
+    const ymd = inputTanggalSesi.value; if (!ymd) return;
+    await loadSheet6();
+    if (sheetState !== 'ok') { renderAll(); return; }
+    const jalankan = () => { terapkanOtomatis(ymd, 'gabung'); renderAll(); simpanDataKeStorage(); simpanKokKeStorage(); };
+    if (pristine()) { jalankan(); return; }
+    showConfirm('Muat dari Sheet 6', 'Jumlah kok pemain yang ada di Sheet 6 akan ditimpa sesuai data terbaru. Pemain yang Anda tambah manual tetap dipertahankan.', jalankan);
+}
+
+// =====================================================================
+// RENDER
+// =====================================================================
+function updateSheetStatus() {
+    const el = document.getElementById('sheet-status'); if (!el) return;
+    const ymd = inputTanggalSesi.value;
+    let t = '';
+    if (sheetState === 'loading') t = 'Memuat data Sheet 6...';
+    else if (sheetState === 'error') t = '<span class="text-rose-400">Sheet 6 gagal dimuat.</span> Pilih pemain secara manual atau tekan Muat dari Sheet 6.';
+    else {
+        const day = sheetDays.get(ymd);
+        if (!day) t = 'Belum ada pertandingan pada tanggal ini di Sheet 6. Pilih pemain dan isi kok secara manual.';
+        else {
+            const a = Object.keys(kokAuto);
+            const tamu = a.filter(n => !canon(n));
+            t = `<span class="text-brand-rose font-semibold">${day.matches.length}</span> pertandingan di Sheet 6, ${a.length} pemain terbaca.` + (tamu.length ? ` Guest: ${esc(tamu.join(', '))}.` : '');
+        }
+    }
+    if (rosterSource === 'fallback') t += ' <span class="text-amber-300">Roster Sheet1 gagal dimuat, memakai daftar cadangan tanpa foto.</span>';
+    el.innerHTML = t;
+}
+
+function renderChips() {
+    const wrap = document.getElementById('day-chips-wrap'), box = document.getElementById('day-chips');
+    const days = [...sheetDays.values()].sort((a, b) => b.date - a.date).slice(0, 8);
+    wrap.classList.toggle('hidden', !days.length);
+    box.innerHTML = days.map(d => `
+        <button type="button" class="date-btn ${d.key === inputTanggalSesi.value ? 'active' : ''}" data-ymd="${d.key}">
+            <span class="dw">${HARI[d.date.getDay()].slice(0, 3)}</span><b>${d.date.getDate()}</b><span class="dm">${BLN[d.date.getMonth()].slice(0, 3)}</span><i>${d.matches.length} match</i>
+        </button>`).join('');
+}
+
+function renderHadir() {
+    const grid = document.getElementById('hadir-grid');
+    document.getElementById('selected-count').innerText = `${hadir.length} hadir`;
+    btnLanjut.disabled = hadir.length === 0;
+    if (!hadir.length) {
+        grid.innerHTML = `<p class="col-span-full text-sm text-neutral-500 italic text-center py-6">Belum ada pemain hadir. Pilih tanggal yang ada pertandingannya, atau pilih pemain manual.</p>`;
+        return;
+    }
+    grid.innerHTML = hadir.map(h => `
+        <div class="pcard on ${h.guest ? 'guest' : ''}" style="cursor:default">
+            <button type="button" data-rm="${esc(h.nama)}" class="absolute top-1 right-1.5 text-neutral-400 hover:text-white text-lg leading-none" aria-label="Hapus ${esc(h.nama)}">&times;</button>
+            ${imgTag(h.nama, 'w-14 h-14 rounded-full object-cover mb-2 border border-white/20 shadow-lg bg-black')}
+            <span class="font-display uppercase tracking-wider text-xs text-center font-bold leading-tight">${esc(h.nama)}</span>
+            ${h.guest ? '<span class="text-[9px] text-amber-300 mt-0.5">Guest</span>' : ''}
+        </div>`).join('');
+}
+
+function metaKok(n) {
+    const a = kokAuto[n], v = kokVal[n] || 0;
+    if (a === undefined) return 'Tidak ada di Sheet 6, diisi manual';
+    if (v === a) return `Sheet 6: ${a} match`;
+    return `Sheet 6: ${a} match <span class="text-amber-300 font-semibold">diubah</span> <button type="button" data-act="reset" data-n="${esc(n)}" class="underline text-neutral-300 hover:text-white">kembalikan</button>`;
+}
+function rowKokHTML(h) {
+    const n = h.nama, v = kokVal[n] || 0;
+    const btns = [0, 1, 2, 3, 4, 5, 6].map(i => `<button type="button" class="kbtn ${v === i ? 'on' : ''}" data-act="set" data-n="${esc(n)}" data-v="${i}">${i}</button>`).join('');
+    return `<div class="kok-row bg-black/30 border border-white/5 p-3.5" style="border-radius:1.25rem" data-n="${esc(n)}">
+        <div class="flex items-center gap-3">
+            ${imgTag(n, 'w-11 h-11 rounded-full object-cover border border-white/20 bg-black flex-none')}
+            <div class="min-w-0 flex-1">
+                <p class="font-display uppercase tracking-wider text-sm font-bold truncate">${esc(n)}${h.guest ? ' <span class="text-[10px] text-amber-300 normal-case tracking-normal font-body font-medium">Guest</span>' : ''}</p>
+                <p class="meta text-[11px] text-neutral-400">${metaKok(n)}</p>
+            </div>
+            <div class="flex items-center gap-1.5 flex-none">
+                <button type="button" class="step-btn" data-act="dec" data-n="${esc(n)}" aria-label="Kurangi">&minus;</button>
+                <input type="number" min="0" inputmode="numeric" data-kok="${esc(n)}" value="${v}" class="w-14 text-center py-1.5 rounded-lg text-white font-bold">
+                <button type="button" class="step-btn" data-act="inc" data-n="${esc(n)}" aria-label="Tambah">+</button>
+            </div>
+        </div>
+        <div class="grid grid-cols-7 gap-1.5 mt-3">${btns}</div>
+    </div>`;
+}
+function renderKokList() {
+    hadir.forEach(h => { if (kokVal[h.nama] === undefined) kokVal[h.nama] = kokAuto[h.nama] ?? 0; });
+    document.getElementById('input-kok-container').innerHTML = hadir.map(rowKokHTML).join('');
+    document.getElementById('label-tanggal-hitung').innerText = labelTanggal(inputTanggalSesi.value);
+}
+function refreshRow(n, keepInput) {
+    const row = [...document.querySelectorAll('#input-kok-container .kok-row')].find(r => r.dataset.n === n); if (!row) return;
+    const v = kokVal[n] || 0;
+    row.querySelectorAll('.kbtn').forEach(b => b.classList.toggle('on', +b.dataset.v === v));
+    const inp = row.querySelector('input[data-kok]'); if (inp && !keepInput) inp.value = v;
+    row.querySelector('.meta').innerHTML = metaKok(n);
+}
+function inStep2() { return !document.getElementById('section-hitung').classList.contains('hidden'); }
+function renderAll() {
+    renderChips(); renderHadir(); updateSheetStatus();
+    if (inStep2()) { renderKokList(); hitungTotal(); }
+}
+
+// =====================================================================
+// INTERAKSI: KARTU FOTO PEMAIN (modal) & GUEST
+// =====================================================================
+function bukaModalPemain() { renderModalGrid(); document.getElementById('skPlayerModal').classList.remove('hidden'); }
+function tutupModalPemain() { document.getElementById('skPlayerModal').classList.add('hidden'); renderAll(); }
+
+function cardHTML(nama, guest, on) {
+    return `<div class="pcard ${on ? 'on' : ''} ${guest ? 'guest' : ''}" data-n="${esc(nama)}" data-g="${guest ? 1 : 0}">
+        <span class="tick">&#10003;</span>
+        ${imgTag(nama, 'w-14 h-14 rounded-full object-cover mb-2 border border-white/20 shadow-lg bg-black')}
+        <span class="font-display uppercase tracking-wider text-xs text-center font-bold leading-tight">${esc(nama)}</span>
+    </div>`;
+}
+function renderModalGrid() {
+    const sel = new Set(hadir.map(h => h.nama));
+    const members = [...roster.map(p => p.nama), ...hadir.filter(h => !h.guest && !canon(h.nama)).map(h => h.nama)];
+    const guests = [...GUEST_NAMES, ...hadir.filter(h => h.guest && !GUEST_NAMES.includes(h.nama)).map(h => h.nama)];
+    document.getElementById('skPlayerGrid').innerHTML =
+        members.map(n => cardHTML(n, false, sel.has(n))).join('') +
+        `<p class="col-span-full font-display uppercase tracking-widest text-xs text-amber-300 pt-2 border-t border-white/10">Tamu</p>` +
+        guests.map(n => cardHTML(n, true, sel.has(n))).join('');
+}
+function toggleHadir(nama, guest) {
+    const i = hadir.findIndex(h => h.nama === nama);
+    if (i >= 0) { hadir.splice(i, 1); delete kokVal[nama]; }
+    else { hadir.push({ nama, guest }); kokVal[nama] = kokAuto[nama] ?? 0; urutkanHadir(); }
+    simpanDataKeStorage(); simpanKokKeStorage();
+}
+function pilihSemua(status) {
+    if (status) roster.forEach(p => { if (!hadir.some(h => h.nama === p.nama)) { hadir.push({ nama: p.nama, guest: false }); kokVal[p.nama] = kokAuto[p.nama] ?? 0; } });
+    else { hadir.filter(h => !h.guest).forEach(h => delete kokVal[h.nama]); hadir = hadir.filter(h => h.guest); }
+    urutkanHadir(); renderModalGrid(); simpanDataKeStorage(); simpanKokKeStorage();
+}
+function tambahGuest() {
+    const nama = inputGuest.value.trim(); if (!nama) return;
+    inputGuest.value = ''; inputGuest.focus();
+    if (hadir.some(h => norm(h.nama) === norm(nama))) { renderModalGrid(); return; }
+    const m = canon(nama);
+    if (m) hadir.push({ nama: m, guest: false }); else hadir.push({ nama, guest: true });
+    const added = hadir[hadir.length - 1].nama;
+    kokVal[added] = kokAuto[added] ?? 0;
+    urutkanHadir(); renderModalGrid(); simpanDataKeStorage(); simpanKokKeStorage();
+}
+
+document.getElementById('skPlayerGrid').addEventListener('click', e => {
+    const c = e.target.closest('.pcard'); if (!c) return;
+    toggleHadir(c.dataset.n, c.dataset.g === '1');
+    c.classList.toggle('on', hadir.some(h => h.nama === c.dataset.n));
+    // guest custom yang dicabut hilang dari daftar
+    if (c.dataset.g === '1' && !GUEST_NAMES.includes(c.dataset.n) && !hadir.some(h => h.nama === c.dataset.n)) renderModalGrid();
+});
+document.getElementById('hadir-grid').addEventListener('click', e => {
+    const b = e.target.closest('[data-rm]'); if (!b) return;
+    const n = b.dataset.rm, h = hadir.find(x => x.nama === n); if (!h) return;
+    toggleHadir(n, h.guest); renderAll();
+});
+document.getElementById('day-chips').addEventListener('click', e => {
+    const b = e.target.closest('[data-ymd]'); if (!b || b.dataset.ymd === inputTanggalSesi.value) return;
+    inputTanggalSesi.value = b.dataset.ymd; ubahTanggal();
+});
+inputGuest.addEventListener('keypress', e => { if (e.key === 'Enter') tambahGuest(); });
+
+// =====================================================================
+// INTERAKSI: INPUT KOK (tombol angka + stepper + ketik langsung)
+// =====================================================================
+function setKok(n, v) {
+    kokVal[n] = Math.max(0, Math.round(v) || 0);
+    refreshRow(n); hitungTotal(); simpanKokKeStorage();
+}
+document.getElementById('input-kok-container').addEventListener('click', e => {
+    const b = e.target.closest('[data-act]'); if (!b) return;
+    const n = b.dataset.n, a = b.dataset.act, cur = kokVal[n] || 0;
+    if (a === 'set') setKok(n, +b.dataset.v);
+    else if (a === 'inc') setKok(n, cur + 1);
+    else if (a === 'dec') setKok(n, cur - 1);
+    else if (a === 'reset' && kokAuto[n] !== undefined) setKok(n, kokAuto[n]);
+});
+document.getElementById('input-kok-container').addEventListener('input', e => {
+    const i = e.target.closest('input[data-kok]'); if (!i) return;
+    const n = i.dataset.kok;
+    kokVal[n] = Math.max(0, parseInt(i.value) || 0);
+    refreshRow(n, true); hitungTotal(); simpanKokKeStorage();
+});
+document.getElementById('input-kok-container').addEventListener('change', e => {
+    const i = e.target.closest('input[data-kok]'); if (i) i.value = kokVal[i.dataset.kok] || 0;
+});
+function kembalikanSemuaKokOtomatis() {
+    hadir.forEach(h => { if (kokAuto[h.nama] !== undefined) kokVal[h.nama] = kokAuto[h.nama]; });
+    pemasukanManual = null; alasanPemasukan = '';
+    renderKokList(); hitungTotal(); simpanKokKeStorage();
+}
+
+// =====================================================================
+// LANGKAH & TAB
+// =====================================================================
+function lanjutKeHitung() {
+    if (!hadir.length) return;
+    document.getElementById('section-absensi').classList.add('hidden');
+    document.getElementById('section-hitung').classList.remove('hidden');
+    renderKokList(); hitungTotal(); simpanKokKeStorage();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function kembaliKeAbsen() {
+    document.getElementById('section-hitung').classList.add('hidden');
+    document.getElementById('section-absensi').classList.remove('hidden');
+    renderHadir();
+}
+function gantiTab(tab) {
+    const rekap = tab === 'rekap';
+    document.getElementById('view-rekap').classList.toggle('hidden', !rekap);
+    document.getElementById('view-riwayat').classList.toggle('hidden', rekap);
+    document.getElementById('tab-rekap').setAttribute('aria-selected', rekap);
+    document.getElementById('tab-riwayat').setAttribute('aria-selected', !rekap);
+    if (!rekap) renderRiwayatList();
+}
+
+// =====================================================================
+// HITUNG TOTAL, PEMASUKAN, PREVIEW WA
+// =====================================================================
+function ubahPemasukan() {
+    const v = inputPemasukan.value;
+    pemasukanManual = v === '' ? null : Math.max(0, parseFloat(v) || 0);
+    hitungTotal(true);
+}
+function resetPemasukan() { pemasukanManual = null; alasanPemasukan = ''; hitungTotal(); }
+inputAlasan.addEventListener('input', () => {
+    alasanPemasukan = inputAlasan.value;
+    if (alasanPemasukan.trim()) document.getElementById('err-alasan').classList.add('hidden');
+    hitungTotal(true);
+});
+inputPemasukan.addEventListener('change', () => hitungTotal());
+
+function hitungTotal(skipPemasukanInput) {
+    let totalKokRaw = 0, totalPatungan = 0; const rincianList = [];
+    hadir.forEach(h => {
+        const jml = kokVal[h.nama] || 0, biaya = jml * PATUNGAN_PER_KOK;
+        totalKokRaw += jml; totalPatungan += biaya;
+        rincianList.push(`- ${h.nama}: ${jml} kok (${formatRupiah(biaya)})`);
+    });
+    const totalKok = fmtNum(totalKokRaw / 4);
+    const kasTerakhir = parseFloat(inputKasTerakhir.value) || 0;
+    const otomatis = totalKok * INSENTIF_KAS_PER_KOK;
+    const pemasukan = pemasukanManual !== null ? pemasukanManual : otomatis;
+    const totalKasTerbaru = kasTerakhir + pemasukan;
+    const adj = pemasukanManual !== null && pemasukan !== otomatis;   // pemasukan diubah dari hitungan otomatis
+    const selisih = pemasukan - otomatis;
+    const selisihTxt = `${selisih > 0 ? '+ ' : '- '}${formatRupiah(Math.abs(selisih))}`;
+
+    if (!skipPemasukanInput) { inputPemasukan.value = pemasukan; inputAlasan.value = alasanPemasukan; }
+    document.getElementById('box-alasan').classList.toggle('hidden', !adj);
+    if (adj) {
+        document.getElementById('alasan-seharusnya').innerText = formatRupiah(otomatis);
+        document.getElementById('alasan-diganti').innerText = formatRupiah(pemasukan);
+        document.getElementById('alasan-selisih').innerText = selisihTxt;
+    } else document.getElementById('err-alasan').classList.add('hidden');
+    const manual = pemasukanManual !== null;
+    const bd = document.getElementById('badge-pemasukan');
+    bd.innerText = manual ? 'Manual' : 'Otomatis';
+    bd.className = 'text-[10px] px-2 py-0.5 rounded-full ' + (manual ? 'bg-amber-400/20 text-amber-300' : 'bg-white/10 text-neutral-300');
+    document.getElementById('btn-reset-pemasukan').classList.toggle('hidden', !manual);
+
+    document.getElementById('summary-total-kok').innerText = `${totalKok} pcs`;
+    document.getElementById('summary-total-patungan').innerText = formatRupiah(totalPatungan);
+    document.getElementById('summary-kas-terakhir').innerText = formatRupiah(kasTerakhir);
+    document.getElementById('summary-insentif-kas').innerText = `+ ${formatRupiah(pemasukan)}`;
+    document.getElementById('summary-total-kas-akhir').innerText = formatRupiah(totalKasTerbaru);
+
+    const tanggalHariIni = labelTanggal(inputTanggalSesi.value) || new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    let wa = `*LAPORAN JGEER BADMINTON*\n`;
+    wa += `📅 Hari/Tanggal: ${tanggalHariIni}\n`;
+    wa += `💰 Patungan: Rp 5.000/kok \n\n`;
+    wa += `*Rincian Pemain:*\n`;
+    wa += rincianList.join('\n');
+    wa += `\n\n---------------------------\n`;
+    wa += `*Total Kok Terpakai:* ${totalKok} pcs\n`;
+    wa += `*Total Patungan Pemain:* ${formatRupiah(totalPatungan)}\n`;
+    wa += `---------------------------\n`;
+    wa += `*REKAP KAS PB JGEER PER "${tanggalHariIni}":*\n`;
+    wa += `- Kas Terakhir: ${formatRupiah(kasTerakhir)}\n`;
+    wa += `- Pemasukan Kas Hari Ini : ${formatRupiah(pemasukan)}\n`;
+    if (adj) wa += `  (disesuaikan dari ${formatRupiah(otomatis)}, selisih ${selisihTxt}: ${alasanPemasukan.trim() || 'alasan belum diisi'})\n`;
+    wa += `👉 *TOTAL KAS SEKARANG:* ${formatRupiah(totalKasTerbaru)}\n`;
+    wa += `---------------------------\n`;
+    wa += `_Salam Jgeer, Tengs Slurd!_ 🙏`;
+    document.getElementById('wa-preview').value = wa;
+}
+
+// =====================================================================
+// RIWAYAT (format data & penyimpanan sama seperti sebelumnya)
+// =====================================================================
+function simpanSesiKeRiwayat() {
+    const detailKok = {}; let totalKokRaw = 0;
+    hadir.forEach(h => { const jml = kokVal[h.nama] || 0; detailKok[h.nama] = jml; totalKokRaw += jml; });
+    const totalKokSesi = totalKokRaw / 4;
+    const checkedAnggota = hadir.filter(h => !h.guest).map(h => h.nama);
+    const daftarGuest = hadir.filter(h => h.guest).map(h => h.nama);
+    const kasAwal = parseFloat(inputKasTerakhir.value) || 0;
+    const pemasukanSeharusnya = totalKokSesi * INSENTIF_KAS_PER_KOK;
+    const pemasukanKas = pemasukanManual !== null ? pemasukanManual : pemasukanSeharusnya;
+    const kasAkhir = kasAwal + pemasukanKas;
+    const diubah = pemasukanKas !== pemasukanSeharusnya;
+    if (diubah && !alasanPemasukan.trim()) {
+        document.getElementById('err-alasan').classList.remove('hidden');
+        document.getElementById('box-alasan').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        inputAlasan.focus();
+        return;
+    }
+
+    const dataSesi = {
+        id: idSesiEditing ? idSesiEditing : "sesi_" + Date.now(),
+        tanggal: inputTanggalSesi.value,
+        checkedAnggota: checkedAnggota,
+        daftarGuest: daftarGuest,
+        pemainHadir: [...checkedAnggota, ...daftarGuest],
+        detailKok: detailKok,
+        totalKok: totalKokSesi,
+        kasAwal: kasAwal,
+        pemasukanKas: pemasukanKas,
+        pemasukanSeharusnya: pemasukanSeharusnya,
+        alasanPemasukan: diubah ? alasanPemasukan.trim() : '',
+        kasAkhir: kasAkhir,
+        waText: document.getElementById('wa-preview').value,
+        updatedAt: new Date().toISOString()
+    };
+
+    if (idSesiEditing) {
+        const idx = riwayatTransaksi.findIndex(item => item.id === idSesiEditing);
+        if (idx !== -1) riwayatTransaksi[idx] = dataSesi;
+        keluarModeEdit();
+    } else {
+        riwayatTransaksi.unshift(dataSesi);
+    }
+    riwayatTransaksi.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+
+    simpanRiwayatKeStorage();
+    if (window.simpanKeFirebaseDoc) window.simpanKeFirebaseDoc(dataSesi);
+    gantiTab('riwayat');
+}
+
+function renderRiwayatList() {
+    const container = document.getElementById('list-riwayat-container');
+    document.getElementById('riwayat-count').innerText = `${riwayatTransaksi.length} transaksi`;
+    container.innerHTML = '';
+    if (riwayatTransaksi.length === 0) {
+        container.innerHTML = `<div class="text-center py-10 text-neutral-500 italic text-sm">Belum ada riwayat transaksi tersimpan.</div>`;
+        return;
+    }
+    riwayatTransaksi.slice(0, 5).forEach(item => {   // 5 transaksi terakhir, seperti sebelumnya
+        const tgl = new Date(item.tanggal + "T00:00:00").toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+        const card = document.createElement('div');
+        card.className = "bg-black/30 border border-white/10 p-5 space-y-4";
+        card.style.borderRadius = '1.25rem';
+        card.innerHTML = `
+            <div class="flex justify-between items-start gap-3 border-b border-white/10 pb-3">
+                <div>
+                    <p class="font-display uppercase tracking-wide font-bold">${esc(tgl)}</p>
+                    <p class="text-xs text-neutral-400 mt-0.5">${item.pemainHadir.length} pemain &middot; total ${fmtNum(item.totalKok)} kok</p>
+                </div>
+                <span class="text-xs font-bold text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-3 py-1 rounded-full whitespace-nowrap">+ ${formatRupiah(item.pemasukanKas)}</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3 text-xs">
+                <div><span class="text-neutral-500 block text-[10px] uppercase tracking-widest">Kas awal</span><span class="font-semibold">${formatRupiah(item.kasAwal)}</span></div>
+                <div><span class="text-neutral-500 block text-[10px] uppercase tracking-widest">Kas akhir</span><span class="font-semibold text-brand-rose">${formatRupiah(item.kasAkhir)}</span></div>
+            </div>
+            ${item.alasanPemasukan ? `<p class="text-xs text-amber-200 bg-amber-400/5 border border-amber-400/25 px-3 py-2" style="border-radius:.9rem">Pemasukan disesuaikan dari ${formatRupiah(item.pemasukanSeharusnya)} (selisih ${item.pemasukanKas - item.pemasukanSeharusnya > 0 ? '+' : '-'} ${formatRupiah(Math.abs(item.pemasukanKas - item.pemasukanSeharusnya))}): ${esc(item.alasanPemasukan)}</p>` : ''}
+            <div class="flex flex-wrap justify-between items-center gap-2">
+                <button onclick="salinWAById('${item.id}')" class="ghost-btn sm">Salin WA</button>
+                <div class="flex gap-2">
+                    <button onclick="editRevisiSesi('${item.id}')" class="ghost-btn sm">Revisi</button>
+                    <button onclick="hapusSesiRiwayat('${item.id}')" class="ghost-btn sm hover:!bg-brand-rose">Hapus</button>
+                </div>
+            </div>`;
+        container.appendChild(card);
+    });
+}
+
+function editRevisiSesi(id) {
+    const sesi = riwayatTransaksi.find(item => item.id === id); if (!sesi) return;
+    idSesiEditing = id;
+    inputTanggalSesi.value = sesi.tanggal; tanggalAktif = sesi.tanggal;
+    inputKasTerakhir.value = sesi.kasAwal;
+    hadir = [
+        ...(sesi.checkedAnggota || []).map(n => ({ nama: n, guest: false })),
+        ...(sesi.daftarGuest || []).map(n => ({ nama: n, guest: true }))
+    ];
+    kokVal = { ...(sesi.detailKok || {}) };
+    kokAuto = hitungAuto(sesi.tanggal).counts;
+    pemasukanManual = Math.abs((sesi.pemasukanKas || 0) - (sesi.totalKok || 0) * INSENTIF_KAS_PER_KOK) > 0.5 ? sesi.pemasukanKas : null;
+    alasanPemasukan = sesi.alasanPemasukan || '';
+    urutkanHadir();
+    document.getElementById('banner-mode-edit').classList.remove('hidden');
+    document.getElementById('label-mode-edit').innerText = `Sedang merevisi sesi transaksi (${sesi.tanggal})`;
+    document.getElementById('text-btn-simpan').innerText = "Simpan hasil revisi transaksi";
+    gantiTab('rekap');
+    renderAll(); lanjutKeHitung();
+}
+
+function keluarModeEdit() {
+    idSesiEditing = null;
+    document.getElementById('banner-mode-edit').classList.add('hidden');
+    document.getElementById('text-btn-simpan').innerText = "Simpan transaksi ke riwayat";
+    setTanggalHariIni();
+    terapkanOtomatis(inputTanggalSesi.value, 'ganti');
+    setKasAwalOtomatis();
+    kembaliKeAbsen();
+    renderAll(); simpanDataKeStorage(); simpanKokKeStorage();
+}
+function batalEditSesi() { keluarModeEdit(); }
+
+function hapusSesiRiwayat(id) {
+    showConfirm("Hapus Sesi Transaksi", "Apakah Anda yakin ingin menghapus catatan transaksi ini dari riwayat?", () => {
+        riwayatTransaksi = riwayatTransaksi.filter(item => item.id !== id);
+        simpanRiwayatKeStorage(); renderRiwayatList(); setKasAwalOtomatis();
+    });
+}
+function salinWAById(id) {
+    const sesi = riwayatTransaksi.find(item => item.id === id); if (!sesi) return;
+    fallbackCopyText(sesi.waText);
+}
+
+function setKasAwalOtomatis() {
+    if (idSesiEditing !== null) return;   // jangan menimpa saat revisi
+    if (riwayatTransaksi && riwayatTransaksi.length > 0) {
+        const t = riwayatTransaksi[0];
+        if (t && t.kasAkhir !== undefined) {
+            inputKasTerakhir.value = t.kasAkhir;
+            simpanDataKeStorage();
+            if (inStep2()) hitungTotal();
+        }
+    }
+}
+
+// =====================================================================
+// PENYIMPANAN LOKAL (kunci & bentuk data sama seperti sebelumnya)
+// =====================================================================
+function simpanDataKeStorage() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        kasTerakhir: inputKasTerakhir.value || 0,
+        checkedAnggota: hadir.filter(h => !h.guest).map(h => h.nama),
+        daftarGuest: hadir.filter(h => h.guest).map(h => h.nama),
+        tanggalSesi: inputTanggalSesi.value
+    }));
+}
+function simpanKokKeStorage() {
+    const kokData = {};
+    hadir.forEach(h => { kokData[h.nama] = kokVal[h.nama] || 0; });
+    localStorage.setItem(STORAGE_KEY + "_kok", JSON.stringify(kokData));
+}
+function simpanRiwayatKeStorage() {
+    try { localStorage.setItem(RIWAYAT_KEY, JSON.stringify(riwayatTransaksi)); }
+    catch (e) { console.error("Gagal menyimpan ke LocalStorage:", e); }
+}
+function muatRiwayatTersimpan() {
+    const saved = localStorage.getItem(RIWAYAT_KEY);
+    if (!saved) return;
+    try { riwayatTransaksi = JSON.parse(saved); renderRiwayatList(); }
+    catch (e) { console.error("Gagal membaca riwayat tersimpan:", e); riwayatTransaksi = []; }
+}
+function muatDataTersimpan() {
+    const saved = localStorage.getItem(STORAGE_KEY); if (!saved) return;
+    try {
+        const p = JSON.parse(saved);
+        if (p.kasTerakhir !== undefined) inputKasTerakhir.value = p.kasTerakhir;
+        if (p.tanggalSesi) inputTanggalSesi.value = p.tanggalSesi;
+        hadir = [
+            ...(Array.isArray(p.checkedAnggota) ? p.checkedAnggota : []).map(n => ({ nama: n, guest: false })),
+            ...(Array.isArray(p.daftarGuest) ? p.daftarGuest : []).map(n => ({ nama: n, guest: true }))
+        ];
+        const k = JSON.parse(localStorage.getItem(STORAGE_KEY + "_kok")) || {};
+        hadir.forEach(h => { if (k[h.nama] !== undefined) kokVal[h.nama] = k[h.nama]; });
+    } catch (e) { console.error("Gagal membaca data tersimpan", e); }
+}
+
+// =====================================================================
+// RESET, KONFIRMASI, SALIN WA
+// =====================================================================
+function mintaResetHariIni() {
+    showConfirm("Reset Hari Ini", "Kosongkan kehadiran, guest, dan kok, lalu muat ulang otomatis dari Sheet 6 untuk hari ini?", () => {
+        if (idSesiEditing) { idSesiEditing = null; document.getElementById('banner-mode-edit').classList.add('hidden'); document.getElementById('text-btn-simpan').innerText = "Simpan transaksi ke riwayat"; }
+        localStorage.removeItem(STORAGE_KEY + "_kok");
+        hadir = []; kokVal = {}; kokAuto = {};
+        setTanggalHariIni();
+        terapkanOtomatis(inputTanggalSesi.value, 'ganti');
+        setKasAwalOtomatis();
+        kembaliKeAbsen();
+        renderAll(); simpanDataKeStorage(); simpanKokKeStorage();
+    });
+}
+function showConfirm(title, message, onConfirm, onCancel) {
+    document.getElementById('confirm-title').innerText = title;
+    document.getElementById('confirm-message').innerText = message;
+    pendingConfirmCallback = onConfirm; pendingCancelCallback = onCancel || null;
+    document.getElementById('modal-confirm').classList.remove('hidden');
+}
+document.getElementById('btn-cancel-confirm').onclick = () => {
+    document.getElementById('modal-confirm').classList.add('hidden');
+    if (pendingCancelCallback) pendingCancelCallback();
+};
+document.getElementById('btn-ok-confirm').onclick = () => {
+    document.getElementById('modal-confirm').classList.add('hidden');
+    if (pendingConfirmCallback) pendingConfirmCallback();
+};
+
+function salinKeWA() {
+    const text = document.getElementById('wa-preview').value;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(tampilkanNotifCopy).catch(() => fallbackCopyText(text));
+    } else fallbackCopyText(text);
+}
+function fallbackCopyText(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    try { document.execCommand('copy') ? tampilkanNotifCopy() : alert('Gagal menyalin teks.'); }
+    catch (err) { alert('Gagal menyalin teks.'); }
+    document.body.removeChild(ta);
+}
+function tampilkanNotifCopy() {
+    const n = document.getElementById('copy-notification');
+    n.classList.remove('hidden');
+    setTimeout(() => n.classList.add('hidden'), 3500);
+}
+
+// =====================================================================
+// INISIALISASI
+// =====================================================================
+let skStarted = false;
+window.__skStart = async () => {
+    if (skStarted) return; skStarted = true;
+    skInitFirebase();
+    muatRiwayatTersimpan();
+    muatDataTersimpan();
+    if (!inputTanggalSesi.value) setTanggalHariIni();
+    tanggalAktif = inputTanggalSesi.value;
+    setKasAwalOtomatis();
+    renderAll();
+
+    await Promise.all([loadRoster(), loadSheet6()]);
+
+    if (!idSesiEditing) {
+        if (hadir.length === 0) terapkanOtomatis(inputTanggalSesi.value, 'ganti');   // tanggal belum punya data tersimpan: isi dari Sheet 6
+        else kokAuto = hitungAuto(inputTanggalSesi.value).counts;                     // pertahankan isian tersimpan, hanya hitung pembanding
+        hadir.forEach(h => { if (kokVal[h.nama] === undefined) kokVal[h.nama] = kokAuto[h.nama] ?? 0; });
+        simpanDataKeStorage(); simpanKokKeStorage();
+    }
+    renderAll();
+};
+
+// =====================================================================
+// FIREBASE (sama seperti sebelumnya; dimuat setelah admin membuka kunci)
+// =====================================================================
+const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyAmQ7JJQ32Ir7f4qKKVjk2tSOX8V0gl0i4",
+    authDomain: "pbjgeer-26c8b.firebaseapp.com",
+    projectId: "pbjgeer-26c8b",
+    storageBucket: "pbjgeer-26c8b.firebasestorage.app",
+    messagingSenderId: "731670438184",
+    appId: "1:731670438184:web:e420b444556eb82638301d",
+    measurementId: "G-5WN3C0DCTR"
+};
+window.isFirebaseActive = false;
+function skStatus(cls, teks) {
+    document.getElementById('status-dot').className = 'w-2 h-2 rounded-full ' + cls;
+    document.getElementById('status-text').innerText = teks;
+}
+async function skInitFirebase() {
+    try {
+        const V = 'https://www.gstatic.com/firebasejs/11.6.1/';
+        const [A, AU, FS] = await Promise.all([import(V + 'firebase-app.js'), import(V + 'firebase-auth.js'), import(V + 'firebase-firestore.js')]);
+        const app = A.initializeApp(FIREBASE_CONFIG);
+        const auth = AU.getAuth(app);
+        const db = FS.getFirestore(app);
+        try { await AU.signInAnonymously(auth); } catch (authErr) { console.warn("Autentikasi Anonim Firebase dibatasi:", authErr.message); }
+        window.db = db; window.auth = auth; window.isFirebaseActive = true;
+        skStatus('bg-emerald-400', 'Firebase Terhubung');
+
+        window.simpanKeFirebaseDoc = async function (dataSesi) {
+            try { await FS.setDoc(FS.doc(db, 'riwayat_transaksi', dataSesi.id), dataSesi, { merge: true }); }
+            catch (err) { console.warn("Data tersimpan aman di penyimpanan lokal HP:", err.message); }
+        };
+
+        FS.onSnapshot(FS.collection(db, 'riwayat_transaksi'), snapshot => {
+            const dataFB = [];
+            snapshot.forEach(d => dataFB.push(d.data()));
+            if (dataFB.length > 0) {
+                dataFB.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+                riwayatTransaksi = dataFB;
+                localStorage.setItem(RIWAYAT_KEY, JSON.stringify(dataFB));
+                renderRiwayatList();
+                setKasAwalOtomatis();   // paksa update kolom kas setelah data dari cloud masuk
+            }
+        }, error => {
+            console.warn("Menggunakan penyimpanan lokal HP/Browser:", error.message);
+            skStatus('bg-amber-400', 'Tersimpan di HP (Lokal)');
+        });
+    } catch (e) {
+        console.error("Gagal koneksi Firebase", e);
+        window.isFirebaseActive = false;
+        skStatus('bg-amber-400', 'Lokal (Tersimpan)');
+    }
+}
+
+Object.assign(window, { batalEditSesi, bukaModalPemain, editRevisiSesi, gantiTab, hapusSesiRiwayat, hitungTotal, simpanDataKeStorage, kembaliKeAbsen, kembalikanSemuaKokOtomatis, lanjutKeHitung, mintaResetHariIni, muatUlangDariSheet, pilihSemua, resetPemasukan, salinKeWA, salinWAById, simpanSesiKeRiwayat, tambahGuest, tutupModalPemain, ubahPemasukan, ubahTanggal });
+})();
+</script>
 <!-- TEMA-TERANG-JS -->
 <script>/* TEMA TERANG: interaksi ringan (riak tombol, muncul saat digulir, hitung naik) */
 (() => {
@@ -1469,32 +2662,5 @@ html body :is(.export-btn,.ghost-btn,.ghost-pill,.tab-btn){position:relative;ove
 })();
 </script>
 <!-- /TEMA-TERANG-JS -->
-<!-- PWA-JS -->
-<script>
-(() => {
-  // Daftarkan service worker (hanya berjalan di https / localhost)
-  if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
-  const standalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
-  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) && !/crios|fxios/i.test(navigator.userAgent);
-  let deferred = null;
-  const sync = () => document.querySelectorAll('[data-install]').forEach(el => { el.hidden = standalone() || !(deferred || ios); });
-  addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; sync(); });
-  addEventListener('appinstalled', () => { deferred = null; sync(); });
-  function sheet(html) {
-    document.getElementById('pwaSheet')?.remove();
-    const d = document.createElement('div'); d.id = 'pwaSheet';
-    d.style.cssText = 'position:fixed;inset:0;z-index:400;background:rgba(43,27,34,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;padding:1rem';
-    d.innerHTML = '<div style="background:#fff;color:#2B1B22;border-radius:1.5rem;padding:1.4rem;max-width:26rem;width:100%;box-shadow:0 30px 60px -20px rgba(0,0,0,.5);font:500 14px/1.6 \'Plus Jakarta Sans\',Inter,sans-serif">' + html + '<button style="margin-top:1rem;width:100%;padding:.7rem;border:0;border-radius:9999px;background:linear-gradient(135deg,#E4405F,#FF7A59);color:#fff;font:700 14px Inter,sans-serif;cursor:pointer">Mengerti</button></div>';
-    d.addEventListener('click', e => { if (e.target === d || e.target.tagName === 'BUTTON') d.remove(); }); document.body.appendChild(d);
-  }
-  document.addEventListener('click', async e => {
-    if (!e.target.closest('[data-install]')) return;
-    if (deferred) { deferred.prompt(); try { await deferred.userChoice; } catch (_) {} deferred = null; sync(); }
-    else if (ios) sheet('<b style="font-size:16px">Pasang di iPhone</b><ol style="margin:.6rem 0 0 1.1rem;padding:0"><li>Buka halaman ini lewat <b>Safari</b>.</li><li>Ketuk ikon <b>Bagikan</b> (kotak dengan panah ke atas).</li><li>Pilih <b>Tambah ke Layar Utama</b>.</li></ol>');
-  });
-  document.addEventListener('DOMContentLoaded', sync); sync();
-})();
-</script>
-<!-- /PWA-JS -->
 </body>
 </html>

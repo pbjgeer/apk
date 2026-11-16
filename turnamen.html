@@ -2,7 +2,17 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#7A1020">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="PB Jgeer">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="icon" type="image/png" sizes="48x48" href="icons/favicon-48.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <script src="pwa.js"></script>
 <title>Turnamen | PB Jgeer</title>
 <meta name="theme-color" content="#FFF8F5">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -135,15 +145,6 @@ details>summary.muted{font-weight:600}
 @media(max-width:380px){.dk{font-size:8.5px;letter-spacing:0}}
 @media(prefers-reduced-motion:reduce){.dock{animation:none!important}.dk,.dk-ic,.btn,.mc,.pc,.ist,.pz{transition:none}}
 </style>
-<!-- PWA -->
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" href="icons/favicon-64.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="PB Jgeer">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<!-- /PWA -->
 </head>
 <body>
 <div id="boot" role="status" aria-live="polite" aria-label="Memuat"><div class="bootlogo"><img src="https://raw.githubusercontent.com/amrylr/sirekapjgeer/d5ee3532961526eb61ee71dfd3696db33cdc10f6/LOGOJGEER.png" alt=""></div><div class="boottxt">Memuat</div></div>
@@ -234,10 +235,12 @@ const toast = t => { const e = $('#toast'); e.textContent = t; e.classList.add('
 $('#logo').src = LOGO;
 
 // ===== FOTO PEMAIN (Sheet1, kolom Foto) =====
-const photos = new Map(); let roster = [];
-const rawUrl = u => { u = String(u || '').trim(); if (!u) return ''; let m = u.match(/^https?:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/(.+)$/);
-  if (m) return `https://raw.githubusercontent.com/${m[1]}/${m[2]}/${m[3]}`;
-  if (/drive\.google\.com/.test(u)) { m = u.match(/[-\w]{25,}/); return m ? `https://drive.google.com/thumbnail?id=${m[0]}&sz=w400` : ''; } return u; };
+const photos = new Map(); let roster = []; let rosterReady = Promise.resolve();
+const rawUrl = u => { u = String(u || '').trim(); if (!u) return ''; let m = u.match(/^https?:\/\/github\.com\/([^/]+)\/([^/]+)\/(?:blob|raw)\/(.+)$/i);
+  if (m) return `https://raw.githubusercontent.com/${m[1]}/${m[2]}/${m[3].split('?')[0]}`;
+  if (/drive\.google\.com/.test(u)) { m = u.match(/[-\w]{25,}/); return m ? `https://drive.google.com/thumbnail?id=${m[0]}&sz=w400` : ''; }
+  if (/^(https?:\/\/|data:)/i.test(u)) return u;
+  return 'https://raw.githubusercontent.com/amrylr/roster/main/' + encodeURI(u.replace(/^\/+/, '')); };   // nama file -> GitHub roster
 const gq = sh => new Promise((res, rej) => { const cb = '__g' + Math.random().toString(36).slice(2), s = document.createElement('script');
   window[cb] = d => { res(d.table); s.remove(); delete window[cb]; }; s.onerror = () => { rej(new Error('gviz')); s.remove(); };
   s.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json;responseHandler:${cb}&sheet=${encodeURIComponent(sh)}`; document.head.appendChild(s); });
@@ -340,9 +343,14 @@ function bgCanvas(H, SC) { const [bc, x] = mk(H, SC); let g = x.createRadialGrad
     .forEach(([cx, cy, r, col]) => { g = x.createRadialGradient(cx, cy, 0, cx, cy, r); g.addColorStop(0, col); g.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = g; x.fillRect(0, 0, W, H); });
   x.strokeStyle = 'rgba(255,255,255,.07)'; x.lineWidth = 3; x.strokeRect(36, 36, W - 72, H - 72); x.beginPath(); x.moveTo(W / 2, 36); x.lineTo(W / 2, H - 36);
   [.2, .5, .8].forEach(f => { x.moveTo(36, H * f); x.lineTo(W - 36, H * f); }); x.stroke(); return bc; }
-const dataURL = u => new Promise(res => { fetch(u, { mode: 'cors' }).then(r => r.blob()).then(b => { const f = new FileReader(); f.onload = () => res(f.result); f.readAsDataURL(b); }).catch(() => res(null)); });
+const dataURL = u => new Promise(res => { const ac = new AbortController(), tm = setTimeout(() => ac.abort(), 10000);
+  fetch(u, { mode: 'cors', referrerPolicy: 'no-referrer', signal: ac.signal }).then(r => { if (!r.ok) throw new Error('http'); return r.blob(); })
+    .then(b => { const f = new FileReader(); f.onload = () => res(f.result); f.onerror = () => res(null); f.readAsDataURL(b); }).catch(() => res(null)).finally(() => clearTimeout(tm)); });
 const loadImg = u => new Promise(res => { if (!u) return res(null); const i = new Image(); i.onload = () => res(i); i.onerror = () => res(null); i.src = u; });
-const IC = new Map(); const imgOf = n => { const k = norm(n); if (!IC.has(k)) IC.set(k, (async () => { const u = photos.get(k); return u ? loadImg(await dataURL(u)) : null; })()); return IC.get(k); };
+const IC = new Map();
+const imgOf = n => { const k = norm(n), u = photos.get(k); if (!u) return Promise.resolve(null);   // roster/foto belum ada: jangan disimpan, coba lagi nanti
+  if (!IC.has(k)) IC.set(k, (async () => { const d = await dataURL(u), im = d ? await loadImg(d) : null; if (!im) IC.delete(k); return im; })());   // gagal: boleh dicoba lagi
+  return IC.get(k); };
 function av(c, img, name, x, y, r, col) { c.save(); c.beginPath(); c.arc(x, y, r + 3, 0, 7); c.fillStyle = '#12060a'; c.fill(); c.restore(); c.save(); c.beginPath(); c.arc(x, y, r, 0, 7); c.clip();
   if (img) { const s = Math.max(2 * r / img.width, 2 * r / img.height); c.drawImage(img, x - img.width * s / 2, y - img.height * s / 2, img.width * s, img.height * s); }
   else { c.fillStyle = '#2a0d14'; c.fillRect(x - r, y - r, 2 * r, 2 * r); c.fillStyle = ROSE; c.font = F(700, r * 1.1, D); c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText((name || '?')[0].toUpperCase(), x, y + r * .05); }
@@ -351,6 +359,7 @@ function igIcon(c, x, y, s, col) { c.save(); c.translate(x, y); c.scale(s / 24, 
 const schedText = m => [S.tanggal && fmtD(S.tanggal), jam(m.time) && jam(m.time) + ' WIB', m.court && 'LAPANGAN ' + String(m.court).toUpperCase()].filter(Boolean).join('  •  ');
 
 async function poster(spec, key, SC) {
+  await rosterReady;
   const f = FM[key], H = f.H, top = f.top, footY = H - f.foot, y1 = footY - 60, bc = bgCanvas(H, SC), bl = blurred(bc), [cv, c] = mk(H, SC);
   c.drawImage(bc, 0, 0, W, H);
   const glass = (x, y, w, h, r, t = .1, e = .3) => { c.save(); c.shadowColor = 'rgba(0,0,0,.55)'; c.shadowBlur = 30 * SC; c.shadowOffsetY = 12 * SC; rr(c, x, y, w, h, r); c.fillStyle = '#12060a'; c.fill(); c.restore();
@@ -633,37 +642,10 @@ $$('#tabs button').forEach(b => b.onclick = () => { $$('#tabs button').forEach(x
 (async () => {
   const boot = $('#boot'), sembunyi = () => { boot.classList.add('done'); setTimeout(() => boot.remove(), 600); };
   const aman = setTimeout(sembunyi, 15000);   // cadangan: jangan terkunci jika jaringan macet
-  try { await Promise.all([load(true), loadRoster()]); } catch (e) { console.warn(e); }
+  try { await Promise.all([load(true), (rosterReady = loadRoster())]); } catch (e) { console.warn(e); }
   renderInfo(); clearTimeout(aman); sembunyi();
   const h = location.hash.slice(1); if (['bracket', 'poster', 'admin'].includes(h)) $(`#tabs [data-t="${h}"]`).click(); setInterval(() => { if (['info', 'bracket'].includes(tab())) load(); }, 30000); })();
 })();
 </script>
-<!-- PWA-JS -->
-<script>
-(() => {
-  // Daftarkan service worker (hanya berjalan di https / localhost)
-  if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
-  const standalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
-  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) && !/crios|fxios/i.test(navigator.userAgent);
-  let deferred = null;
-  const sync = () => document.querySelectorAll('[data-install]').forEach(el => { el.hidden = standalone() || !(deferred || ios); });
-  addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; sync(); });
-  addEventListener('appinstalled', () => { deferred = null; sync(); });
-  function sheet(html) {
-    document.getElementById('pwaSheet')?.remove();
-    const d = document.createElement('div'); d.id = 'pwaSheet';
-    d.style.cssText = 'position:fixed;inset:0;z-index:400;background:rgba(43,27,34,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;padding:1rem';
-    d.innerHTML = '<div style="background:#fff;color:#2B1B22;border-radius:1.5rem;padding:1.4rem;max-width:26rem;width:100%;box-shadow:0 30px 60px -20px rgba(0,0,0,.5);font:500 14px/1.6 \'Plus Jakarta Sans\',Inter,sans-serif">' + html + '<button style="margin-top:1rem;width:100%;padding:.7rem;border:0;border-radius:9999px;background:linear-gradient(135deg,#E4405F,#FF7A59);color:#fff;font:700 14px Inter,sans-serif;cursor:pointer">Mengerti</button></div>';
-    d.addEventListener('click', e => { if (e.target === d || e.target.tagName === 'BUTTON') d.remove(); }); document.body.appendChild(d);
-  }
-  document.addEventListener('click', async e => {
-    if (!e.target.closest('[data-install]')) return;
-    if (deferred) { deferred.prompt(); try { await deferred.userChoice; } catch (_) {} deferred = null; sync(); }
-    else if (ios) sheet('<b style="font-size:16px">Pasang di iPhone</b><ol style="margin:.6rem 0 0 1.1rem;padding:0"><li>Buka halaman ini lewat <b>Safari</b>.</li><li>Ketuk ikon <b>Bagikan</b> (kotak dengan panah ke atas).</li><li>Pilih <b>Tambah ke Layar Utama</b>.</li></ol>');
-  });
-  document.addEventListener('DOMContentLoaded', sync); sync();
-})();
-</script>
-<!-- /PWA-JS -->
 </body>
 </html>

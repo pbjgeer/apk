@@ -18,8 +18,8 @@
   <!-- Meta Tag Open Graph untuk Preview WhatsApp & Sosmed -->
   <meta property="og:title" content="Portal Internal | PB Jgeer" />
   <meta property="og:description" content="Mari ngesang dan bersenang-senang! Cek jadwal mabar, roster tim, klasemen, dan galeri foto dokumentasi PB Jgeer." />
-  <meta property="og:image" content="https://raw.githubusercontent.com/amrylr/jgeerbadminton/refs/heads/main/PB%20Jgeer%20Famiglia%F0%9F%A5%B3%20(1).webp" />
-  <meta property="og:url" content="https://amrylr.github.io/jgeerbadminton/" />
+  <meta property="og:image" content="https://raw.githubusercontent.com/pbjgeer/apk/refs/heads/main/galeri/galeri1.webp" />
+  <meta property="og:url" content="https://https://pbjgeer.github.io/apk/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="PB Jgeer" />
 
@@ -571,7 +571,7 @@ html body :is(.export-btn,.ghost-btn,.ghost-pill,.tab-btn){position:relative;ove
     <!-- HERO -->
     <section class="hero relative isolate overflow-hidden bg-neutral-900">
       <img
-        src="https://raw.githubusercontent.com/amrylr/jgeerbadminton/refs/heads/main/PB%20Jgeer%20Famiglia%F0%9F%A5%B3%20(1).webp"
+        src="https://raw.githubusercontent.com/pbjgeer/apk/refs/heads/main/galeri/galeri1.webp"
         alt="Jgeer Famiglia"
         class="absolute inset-0 -z-20 w-full h-full object-cover"
         onerror="this.style.display='none'"
@@ -1165,24 +1165,24 @@ html body :is(.export-btn,.ghost-btn,.ghost-pill,.tab-btn){position:relative;ove
     };
 
     const LOGO_URL = 'https://raw.githubusercontent.com/pbjgeer/apk/refs/heads/main/logopbjgeer.png';
-    const SITE_URL = 'amrylr.github.io/jgeerbadminton';
+    const SITE_URL = 'https://pbjgeer.github.io/apk';
 
     // SUMBER FOTO = GITHUB (repo milik sendiri).
     // Isi dengan nama file di folder basis di bawah, ATAU tempel link GitHub lengkap (blob/raw): otomatis diubah ke link raw.
     // Roster : kolom Foto (E) di Sheet1, contoh  https://github.com/amrylr/roster/blob/<hash>/amry.jpg  atau cukup  amry.jpg
     const GITHUB_ROSTER_BASE = 'https://raw.githubusercontent.com/amrylr/roster/main/';
-    const GITHUB_GALERI_BASE = 'https://raw.githubusercontent.com/amrylr/jgeerbadminton/main/galeri/';
+    const GITHUB_GALERI_BASE = 'https://raw.githubusercontent.com/pbjgeer/apk/main/galeri/';
     // Foto pemain smash untuk latar siluet poster. Default: "Jumping smash" oleh Muktasim Azlan di Unsplash (Unsplash License).
     // Bisa diganti dengan nama file di folder galeri / link GitHub / link gambar lain. PNG berlatar transparan -> siluet murni.
     // Isi '' untuk memakai siluet gambar bawaan. Jika foto gagal dimuat, poster tampil tanpa ilustrasi.
-    let POSTER_SMASH_IMG = 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=1400&q=80&fm=jpg&fit=crop';
+    let POSTER_SMASH_IMG = '';
 
     // GALERI: 3 foto statis. `foto` = nama file (di GITHUB_GALERI_BASE) atau link GitHub; `ig` = link postingan Instagram aslinya.
     // Jika foto belum ada/gagal dimuat, kartu tetap tampil dengan latar placeholder dan tetap bisa diklik.
     const GALERI = [
-      { ig: 'https://www.instagram.com/p/DcWMFYpFH2x/', foto: 'https://raw.githubusercontent.com/amrylr/jgeerbadminton/refs/heads/main/PB%20Jgeer%20Famiglia%F0%9F%A5%B3%20(1).webp', caption: 'Momen Mabar #1' },
-      { ig: 'https://www.instagram.com/p/DU0uiO1D_M5/', foto: 'https://raw.githubusercontent.com/amrylr/jgeerbadminton/refs/heads/main/galeri1.webp', caption: 'Momen Mabar #2' },
-      { ig: 'https://www.instagram.com/p/DGsQAiVPOVT/', foto: 'https://raw.githubusercontent.com/amrylr/jgeerbadminton/refs/heads/main/galeri2.webp', caption: 'Momen Mabar #3' },
+      { ig: 'https://www.instagram.com/p/DcWMFYpFH2x/', foto: '', caption: 'Momen Mabar #1' },
+      { ig: 'https://www.instagram.com/p/DU0uiO1D_M5/', foto: '', caption: 'Momen Mabar #2' },
+      { ig: 'https://www.instagram.com/p/DGsQAiVPOVT/', foto: '', caption: 'Momen Mabar #3' },
     ];
 
     // Ubah link GitHub (blob/raw) atau nama file menjadi URL gambar langsung (raw.githubusercontent.com)

@@ -89,6 +89,10 @@ label{display:block;font-size:11px;font-weight:700;color:var(--mut);text-transfo
 .faq p{margin:.6rem 0 0;color:#5E4B54;line-height:1.6;animation:fi .3s both}
 .about{position:relative;overflow:hidden}.about:before{content:'🏸';position:absolute;right:-.4rem;top:-1rem;font-size:7rem;opacity:.07;transform:rotate(18deg);pointer-events:none}.about h2{font-size:1.4rem;font-weight:800}.about p{color:#5E4B54;line-height:1.65;margin:.5rem 0 0;max-width:46rem}
 .cta{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.1rem}.btn.lg{padding:.8rem 1.6rem;font-size:.9rem}a.btn{text-decoration:none;display:inline-block}
+/* Sponsor */
+.spg{display:flex;flex-wrap:wrap;justify-content:center;gap:.8rem}.spn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;width:9.5rem;min-height:7.5rem;padding:1rem .8rem;text-align:center;text-decoration:none;color:var(--ink);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s}
+a.spn:hover{transform:translateY(-5px);box-shadow:var(--sh2)}.spn img{max-width:100%;height:3.6rem;object-fit:contain}.spn span{font-weight:700;font-size:.78rem;line-height:1.2}.spn .stx{font-size:1rem;font-weight:800}
+@media(min-width:640px){.spn{width:11rem;min-height:8.5rem}.spn img{height:4.2rem}}
 /* Muncul saat digulir */
 .rv{opacity:0}.rv.in{opacity:1;animation:rvIn .6s cubic-bezier(.22,1,.36,1) var(--d,0s) backwards}@keyframes rvIn{from{opacity:0;transform:translateY(22px)}}
 /* Kartu pilih pemain */
@@ -362,9 +366,12 @@ function av(c, img, name, x, y, r, col) { c.save(); c.beginPath(); c.arc(x, y, r
 function igIcon(c, x, y, s, col) { c.save(); c.translate(x, y); c.scale(s / 24, s / 24); c.strokeStyle = col; c.lineWidth = 2; rr(c, 3, 3, 18, 18, 5); c.stroke(); c.beginPath(); c.arc(12, 12, 4, 0, 7); c.stroke(); c.beginPath(); c.arc(17.5, 6.5, 1.1, 0, 7); c.fillStyle = col; c.fill(); c.restore(); }
 const schedText = m => [S.tanggal && fmtD(S.tanggal), jam(m.time) && jam(m.time) + ' WIB', m.court && 'LAPANGAN ' + String(m.court).toUpperCase()].filter(Boolean).join('  •  ');
 
+const SPC = new Map();
+const spImg = u => { if (!u) return Promise.resolve(null); if (!SPC.has(u)) SPC.set(u, (async () => { const d = await dataURL(u), im = d ? await loadImg(d) : null; if (!im) SPC.delete(u); return im; })()); return SPC.get(u); };
 async function poster(spec, key, SC) {
   await rosterReady;
-  const f = FM[key], H = f.H, top = f.top, footY = H - f.foot, y1 = footY - 60, bc = bgCanvas(H, SC), bl = bc, [cv, c] = mk(H, SC);
+  const spH = sponsors.length ? 130 : 0;   // ruang strip sponsor di atas footer
+  const f = FM[key], H = f.H, top = f.top, footY = H - f.foot, y1 = footY - 60 - spH, bc = bgCanvas(H, SC), bl = bc, [cv, c] = mk(H, SC);
   c.drawImage(bc, 0, 0, W, H);
   const glass = (x, y, w, h, r, t = .1, e = .3) => { c.save(); c.shadowColor = 'rgba(214,69,93,.26)'; c.shadowBlur = 34 * SC; c.shadowOffsetY = 12 * SC; rr(c, x, y, w, h, r); c.fillStyle = '#fff'; c.fill(); c.restore();
     c.save(); rr(c, x + .75, y + .75, w - 1.5, h - 1.5, r); c.strokeStyle = 'rgba(43,27,34,.07)'; c.lineWidth = 1.5; c.stroke(); c.restore(); };
@@ -431,6 +438,16 @@ async function poster(spec, key, SC) {
       for (let i = 0; i < arr.length; i++) { const col = i % cols, row = Math.floor(i / cols); await bcard(cols === 2 ? 70 + col * (cw2 + gapX) : 100, ty + row * (chh + gapY), cw2, chh, arr[i]); }
       if (extra) { c.font = F(700, 20); c.fillStyle = PGOLD; c.textBaseline = 'middle'; c.textAlign = 'left'; const t = 'PEMENANG MELAJU KE ' + RL[n / 2]; sp(c, t, (W - sw(c, t, 5)) / 2, ty + total + 32, 5); }
     }
+  }
+  // strip sponsor (logo; jika logo gagal dimuat -> nama)
+  if (sponsors.length) {
+    const items = await Promise.all(sponsors.map(async s => ({ s, im: await spImg(s.logo) })));
+    c.textBaseline = 'middle'; c.textAlign = 'left'; c.font = F(700, 17); c.fillStyle = PMUT; const lb = 'DIDUKUNG OLEH'; sp(c, lb, (W - sw(c, lb, 5)) / 2, y1 + 34, 5);
+    const bh = 64, gap = 36, maxW = 920, cy = y1 + 34 + 20 + bh / 2;
+    items.forEach(it => { if (it.im) { it.w = Math.min(bh * it.im.width / it.im.height, 220); it.h = it.w * it.im.height / it.im.width; } else { c.font = F(600, 26, D); it.w = Math.min(c.measureText((it.s.nama || '').toUpperCase()).width, 220); it.h = 0; } });
+    let tot = items.reduce((a, it) => a + it.w, 0) + gap * (items.length - 1), k = Math.min(1, maxW / tot); tot *= k;
+    let x = (W - tot) / 2;
+    items.forEach(it => { const w = it.w * k; if (it.im) c.drawImage(it.im, x, cy - it.h * k / 2, w, it.h * k); else { c.font = F(600, 26 * k, D); c.fillStyle = PINK; c.textAlign = 'left'; c.fillText(clipT(c, (it.s.nama || '').toUpperCase(), w), x, cy + 1); } x += w + gap * k; });
   }
   // footer
   c.textBaseline = 'alphabetic'; c.font = F(600, 26); const u = 'jgeer_badminton', uw = c.measureText(u).width, fx = (W - (42 + uw)) / 2; igIcon(c, fx, footY - 15, 30, PROSE); c.fillStyle = PMUT; c.textAlign = 'left'; c.fillText(u, fx + 42, footY + 9);
@@ -556,6 +573,23 @@ const INFO = {
     { q: 'Bisa daftar sendiri tanpa pasangan?', a: 'Sebaiknya sudah punya pasangan. Hubungi panitia jika butuh dicarikan pasangan.' },
     { q: 'Perlu bawa raket sendiri?', a: 'Disarankan membawa raket sendiri. Tanyakan panitia untuk ketersediaan raket dan kok.' }]
 };
+// ===== SPONSOR (sheet "Sponsor": kolom Nama | Logo | Link) =====
+const SPONSOR_BASE = 'https://raw.githubusercontent.com/amrylr/jgeerbadminton/main/sponsor/';
+let sponsors = [];
+const sponsorImg = u => { u = String(u || '').trim(); if (!u) return ''; if (/drive\.google\.com/.test(u)) { const m = u.match(/[-\w]{25,}/); return m ? `https://drive.google.com/thumbnail?id=${m[0]}&sz=w400` : ''; }
+  const g = u.match(/^https?:\/\/github\.com\/([^/]+)\/([^/]+)\/(?:blob|raw)\/(.+)$/i); if (g) return `https://raw.githubusercontent.com/${g[1]}/${g[2]}/${g[3].split('?')[0]}`;
+  return /^(https?:\/\/|data:)/i.test(u) ? u : SPONSOR_BASE + encodeURI(u.replace(/^\/+/, '')); };
+async function loadSponsor() {
+  try { const t = await gq('Sponsor'), lab = t.cols.map(c => c.label || ''), grid = t.rows.map(r => r.c.map(c => c && c.v != null ? String(c.v).trim() : '')); if (lab.some(Boolean)) grid.unshift(lab);
+    const hd = (grid[0] || []).map(norm); if (!hd.some(h => /logo|sponsor/.test(h))) { sponsors = []; return; }   // pengaman: tab tidak ada -> Google bisa mengembalikan sheet lain
+    const used = new Set(), pick = (re, d) => { let i = hd.findIndex((x, k) => re.test(x) && !used.has(k)); if (i < 0 && d < hd.length && !used.has(d)) i = d; if (i >= 0) used.add(i); return i; };
+    const cL = pick(/logo|foto|gambar|image|img|photo/, 1), cU = pick(/link|url|website|situs|web|instagram|ig/, 2), cN = pick(/nama|sponsor|brand|perusahaan|name/, 0), g = (r, c) => c >= 0 ? r[c] || '' : '';
+    sponsors = grid.slice(1).map(r => { let u = g(r, cU); if (u) u = /^https?:\/\//i.test(u) ? u : /^@/.test(u) ? 'https://instagram.com/' + u.slice(1) : 'https://' + u; return { nama: g(r, cN), logo: sponsorImg(g(r, cL)), link: u }; }).filter(s => s.nama || s.logo);
+  } catch (e) { console.warn('Sponsor gagal dimuat', e); sponsors = []; } }
+function sponsorHTML() {
+  if (!sponsors.length) return '';
+  return `<div class="sh"><h2>🤝 Sponsor</h2></div><div class="spg">${sponsors.map((s, k) => { const inner = (s.logo ? `<img src="${esc(s.logo)}" alt="${esc(s.nama || 'Sponsor')}" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.style.display='none'">` : `<span class="stx">${esc(s.nama)}</span>`) + (s.logo && s.nama ? `<span>${esc(s.nama)}</span>` : '');
+    return s.link ? `<a class="glass spn rv" style="--d:${Math.min(k, 8) * .05}s" href="${esc(s.link)}" target="_blank" rel="noopener noreferrer" title="${esc(s.nama)}">${inner}</a>` : `<div class="glass spn rv" style="--d:${Math.min(k, 8) * .05}s" title="${esc(s.nama)}">${inner}</div>`; }).join('')}</div>`; }
 function getInfo() {
   const x = S.info || {}, o = Object.assign({}, INFO), t = v => String(v == null ? '' : v).trim();
   ['deskripsi', 'kategori', 'biaya', 'deadline', 'wa'].forEach(k => { if (t(x[k])) o[k] = t(x[k]); });
@@ -601,7 +635,8 @@ function renderInfo() {
   <div class="sh"><h2>📋 Aturan Main</h2></div>
   <div class="rl">${rules.map((r, ri) => `<div class="glass rv" style="--d:${Math.min(ri, 6) * .04}s"><i>✔</i><span>${esc(r)}</span></div>`).join('')}</div>
   <div class="sh"><h2>❓ Tanya Jawab</h2></div>
-  <div class="faq">${INF.faq.map(f => `<details class="glass rv"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join('')}</div>`;
+  <div class="faq">${INF.faq.map(f => `<details class="glass rv"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join('')}</div>
+  ${sponsorHTML()}`;
   revealInfo();
 }
 $('#infoBox').addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) $(`#tabs [data-t="${b.dataset.go}"]`).click(); });
@@ -645,7 +680,7 @@ $$('#tabs button').forEach(b => b.onclick = () => { $$('#tabs button').forEach(x
 (async () => {
   const boot = $('#boot'), sembunyi = () => { boot.classList.add('done'); setTimeout(() => boot.remove(), 600); };
   const aman = setTimeout(sembunyi, 15000);   // cadangan: jangan terkunci jika jaringan macet
-  try { await Promise.all([load(true), (rosterReady = loadRoster())]); } catch (e) { console.warn(e); }
+  try { await Promise.all([load(true), (rosterReady = loadRoster()), loadSponsor()]); } catch (e) { console.warn(e); }
   renderInfo(); clearTimeout(aman); sembunyi();
   const h = location.hash.slice(1); if (['bracket', 'poster', 'admin'].includes(h)) $(`#tabs [data-t="${h}"]`).click(); setInterval(() => { if (['info', 'bracket'].includes(tab())) load(); }, 30000); })();
 })();

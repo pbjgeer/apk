@@ -538,6 +538,16 @@ html body .rv{opacity:0}html body .rv.in{opacity:1;animation:lrvIn .6s cubic-bez
 html body :is(.export-btn,.ghost-btn,.ghost-pill,.tab-btn){position:relative;overflow:hidden}
 </style>
 <!-- /TEMA-TERANG -->
+<style id="sponsor-css">
+.sp-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:.9rem}
+html body .sp-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.55rem;width:9.5rem;min-height:7.5rem;padding:1rem .8rem;border-radius:1.3rem;background:#fff;border:1px solid var(--line);box-shadow:var(--sh);text-align:center;text-decoration:none;color:var(--ink);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .25s}
+html body a.sp-card:hover{transform:translateY(-5px);box-shadow:var(--sh2);border-color:rgba(228,64,95,.45)}
+.sp-card img{max-width:100%;height:3.6rem;object-fit:contain}
+.sp-card span{font-weight:700;font-size:.78rem;line-height:1.2;color:var(--ink)}
+.sp-card .sp-tx{font-size:1rem;font-weight:800}
+@media(min-width:640px){.sp-card{width:11rem;min-height:8.5rem}.sp-card img{height:4.2rem}}
+@media(prefers-reduced-motion:reduce){html body a.sp-card:hover{transform:none}}
+</style>
 </head>
 
 <body class="bg-brand-dark text-white antialiased min-h-screen flex flex-col">
@@ -739,6 +749,15 @@ html body :is(.export-btn,.ghost-btn,.ghost-pill,.tab-btn){position:relative;ove
           <div><h3 class="font-display uppercase tracking-wide font-semibold">History &amp; Galeri</h3><p class="text-sm text-neutral-400">Juara terdahulu & momen seru</p></div>
         </a>
       </div>
+    </section>
+
+    <!-- SPONSOR (data dari sheet "Sponsor"; disembunyikan jika kosong) -->
+    <section id="sponsorSection" class="hidden max-w-6xl mx-auto px-4 sm:px-6 pb-16" aria-label="Sponsor">
+      <div class="text-center mb-8">
+        <p class="font-display uppercase tracking-[0.25em] text-xs sm:text-sm text-brand-rose">Didukung oleh</p>
+        <h2 class="mt-2 font-display uppercase font-bold text-2xl sm:text-3xl">Sponsor <span class="text-brand-rose">Kami</span></h2>
+      </div>
+      <div id="sponsorGrid" class="sp-grid"></div>
     </section>
     </div>
 
@@ -1154,6 +1173,9 @@ html body :is(.export-btn,.ghost-btn,.ghost-pill,.tab-btn){position:relative;ove
     const SHEET_GALERI = { name: ['Sheet9', 'Sheet 9', 'Galeri', 'Gallery'] };
     // Sheet 8 (Event selanjutnya). Jika nama tab berbeda, ganti dengan gid: { gid: '123456789' }
     const SHEET_EVENT = { name: ['Sheet8', 'Sheet 8', 'Event', 'Event Selanjutnya'] };
+    // Sponsor (tab "Sponsor"). Kolom (header baris 1): Nama | Logo | Link (opsional). Logo = link GitHub/Drive/URL gambar, atau nama file di folder sponsor/ repo.
+    const SHEET_SPONSOR = { name: ['Sponsor', 'Sponsors'] };
+    const GITHUB_SPONSOR_BASE = 'https://raw.githubusercontent.com/amrylr/jgeerbadminton/main/sponsor/';
     // Tampilan bawaan hero event (dipakai selama Sheet 8 kosong / belum ada event mendatang). tanggal: 'YYYY-MM-DDTHH:mm:00+07:00' (kosongkan jika belum ada). Kosongkan field yang tidak dipakai.
     const NEXT_EVENT = {
       nama: 'Segera Diumumkan',
@@ -1538,6 +1560,32 @@ html body :is(.export-btn,.ghost-btn,.ghost-pill,.tab-btn){position:relative;ove
             ${r.tgl ? `<p class="mt-1 text-xs text-neutral-300">🗓️ ${esc(r.tgl)}</p>` : ''}
           </div>
         </article>`).join('');
+    }
+
+    // =====================================================================
+    // SPONSOR (Sheet "Sponsor"): nama, logo, link
+    // =====================================================================
+    function extractSponsor(grid) {
+      if (!grid || grid.length < 2) return [];
+      const hd = grid[0].map(norm), used = new Set();
+      if (!hd.some(h => /logo|sponsor/.test(h))) return [];   // pengaman: tab tidak ada -> Google bisa mengembalikan sheet lain
+      const pick = (re, d) => { let i = hd.findIndex((x, k) => re.test(x) && !used.has(k)); if (i < 0 && d >= 0 && d < hd.length && !used.has(d)) i = d; if (i >= 0) used.add(i); return i; };
+      const cL = pick(/logo|foto|gambar|image|img|photo/, 1), cU = pick(/link|url|website|situs|web|instagram|(^| )ig( |$)/, 2), cN = pick(/nama|sponsor|brand|perusahaan|name/, 0);
+      const g = (r, c) => c >= 0 ? str(r[c]) : '';
+      return grid.slice(1).map(r => {
+        let u = g(r, cU); if (u) u = /^https?:\/\//i.test(u) ? u : /^@/.test(u) ? 'https://instagram.com/' + u.slice(1) : 'https://' + u;
+        const l = g(r, cL);
+        return { nama: g(r, cN), logo: l ? (isDriveUrl(l) ? driveThumb(l, 400) : ghRaw(l, GITHUB_SPONSOR_BASE)) : '', link: u };
+      }).filter(s => s.nama || s.logo);
+    }
+    function renderSponsor(list) {
+      const sec = document.getElementById('sponsorSection');
+      sec.classList.toggle('hidden', !list.length);
+      document.getElementById('sponsorGrid').innerHTML = list.map(s => {
+        const inner = (s.logo ? `<img src="${esc(s.logo)}" alt="${esc(s.nama || 'Sponsor')}" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.style.display='none'" />` : `<span class="sp-tx">${esc(s.nama)}</span>`)
+          + (s.logo && s.nama ? `<span>${esc(s.nama)}</span>` : '');
+        return s.link ? `<a class="sp-card" href="${esc(s.link)}" target="_blank" rel="noopener noreferrer" title="${esc(s.nama)}">${inner}</a>` : `<div class="sp-card" title="${esc(s.nama)}">${inner}</div>`;
+      }).join('');
     }
 
     // =====================================================================
@@ -2286,13 +2334,14 @@ let evTimer;
     // MUAT SEMUA DATA
     // =====================================================================
     async function loadAll() {
-      const [sRoster, sBulanan, sTahunan, sHof, sEvent, sGaleri] = await Promise.allSettled([
+      const [sRoster, sBulanan, sTahunan, sHof, sEvent, sGaleri, sSponsor] = await Promise.allSettled([
         fetchGrid(SHEET_ROSTER),
         fetchGrid(SHEET_BULANAN),
         fetchGrid(SHEET_TAHUNAN),
         fetchGrid(SHEET_HOF),
         fetchGrid(SHEET_EVENT),
         fetchGrid(SHEET_GALERI),
+        fetchGrid(SHEET_SPONSOR),
       ]);
 
       // Roster dulu agar peta foto siap sebelum podium dirender
@@ -2341,6 +2390,10 @@ let evTimer;
         const items = extractGaleri(sGaleri.value);
         if (items.length) { renderGaleri(items.filter(x => x.kind !== 'video')); renderVideos(items.filter(x => x.kind === 'video')); }
       } else console.warn('Sheet 9 (galeri) gagal dimuat:', sGaleri.reason);
+
+      // Sponsor dari sheet "Sponsor" (kosong / gagal -> bagian disembunyikan)
+      if (sSponsor.status === 'fulfilled') { try { renderSponsor(extractSponsor(sSponsor.value)); } catch (err) { console.warn('Sponsor gagal ditampilkan:', err); } }
+      else { renderSponsor([]); console.warn('Sheet Sponsor gagal dimuat:', sSponsor.reason); }
     }
 
     // Mulai

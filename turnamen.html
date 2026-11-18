@@ -337,11 +337,15 @@ const sw = (c, t, sp) => [...t].reduce((a, ch) => a + c.measureText(ch).width, 0
 function sp(c, t, x, y, s) { let cx = x; for (const ch of [...t]) { c.fillText(ch, cx, y); cx += c.measureText(ch).width + s; } }
 function mk(H, SC) { const c = document.createElement('canvas'); c.width = W * SC; c.height = H * SC; const x = c.getContext('2d'); x.scale(SC, SC); return [c, x]; }
 function blurred(src) { let c = src; for (let i = 0; i < 3; i++) { const n = document.createElement('canvas'); n.width = Math.max(8, c.width >> 1); n.height = Math.max(8, c.height >> 1); const g = n.getContext('2d'); g.imageSmoothingQuality = 'high'; g.drawImage(c, 0, 0, n.width, n.height); c = n; } return c; }
-function bgCanvas(H, SC) { const [bc, x] = mk(H, SC); let g = x.createRadialGradient(W / 2, H * .28, 0, W / 2, H * .28, Math.hypot(W / 2, H * .78));
-  g.addColorStop(0, '#0A0A0A'); g.addColorStop(.45, '#13070A'); g.addColorStop(1, '#2B0A11'); x.fillStyle = g; x.fillRect(0, 0, W, H);
-  [[W * .95, H * .05, 520, 'rgba(214,69,93,.5)'], [0, H * .32, 560, 'rgba(122,16,32,.8)'], [W, H * .55, 480, 'rgba(155,28,75,.42)'], [W * .05, H * .8, 480, 'rgba(251,191,36,.2)'], [W * .92, H * .97, 560, 'rgba(122,16,32,.75)']]
-    .forEach(([cx, cy, r, col]) => { g = x.createRadialGradient(cx, cy, 0, cx, cy, r); g.addColorStop(0, col); g.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = g; x.fillRect(0, 0, W, H); });
-  x.strokeStyle = 'rgba(255,255,255,.07)'; x.lineWidth = 3; x.strokeRect(36, 36, W - 72, H - 72); x.beginPath(); x.moveTo(W / 2, 36); x.lineTo(W / 2, H - 36);
+const PROSE = '#E4405F', PGOLD = '#D97706', PGREEN = '#16A34A', PINK = '#2B1B22', PMUT = '#85727B', PSOFT = '#9C8A92';
+function paintLightBg(g, W, H) {   // latar tema terang: krem + semburat rose/peach (sama dengan web)
+    const base = g.createLinearGradient(0, 0, W * .6, H); base.addColorStop(0, '#FFF9F6'); base.addColorStop(.5, '#FFF2EC'); base.addColorStop(1, '#FFE7E3');
+    g.fillStyle = base; g.fillRect(0, 0, W, H);
+    [[W * .95, H * .05, 580, 255, 122, 89, .42], [0, H * .30, 620, 228, 64, 95, .20], [W, H * .55, 540, 255, 160, 140, .30], [W * .05, H * .80, 540, 251, 191, 36, .20], [W * .92, H * .97, 620, 228, 64, 95, .26]]
+        .forEach(([x, y, r, R, G, B, a]) => { const q = g.createRadialGradient(x, y, 0, x, y, r); q.addColorStop(0, `rgba(${R},${G},${B},${a})`); q.addColorStop(1, `rgba(${R},${G},${B},0)`); g.fillStyle = q; g.fillRect(0, 0, W, H); });
+}
+function bgCanvas(H, SC) { const [bc, x] = mk(H, SC); paintLightBg(x, W, H);
+  x.strokeStyle = 'rgba(228,64,95,.12)'; x.lineWidth = 3; x.strokeRect(36, 36, W - 72, H - 72); x.beginPath(); x.moveTo(W / 2, 36); x.lineTo(W / 2, H - 36);
   [.2, .5, .8].forEach(f => { x.moveTo(36, H * f); x.lineTo(W - 36, H * f); }); x.stroke(); return bc; }
 const dataURL = u => new Promise(res => { const ac = new AbortController(), tm = setTimeout(() => ac.abort(), 10000);
   fetch(u, { mode: 'cors', referrerPolicy: 'no-referrer', signal: ac.signal }).then(r => { if (!r.ok) throw new Error('http'); return r.blob(); })
@@ -351,86 +355,85 @@ const IC = new Map();
 const imgOf = n => { const k = norm(n), u = photos.get(k); if (!u) return Promise.resolve(null);   // roster/foto belum ada: jangan disimpan, coba lagi nanti
   if (!IC.has(k)) IC.set(k, (async () => { const d = await dataURL(u), im = d ? await loadImg(d) : null; if (!im) IC.delete(k); return im; })());   // gagal: boleh dicoba lagi
   return IC.get(k); };
-function av(c, img, name, x, y, r, col) { c.save(); c.beginPath(); c.arc(x, y, r + 3, 0, 7); c.fillStyle = '#12060a'; c.fill(); c.restore(); c.save(); c.beginPath(); c.arc(x, y, r, 0, 7); c.clip();
+function av(c, img, name, x, y, r, col) { c.save(); c.beginPath(); c.arc(x, y, r + 3, 0, 7); c.fillStyle = '#fff'; c.fill(); c.restore(); c.save(); c.beginPath(); c.arc(x, y, r, 0, 7); c.clip();
   if (img) { const s = Math.max(2 * r / img.width, 2 * r / img.height); c.drawImage(img, x - img.width * s / 2, y - img.height * s / 2, img.width * s, img.height * s); }
-  else { c.fillStyle = '#2a0d14'; c.fillRect(x - r, y - r, 2 * r, 2 * r); c.fillStyle = ROSE; c.font = F(700, r * 1.1, D); c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText((name || '?')[0].toUpperCase(), x, y + r * .05); }
+  else { c.fillStyle = '#FFE4E8'; c.fillRect(x - r, y - r, 2 * r, 2 * r); c.fillStyle = PROSE; c.font = F(700, r * 1.1, D); c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText((name || '?')[0].toUpperCase(), x, y + r * .05); }
   c.restore(); c.beginPath(); c.arc(x, y, r, 0, 7); c.lineWidth = 3; c.strokeStyle = col; c.stroke(); }
 function igIcon(c, x, y, s, col) { c.save(); c.translate(x, y); c.scale(s / 24, s / 24); c.strokeStyle = col; c.lineWidth = 2; rr(c, 3, 3, 18, 18, 5); c.stroke(); c.beginPath(); c.arc(12, 12, 4, 0, 7); c.stroke(); c.beginPath(); c.arc(17.5, 6.5, 1.1, 0, 7); c.fillStyle = col; c.fill(); c.restore(); }
 const schedText = m => [S.tanggal && fmtD(S.tanggal), jam(m.time) && jam(m.time) + ' WIB', m.court && 'LAPANGAN ' + String(m.court).toUpperCase()].filter(Boolean).join('  •  ');
 
 async function poster(spec, key, SC) {
   await rosterReady;
-  const f = FM[key], H = f.H, top = f.top, footY = H - f.foot, y1 = footY - 60, bc = bgCanvas(H, SC), bl = blurred(bc), [cv, c] = mk(H, SC);
+  const f = FM[key], H = f.H, top = f.top, footY = H - f.foot, y1 = footY - 60, bc = bgCanvas(H, SC), bl = bc, [cv, c] = mk(H, SC);
   c.drawImage(bc, 0, 0, W, H);
-  const glass = (x, y, w, h, r, t = .1, e = .3) => { c.save(); c.shadowColor = 'rgba(0,0,0,.55)'; c.shadowBlur = 30 * SC; c.shadowOffsetY = 12 * SC; rr(c, x, y, w, h, r); c.fillStyle = '#12060a'; c.fill(); c.restore();
-    c.save(); rr(c, x, y, w, h, r); c.clip(); c.drawImage(bl, 0, 0, W, H); let g = c.createLinearGradient(x, y, x + w, y + h); g.addColorStop(0, `rgba(255,255,255,${t + .07})`); g.addColorStop(1, `rgba(255,255,255,${t * .35})`); c.fillStyle = g; c.fillRect(x, y, w, h); c.restore();
-    c.save(); rr(c, x + .75, y + .75, w - 1.5, h - 1.5, r); g = c.createLinearGradient(x, y, x, y + h); g.addColorStop(0, `rgba(255,255,255,${e + .2})`); g.addColorStop(.5, `rgba(255,255,255,${e * .5})`); g.addColorStop(1, `rgba(255,255,255,${e * .7})`); c.strokeStyle = g; c.lineWidth = 1.5; c.stroke(); c.restore(); };
-  const wash = (x, y, w, h, r, col, fromLeft = true) => { c.save(); rr(c, x, y, w, h, r); c.clip(); const g = c.createLinearGradient(fromLeft ? x : x + w, 0, fromLeft ? x + w * .6 : x + w * .4, 0); g.addColorStop(0, col); g.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = g; c.fillRect(x, y, w, h); c.restore(); };
+  const glass = (x, y, w, h, r, t = .1, e = .3) => { c.save(); c.shadowColor = 'rgba(214,69,93,.26)'; c.shadowBlur = 34 * SC; c.shadowOffsetY = 12 * SC; rr(c, x, y, w, h, r); c.fillStyle = '#fff'; c.fill(); c.restore();
+    c.save(); rr(c, x + .75, y + .75, w - 1.5, h - 1.5, r); c.strokeStyle = 'rgba(43,27,34,.07)'; c.lineWidth = 1.5; c.stroke(); c.restore(); };
+  const wash = (x, y, w, h, r, col, fromLeft = true) => { c.save(); rr(c, x, y, w, h, r); c.clip(); const g = c.createLinearGradient(fromLeft ? x : x + w, 0, fromLeft ? x + w * .6 : x + w * .4, 0); g.addColorStop(0, col); g.addColorStop(1, col.replace(/[\d.]+\)$/, '0)')); c.fillStyle = g; c.fillRect(x, y, w, h); c.restore(); };
   const m0 = spec.type === 'match' ? B.rounds[spec.r][spec.i] : null, n = B.size >> spec.r;
   const pill = m0 ? `${m0.isThird ? 'JUARA 3' : RL[n]}  •  MATCH ${pad(m0.no)}` : `BAGAN ${spec.r === B.R - 1 ? 'FINAL' : RL[n]}${spec.pages > 1 ? `  (${spec.page + 1}/${spec.pages})` : ''}`;
   // header
   const logo = await loadImg(await dataURL(LOGO)); c.textBaseline = 'alphabetic'; c.font = F(700, 44, D); const wPB = sw(c, 'PB ', 4), wJ = sw(c, 'JGEER', 4), lh = 64, lw = logo ? lh * logo.width / logo.height : 0;
   let bx = (W - (lw + (logo ? 16 : 0) + wPB + 4 + wJ)) / 2; if (logo) { c.drawImage(logo, bx, top, lw, lh); bx += lw + 16; }
-  c.textAlign = 'left'; c.fillStyle = '#fff'; sp(c, 'PB ', bx, top + lh / 2 + 15, 4); c.fillStyle = ROSE; sp(c, 'JGEER', bx + wPB + 4, top + lh / 2 + 15, 4);
+  c.textAlign = 'left'; c.fillStyle = PINK; sp(c, 'PB ', bx, top + lh / 2 + 15, 4); c.fillStyle = PROSE; sp(c, 'JGEER', bx + wPB + 4, top + lh / 2 + 15, 4);
   const T = (S.nama || 'Turnamen').toUpperCase(), ts = fit(c, T, 940, 96, 700, D, 30), tb = top + lh + 20 + Math.round(ts * .85);
-  c.textAlign = 'center'; c.save(); c.shadowColor = 'rgba(214,69,93,.55)'; c.shadowBlur = 30 * SC; c.fillStyle = '#fff'; c.fillText(T, W / 2, tb); c.restore();
-  c.font = F(600, 28, D); const pw = sw(c, pill, 5) + 72, py = tb + 26; glass((W - pw) / 2, py, pw, 56, 28, .12, .34); c.fillStyle = '#fff'; c.textAlign = 'left'; sp(c, pill, (W - pw) / 2 + 36, py + 38, 5);
-  const sub = [fmtD(S.tanggal), S.lokasi].filter(Boolean).join('  •  ').toUpperCase(); if (sub) { c.font = F(500, 24); c.fillStyle = 'rgba(255,255,255,.75)'; c.textAlign = 'center'; c.fillText(sub, W / 2, py + 100); }
+  c.textAlign = 'center'; c.save(); c.shadowColor = 'rgba(228,64,95,.22)'; c.shadowBlur = 18 * SC; c.shadowOffsetY = 6 * SC; { const tw0 = c.measureText(T).width, tg = c.createLinearGradient(W / 2 - tw0 / 2, 0, W / 2 + tw0 / 2, 0); tg.addColorStop(0, '#E4405F'); tg.addColorStop(1, '#FF7A59'); c.fillStyle = tg; } c.fillText(T, W / 2, tb); c.restore();
+  c.font = F(600, 28, D); const pw = sw(c, pill, 5) + 72, py = tb + 26; c.save(); c.shadowColor = 'rgba(228,64,95,.38)'; c.shadowBlur = 24 * SC; c.shadowOffsetY = 8 * SC; rr(c, (W - pw) / 2, py, pw, 56, 28); { const pg = c.createLinearGradient((W - pw) / 2, py, (W - pw) / 2 + pw, py + 56); pg.addColorStop(0, '#E4405F'); pg.addColorStop(1, '#FF7A59'); c.fillStyle = pg; } c.fill(); c.restore(); c.fillStyle = '#fff'; c.textAlign = 'left'; sp(c, pill, (W - pw) / 2 + 36, py + 38, 5);
+  const sub = [fmtD(S.tanggal), S.lokasi].filter(Boolean).join('  •  ').toUpperCase(); if (sub) { c.font = F(500, 24); c.fillStyle = PMUT; c.textAlign = 'center'; c.fillText(sub, W / 2, py + 100); }
   const y0 = py + 56 + (sub ? 44 : 0) + 44, Hc = y1 - y0;
   // ---- poster skor ----
   if (m0) {
     const played = []; for (let q = 0; q < S.bestOf; q++) if (gp(m0.g[q])) played.push(q);
     const done = m0.kind === 'done', live = !done && played.length > 0, tt = schedText(m0), UH = 40 + (tt ? 66 : 14) + 200 + 60 + 200 + 36 + 110, by = y0 + Math.max(0, (Hc - UH) / 2);
     c.textBaseline = 'middle'; const st = done ? 'HASIL AKHIR' : live ? 'SEDANG BERLANGSUNG' : 'SEGERA BERTANDING'; c.font = F(700, 19); const cw = sw(c, st, 5) + 56;
-    glass((W - cw) / 2, by, cw, 40, 20, .12, .34); c.fillStyle = done ? '#86efac' : live ? '#fda4af' : '#e5e7eb'; c.textAlign = 'left'; sp(c, st, (W - cw) / 2 + 28, by + 21, 5);
-    if (tt) { c.font = F(600, 28, D); c.fillStyle = GOLD; c.textAlign = 'center'; c.fillText(tt, W / 2, by + 74); }
+    glass((W - cw) / 2, by, cw, 40, 20, .12, .34); c.fillStyle = done ? PGREEN : live ? '#E11D48' : PMUT; c.textAlign = 'left'; sp(c, st, (W - cw) / 2 + 28, by + 21, 5);
+    if (tt) { c.font = F(600, 28, D); c.fillStyle = PGOLD; c.textAlign = 'center'; c.fillText(tt, W / 2, by + 74); }
     const cy1 = by + 40 + (tt ? 66 : 14), cy2 = cy1 + 260;
-    const team = async (y, t, val, stt) => { const win = stt === 'win', col = win ? GREEN : 'rgba(255,255,255,.85)', x = 70, w = 940, h = 200; glass(x, y, w, h, 34, .1, .3); if (win) wash(x, y, w, h, 34, 'rgba(74,222,128,.22)');
+    const team = async (y, t, val, stt) => { const win = stt === 'win', col = win ? PGREEN : '#D9C3CA', x = 70, w = 940, h = 200; glass(x, y, w, h, 34, .1, .3); if (win) wash(x, y, w, h, 34, 'rgba(34,197,94,.16)');
       const ps = split(t.name).slice(0, 2), imgs = await Promise.all(ps.map(imgOf)), r = 50, mid = y + h / 2; ps.forEach((p, i) => av(c, imgs[i], p, x + 44 + r + i * r * 1.7, mid, r, col));
-      const nx = x + 44 + r + (ps.length - 1) * r * 1.7 + r + 30, bw = 140, mw = x + w - 44 - bw - 30 - nx; c.textAlign = 'left'; c.textBaseline = 'middle'; c.fillStyle = stt === 'lose' ? 'rgba(255,255,255,.55)' : '#fff';
+      const nx = x + 44 + r + (ps.length - 1) * r * 1.7 + r + 30, bw = 140, mw = x + w - 44 - bw - 30 - nx; c.textAlign = 'left'; c.textBaseline = 'middle'; c.fillStyle = stt === 'lose' ? PSOFT : PINK;
       ps.forEach((p, i) => { const s = fit(c, p.toUpperCase(), mw, 46, 600, D, 18); c.fillText(clipT(c, p.toUpperCase(), mw), nx, ps.length === 2 ? mid + (i ? 30 : -30) : mid); });
-      const bx2 = x + w - 44 - bw; rr(c, bx2, mid - 62, bw, 124, 26); c.fillStyle = win ? 'rgba(74,222,128,.2)' : 'rgba(255,255,255,.1)'; c.fill(); c.strokeStyle = win ? GREEN : 'rgba(255,255,255,.25)'; c.lineWidth = 2; c.stroke();
-      c.textAlign = 'center'; c.fillStyle = win ? GREEN : '#fff'; c.font = F(700, 92, D); c.fillText(played.length ? String(val) : '–', bx2 + bw / 2, mid - 6); c.font = F(600, 14); c.fillStyle = 'rgba(255,255,255,.6)'; c.fillText('SET', bx2 + bw / 2, mid + 46); };
+      const bx2 = x + w - 44 - bw; rr(c, bx2, mid - 62, bw, 124, 26); c.fillStyle = win ? 'rgba(34,197,94,.14)' : '#FFF3F0'; c.fill(); c.strokeStyle = win ? PGREEN : 'rgba(43,27,34,.14)'; c.lineWidth = 2; c.stroke();
+      c.textAlign = 'center'; c.fillStyle = win ? PGREEN : PINK; c.font = F(700, 92, D); c.fillText(played.length ? String(val) : '–', bx2 + bw / 2, mid - 6); c.font = F(600, 14); c.fillStyle = PMUT; c.fillText('SET', bx2 + bw / 2, mid + 46); };
     await team(cy1, m0.a, m0.res.wa, done ? (m0.winner.seed === m0.a.seed ? 'win' : 'lose') : 'neu'); await team(cy2, m0.b, m0.res.wb, done ? (m0.winner.seed === m0.b.seed ? 'win' : 'lose') : 'neu');
-    c.beginPath(); c.arc(W / 2, cy1 + 230, 36, 0, 7); c.fillStyle = '#12060a'; c.fill(); c.lineWidth = 4; c.strokeStyle = GOLD; c.stroke(); c.font = F(700, 34, D); c.fillStyle = GOLD; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('VS', W / 2, cy1 + 232);
+    c.beginPath(); c.arc(W / 2, cy1 + 230, 36, 0, 7); c.fillStyle = PROSE; c.fill(); c.lineWidth = 5; c.strokeStyle = '#fff'; c.stroke(); c.font = F(700, 34, D); c.fillStyle = '#fff'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('VS', W / 2, cy1 + 232);
     const gy = cy2 + 236;
     if (played.length) { const k = played.length, gap = 18, gw = Math.min(300, (940 - gap * (k - 1)) / k), gx0 = (W - (k * gw + (k - 1) * gap)) / 2;
       played.forEach((q, idx) => { const g = m0.g[q], gx = gx0 + idx * (gw + gap), a = g[0] ?? 0, b = g[1] ?? 0, both = g[0] != null && g[1] != null; glass(gx, gy, gw, 110, 20, .09, .26);
-        c.font = F(700, 15); c.fillStyle = GOLD; c.textAlign = 'left'; const lb = 'GAME ' + (q + 1); sp(c, lb, gx + gw / 2 - sw(c, lb, 4) / 2, gy + 26, 4);
-        c.font = F(700, 60, D); c.textBaseline = 'middle'; c.textAlign = 'right'; c.fillStyle = both && a > b ? GOLD : 'rgba(255,255,255,.75)'; c.fillText(a, gx + gw / 2 - 24, gy + 72); c.textAlign = 'center'; c.fillStyle = 'rgba(255,255,255,.4)'; c.fillText('–', gx + gw / 2, gy + 70);
-        c.textAlign = 'left'; c.fillStyle = both && b > a ? GOLD : 'rgba(255,255,255,.75)'; c.fillText(b, gx + gw / 2 + 24, gy + 72); });
-    } else { glass(70, gy + 10, 940, 80, 20, .08, .24); c.font = F(600, 28, D); c.fillStyle = GOLD; c.textAlign = 'left'; c.textBaseline = 'middle'; const t2 = 'SKOR AKAN SEGERA DIUMUMKAN'; sp(c, t2, (W - sw(c, t2, 5)) / 2, gy + 51, 5); }
+        c.font = F(700, 15); c.fillStyle = PGOLD; c.textAlign = 'left'; const lb = 'GAME ' + (q + 1); sp(c, lb, gx + gw / 2 - sw(c, lb, 4) / 2, gy + 26, 4);
+        c.font = F(700, 60, D); c.textBaseline = 'middle'; c.textAlign = 'right'; c.fillStyle = both && a > b ? PGOLD : '#5B4A52'; c.fillText(a, gx + gw / 2 - 24, gy + 72); c.textAlign = 'center'; c.fillStyle = '#B8A5AC'; c.fillText('–', gx + gw / 2, gy + 70);
+        c.textAlign = 'left'; c.fillStyle = both && b > a ? PGOLD : '#5B4A52'; c.fillText(b, gx + gw / 2 + 24, gy + 72); });
+    } else { glass(70, gy + 10, 940, 80, 20, .08, .24); c.font = F(600, 28, D); c.fillStyle = PGOLD; c.textAlign = 'left'; c.textBaseline = 'middle'; const t2 = 'SKOR AKAN SEGERA DIUMUMKAN'; sp(c, t2, (W - sw(c, t2, 5)) / 2, gy + 51, 5); }
   } else {
     // ---- poster bagan per babak ----
     const arr = B.rounds[spec.r].filter(m => m.kind !== 'void' && m.kind !== 'bye').slice(spec.page * 16, spec.page * 16 + 16);
     const brow = async (x, y, w, h, m, side) => { const t = side ? m.b : m.a, any = anyP(m), win = m.kind === 'done' && t.type === 'team' && m.winner.seed === t.seed, lose = m.kind === 'done' && t.type === 'team' && !win, mid = y + h / 2; let cx = x + 10; c.textBaseline = 'middle';
-      if (win) wash(x, y, w, h, 0, 'rgba(74,222,128,.2)');
-      if (t.type === 'team') { const ps = split(t.name).slice(0, 2), imgs = await Promise.all(ps.map(imgOf)), r = Math.min(16, h * .34); ps.forEach((p, i) => av(c, imgs[i], p, cx + r + i * r * 1.5, mid, r, win ? GREEN : 'rgba(255,255,255,.5)')); cx += r * 2 + (ps.length - 1) * r * 1.5 + 12; }
+      if (win) wash(x, y, w, h, 0, 'rgba(34,197,94,.16)');
+      if (t.type === 'team') { const ps = split(t.name).slice(0, 2), imgs = await Promise.all(ps.map(imgOf)), r = Math.min(16, h * .34); ps.forEach((p, i) => av(c, imgs[i], p, cx + r + i * r * 1.5, mid, r, win ? PGREEN : '#D9C3CA')); cx += r * 2 + (ps.length - 1) * r * 1.5 + 12; }
       const nG = S.bestOf, gwid = h >= 50 ? 40 : 30, chips = any ? nG * gwid : 0, sets = any ? (h >= 50 ? 54 : 40) : 0, nameW = x + w - 8 - sets - chips - cx - 6; c.textAlign = 'left';
-      if (t.type === 'team') { const txt = split(t.name).join(' / '); fit(c, txt, nameW, Math.min(30, h * .5), 600, D, 11); c.fillStyle = lose ? 'rgba(255,255,255,.55)' : '#fff'; c.fillText(clipT(c, txt, nameW), cx, mid + 1); }
-      else { c.fillStyle = 'rgba(255,255,255,.4)'; c.font = 'italic ' + F(600, h >= 50 ? 22 : 16, D); c.fillText(t.type === 'bye' ? 'BYE' : 'Menunggu pemenang', cx, mid + 1); }
-      if (any) { let gx = cx + nameW + 6; for (let q = 0; q < nG; q++) { const g = m.g[q]; if (gp(g)) { const v = g[side] ?? 0, w2 = g[0] != null && g[1] != null && g[side] > g[1 - side]; c.fillStyle = w2 ? GOLD : 'rgba(255,255,255,.6)'; c.font = F(w2 ? 700 : 600, h >= 50 ? 26 : 19, D); c.textAlign = 'center'; c.fillText(v, gx + gwid / 2, mid + 1); } gx += gwid; }
-        const bh = Math.min(h - 8, h >= 50 ? 44 : 28), bw = sets - 6, bx = x + w - 10 - bw; rr(c, bx, mid - bh / 2, bw, bh, 8); c.fillStyle = win ? GOLD : 'rgba(255,255,255,.1)'; c.fill();
-        c.font = F(700, bh * .75, D); c.textAlign = 'center'; c.fillStyle = win ? '#1a0a0e' : lose ? 'rgba(255,255,255,.55)' : '#fff'; c.fillText(side ? m.res.wb : m.res.wa, bx + bw / 2, mid + 1); } };
-    const bcard = async (x, y, w, h, m) => { glass(x, y, w, h, 18, .09, .28); const st = 44; c.save(); rr(c, x, y, w, h, 18); c.clip(); c.fillStyle = 'rgba(214,69,93,.25)'; c.fillRect(x, y, st, h); c.restore();
-      if (m.no) { const j = jam(m.time); c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = GOLD; c.font = F(700, Math.min(26, h * (j ? .28 : .36)), D); c.fillText(pad(m.no), x + st / 2, y + h * (j ? .36 : .5)); if (j) { c.font = F(600, Math.min(13, h * .18)); c.fillStyle = '#fff'; c.fillText(j, x + st / 2, y + h * .74); } }
-      await brow(x + st, y, w - st, h / 2, m, 0); await brow(x + st, y + h / 2, w - st, h / 2, m, 1); c.strokeStyle = 'rgba(255,255,255,.14)'; c.lineWidth = 1; c.beginPath(); c.moveTo(x + st + 8, y + h / 2); c.lineTo(x + w - 10, y + h / 2); c.stroke(); };
+      if (t.type === 'team') { const txt = split(t.name).join(' / '); fit(c, txt, nameW, Math.min(30, h * .5), 600, D, 11); c.fillStyle = lose ? PSOFT : PINK; c.fillText(clipT(c, txt, nameW), cx, mid + 1); }
+      else { c.fillStyle = '#B8A5AC'; c.font = 'italic ' + F(600, h >= 50 ? 22 : 16, D); c.fillText(t.type === 'bye' ? 'BYE' : 'Menunggu pemenang', cx, mid + 1); }
+      if (any) { let gx = cx + nameW + 6; for (let q = 0; q < nG; q++) { const g = m.g[q]; if (gp(g)) { const v = g[side] ?? 0, w2 = g[0] != null && g[1] != null && g[side] > g[1 - side]; c.fillStyle = w2 ? PGOLD : PMUT; c.font = F(w2 ? 700 : 600, h >= 50 ? 26 : 19, D); c.textAlign = 'center'; c.fillText(v, gx + gwid / 2, mid + 1); } gx += gwid; }
+        const bh = Math.min(h - 8, h >= 50 ? 44 : 28), bw = sets - 6, bx = x + w - 10 - bw; rr(c, bx, mid - bh / 2, bw, bh, 8); c.fillStyle = win ? PGOLD : '#FFF3F0'; c.fill();
+        c.font = F(700, bh * .75, D); c.textAlign = 'center'; c.fillStyle = win ? '#fff' : lose ? PSOFT : PINK; c.fillText(side ? m.res.wb : m.res.wa, bx + bw / 2, mid + 1); } };
+    const bcard = async (x, y, w, h, m) => { glass(x, y, w, h, 18, .09, .28); const st = 44; c.save(); rr(c, x, y, w, h, 18); c.clip(); c.fillStyle = 'rgba(228,64,95,.12)'; c.fillRect(x, y, st, h); c.restore();
+      if (m.no) { const j = jam(m.time); c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = PGOLD; c.font = F(700, Math.min(26, h * (j ? .28 : .36)), D); c.fillText(pad(m.no), x + st / 2, y + h * (j ? .36 : .5)); if (j) { c.font = F(600, Math.min(13, h * .18)); c.fillStyle = PMUT; c.fillText(j, x + st / 2, y + h * .74); } }
+      await brow(x + st, y, w - st, h / 2, m, 0); await brow(x + st, y + h / 2, w - st, h / 2, m, 1); c.strokeStyle = 'rgba(43,27,34,.10)'; c.lineWidth = 1; c.beginPath(); c.moveTo(x + st + 8, y + h / 2); c.lineTo(x + w - 10, y + h / 2); c.stroke(); };
     if (spec.r === B.R - 1) {
       const fm = arr.find(x => !x.isThird), m3 = arr.find(x => x.isThird), champ = B.champ, ch = 150, nameH = champ ? 130 : 44, blockH = 120 + nameH + ch + (m3 ? 54 + ch : 0), by = y0 + Math.max(0, (Hc - blockH) / 2); let yy = by;
       c.textAlign = 'center'; c.textBaseline = 'middle'; c.font = '100px serif'; c.globalAlpha = champ ? 1 : .5; c.fillText('🏆', W / 2, yy + 56); c.globalAlpha = 1; yy += 120;
-      if (champ) { c.font = F(700, 60, D); c.fillStyle = GOLD; c.textAlign = 'left'; const jt = 'JUARA'; sp(c, jt, (W - sw(c, jt, 14)) / 2, yy + 20, 14); const ps = split(champ.name); c.textAlign = 'center'; c.fillStyle = '#fff';
+      if (champ) { c.font = F(700, 60, D); c.fillStyle = PGOLD; c.textAlign = 'left'; const jt = 'JUARA'; sp(c, jt, (W - sw(c, jt, 14)) / 2, yy + 20, 14); const ps = split(champ.name); c.textAlign = 'center'; c.fillStyle = PINK;
         ps.slice(0, 2).forEach((p, i) => { fit(c, p, 900, 44, 600, D, 22); c.fillText(p, W / 2, yy + 62 + i * 44); }); yy += nameH; }
-      else { c.font = F(700, 22); c.fillStyle = GOLD; c.textAlign = 'left'; const t = 'MEMPEREBUTKAN PIALA ' + (S.nama || '').toUpperCase(); sp(c, t, (W - sw(c, t, 4)) / 2, yy + 22, 4); yy += nameH; }
+      else { c.font = F(700, 22); c.fillStyle = PGOLD; c.textAlign = 'left'; const t = 'MEMPEREBUTKAN PIALA ' + (S.nama || '').toUpperCase(); sp(c, t, (W - sw(c, t, 4)) / 2, yy + 22, 4); yy += nameH; }
       if (fm) await bcard(100, yy, 880, ch, fm);
-      if (m3) { c.font = F(700, 28, D); c.fillStyle = GOLD; c.textAlign = 'left'; c.textBaseline = 'middle'; const t = 'JUARA 3'; sp(c, t, (W - sw(c, t, 6)) / 2, yy + ch + 28, 6); await bcard(100, yy + ch + 54, 880, ch, m3); }
+      if (m3) { c.font = F(700, 28, D); c.fillStyle = PGOLD; c.textAlign = 'left'; c.textBaseline = 'middle'; const t = 'JUARA 3'; sp(c, t, (W - sw(c, t, 6)) / 2, yy + ch + 28, 6); await bcard(100, yy + ch + 54, 880, ch, m3); }
     } else {
       const cols = arr.length > 4 ? 2 : 1, rows = Math.ceil(arr.length / cols), cw2 = cols === 2 ? 470 : 880, gapX = 20, gapY = rows >= 6 ? 10 : 16, extra = arr.length <= 4 ? 50 : 0, chh = Math.min(200, (Hc - (rows - 1) * gapY - extra) / rows), total = rows * chh + (rows - 1) * gapY, ty = y0 + Math.max(0, (Hc - total - extra) / 2);
       for (let i = 0; i < arr.length; i++) { const col = i % cols, row = Math.floor(i / cols); await bcard(cols === 2 ? 70 + col * (cw2 + gapX) : 100, ty + row * (chh + gapY), cw2, chh, arr[i]); }
-      if (extra) { c.font = F(700, 20); c.fillStyle = GOLD; c.textBaseline = 'middle'; c.textAlign = 'left'; const t = 'PEMENANG MELAJU KE ' + RL[n / 2]; sp(c, t, (W - sw(c, t, 5)) / 2, ty + total + 32, 5); }
+      if (extra) { c.font = F(700, 20); c.fillStyle = PGOLD; c.textBaseline = 'middle'; c.textAlign = 'left'; const t = 'PEMENANG MELAJU KE ' + RL[n / 2]; sp(c, t, (W - sw(c, t, 5)) / 2, ty + total + 32, 5); }
     }
   }
   // footer
-  c.textBaseline = 'alphabetic'; c.font = F(600, 26); const u = 'jgeer_badminton', uw = c.measureText(u).width, fx = (W - (42 + uw)) / 2; igIcon(c, fx, footY - 15, 30, ROSE); c.fillStyle = '#d4d4d8'; c.textAlign = 'left'; c.fillText(u, fx + 42, footY + 9);
+  c.textBaseline = 'alphabetic'; c.font = F(600, 26); const u = 'jgeer_badminton', uw = c.measureText(u).width, fx = (W - (42 + uw)) / 2; igIcon(c, fx, footY - 15, 30, PROSE); c.fillStyle = PMUT; c.textAlign = 'left'; c.fillText(u, fx + 42, footY + 9);
   return cv;
 }
 

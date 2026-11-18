@@ -371,6 +371,70 @@ html body #sirekapApp .border-amber-400\/20{border-color:rgba(217,119,6,.25)!imp
 html body #skPlayerModal .glass-card,html body #modal-confirm .glass-card{background:#fff!important}
 html body #sirekapApp .kok-row{box-shadow:var(--sh)}
 
+/* ===== Mutasi (tabel buku kas) ===== */
+html body .sk-stat{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:.15rem;padding:1.1rem 1.2rem;border-radius:1.4rem;background:#fff;border:1px solid var(--line);box-shadow:var(--sh)}
+html body .sk-stat:before{content:'';position:absolute;left:0;top:0;bottom:0;width:.35rem;background:var(--grad)}
+html body .sk-stat.in:before{background:linear-gradient(180deg,#22C55E,#16A34A)}
+html body .sk-stat.out:before{background:linear-gradient(180deg,#FB7185,#E11D48)}
+html body .sk-stat .sk-stat-l{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:var(--mut)}
+html body .sk-stat b{font-family:'Plus Jakarta Sans','Oswald',sans-serif;font-size:1.55rem;line-height:1.15;font-weight:800;font-variant-numeric:tabular-nums;color:var(--ink)}
+html body .sk-stat.saldo b{color:var(--rose)}
+html body .sk-stat.in b{color:#15803D}
+html body .sk-stat.out b{color:#BE123C}
+html body .sk-stat small{font-size:.72rem;color:var(--mut)}
+html body .sk-preview{font-size:.78rem;color:var(--mut);background:#FFF3F0;border-radius:.9rem;padding:.6rem .85rem}
+html body .sk-preview b{color:var(--ink)}
+html body .sk-kat{padding:.45rem .95rem;border-radius:999px;font-size:.78rem;font-weight:700;background:#fff;border:1px solid rgba(43,27,34,.14);color:var(--mut);cursor:pointer;transition:transform .15s,color .15s,border-color .15s,background .15s}
+html body .sk-kat:hover{color:var(--rose);border-color:rgba(228,64,95,.5);background:#FFF1F3}
+html body .sk-kat:active{transform:scale(.95)}
+html body .sk-kat.on{background:var(--grad);border-color:transparent;color:#fff;box-shadow:0 8px 16px -8px rgba(228,64,95,.9)}
+html body .sk-tbl-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.75rem;padding:1.1rem 1.25rem;background:linear-gradient(90deg,#FFE9EE,rgba(255,255,255,0));border-bottom:1px solid var(--line)}
+html body .sk-sel{border-radius:999px;padding:.5rem 1rem;font-size:.78rem;font-weight:700;background:#fff!important;border:1px solid rgba(43,27,34,.14)!important;color:var(--ink)!important;color-scheme:light}
+html body .sk-tblwrap{max-height:38rem;overflow:auto;-webkit-overflow-scrolling:touch}
+html body .sk-tbl{width:100%;min-width:38rem;border-collapse:separate;border-spacing:0;font-size:.82rem;font-variant-numeric:tabular-nums}
+html body .sk-tbl thead th{position:sticky;top:0;z-index:2;padding:.75rem .7rem;text-align:left;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:#fff;background:#DB3A59}
+html body .sk-tbl th.r,html body .sk-tbl td.r{text-align:right;white-space:nowrap}
+html body .sk-tbl tbody td{padding:.8rem .7rem;border-bottom:1px solid var(--line);vertical-align:top;background:#fff;transition:background .2s}
+html body .sk-tbl tbody tr:nth-child(even) td{background:#FFF9F7}
+html body .sk-tbl tbody tr:hover td{background:#FFF1F3}
+html body .sk-tgl b{display:block;font-weight:800;color:var(--ink);white-space:nowrap}
+html body .sk-tgl small{display:block;font-size:.68rem;color:var(--mut)}
+html body .sk-ket{min-width:9rem;line-height:1.35}
+html body .sk-ket b{font-weight:800;color:var(--ink)}
+html body .sk-ket small{display:block;margin-top:.1rem;font-size:.72rem;color:var(--mut)}
+html body .sk-chip{display:inline-block;margin-bottom:.3rem;padding:.12rem .6rem;border-radius:999px;font-size:.62rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+html body .sk-chip.in{background:#DCFCE7;color:#15803D}
+html body .sk-chip.out{background:#FFE4E8;color:#BE123C}
+html body .sk-chip.adj{background:#FEF3C7;color:#B45309}
+html body .sk-in{color:#15803D;font-weight:800}
+html body .sk-out{color:#BE123C;font-weight:800}
+html body .sk-adj{color:#B45309;font-weight:800}
+html body .sk-saldo{font-weight:800;color:var(--ink)}
+html body .sk-aksi{white-space:nowrap;text-align:right}
+html body .sk-dash{color:#CBB8C0}
+html body .sk-act{padding:.22rem .55rem;margin-left:.2rem;border-radius:999px;font-size:.68rem;font-weight:800;background:#fff;border:1px solid rgba(43,27,34,.14);color:var(--mut);cursor:pointer;transition:all .15s}
+html body .sk-act:hover{color:var(--rose);border-color:rgba(228,64,95,.5);background:#FFF1F3}
+html body .sk-act.del:hover{color:#fff;background:#E11D48;border-color:#E11D48}
+html body .sk-empty{text-align:center;padding:2.5rem 1rem!important;color:var(--mut);font-style:italic}
+html body .sk-tbl tfoot td{position:sticky;bottom:0;padding:.8rem .9rem;font-weight:800;background:#FFE9EE;border-top:2px solid rgba(228,64,95,.35)}
+html body .sk-toast{position:fixed;left:50%;bottom:calc(6rem + env(safe-area-inset-bottom));transform:translate(-50%,12px);z-index:2100;max-width:calc(100% - 2rem);padding:.65rem 1.1rem;border-radius:999px;background:#2B1B22;color:#fff;font-size:.78rem;font-weight:700;box-shadow:0 16px 30px -14px rgba(0,0,0,.65);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
+html body .sk-toast.show{opacity:1;transform:translate(-50%,0)}
+
+html body .sk-mob-amt{display:none;margin-top:.3rem;font-size:.86rem}
+html body .sk-mob-act{display:none}
+@media (max-width:640px){
+  html body .sk-tbl{min-width:0;font-size:.78rem}
+  html body .sk-tbl .c-m,html body .sk-tbl .c-k,html body .sk-tbl .c-a{display:none}
+  html body .sk-mob-amt{display:block}
+  html body .sk-mob-act{display:flex;gap:.4rem;margin-top:.5rem}
+  html body .sk-mob-act .sk-act{margin:0}
+  html body .sk-mob-act .sk-dash{display:none}
+  html body .sk-tbl thead th,html body .sk-tbl tbody td,html body .sk-tbl tfoot td{padding:.7rem .6rem}
+  html body .sk-tgl small{display:none}
+  html body .sk-ket{min-width:0}
+  html body .sk-tblwrap{max-height:none}
+}
+
 </style>
 </head>
 <body class="bg-brand-dark text-white antialiased min-h-screen flex flex-col font-body">
@@ -524,6 +588,7 @@ html body #sirekapApp .kok-row{box-shadow:var(--sh)}
     <div role="tablist" class="inline-flex p-1.5 rounded-xl bg-black/40 border border-white/10 font-display uppercase tracking-wider text-sm sm:text-base whitespace-nowrap">
       <button role="tab" id="tab-rekap" onclick="gantiTab('rekap')" aria-selected="true" class="tab-btn px-5 sm:px-6 py-2.5 font-semibold">Input Rekap</button>
       <button role="tab" id="tab-riwayat" onclick="gantiTab('riwayat')" aria-selected="false" class="tab-btn px-5 sm:px-6 py-2.5 font-semibold">Riwayat</button>
+      <button role="tab" id="tab-mutasi" onclick="gantiTab('mutasi')" aria-selected="false" class="tab-btn px-5 sm:px-6 py-2.5 font-semibold">Mutasi</button>
     </div>
   </div>
 
@@ -540,7 +605,7 @@ html body #sirekapApp .kok-row{box-shadow:var(--sh)}
       <div class="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 class="font-display uppercase text-2xl font-bold tracking-wide text-brand-rose">Langkah 1 &middot; Kehadiran</h2>
-          <p class="text-sm text-neutral-400 mt-1">Pilih tanggal. Pemain yang main di hari itu otomatis tercatat hadir.</p>
+          <p class="text-sm text-neutral-400 mt-1">Pilih tanggal. Pemain yang main di hari itu (Sheet 6) otomatis tercatat hadir.</p>
         </div>
         <button onclick="mintaResetHariIni()" class="ghost-btn sm">Reset hari ini</button>
       </div>
@@ -556,8 +621,8 @@ html body #sirekapApp .kok-row{box-shadow:var(--sh)}
       </div>
 
       <div class="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-white/5 px-4 py-3">
-        <p id="sheet-status" class="text-xs text-neutral-300 min-h-[1rem] flex-1" aria-live="polite">Memuat data ...</p>
-        <button onclick="muatUlangDariSheet()" class="ghost-btn sm">Muat dari </button>
+        <p id="sheet-status" class="text-xs text-neutral-300 min-h-[1rem] flex-1" aria-live="polite">Memuat data Sheet 6...</p>
+        <button onclick="muatUlangDariSheet()" class="ghost-btn sm">Muat dari Sheet 6</button>
       </div>
 
       <div>
@@ -661,6 +726,79 @@ html body #sirekapApp .kok-row{box-shadow:var(--sh)}
       <div id="list-riwayat-container" class="p-4 sm:p-6 space-y-4 max-h-[44rem] overflow-y-auto"></div>
     </div>
   </div>
+
+  <!-- VIEW 3: MUTASI -->
+  <div id="view-mutasi" class="hidden space-y-6">
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div class="sk-stat saldo"><span class="sk-stat-l">Saldo kas sekarang</span><b id="sum-saldo">Rp 0</b><small>Setelah semua pemasukan &amp; pengeluaran</small></div>
+      <div class="sk-stat in"><span class="sk-stat-l">Pemasukan</span><b id="sum-masuk">Rp 0</b><small id="sum-masuk-sub">0 sesi</small></div>
+      <div class="sk-stat out"><span class="sk-stat-l">Pengeluaran</span><b id="sum-keluar">Rp 0</b><small id="sum-keluar-sub">0 pengeluaran</small></div>
+    </div>
+
+    <div class="glass-card p-5 sm:p-6">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="font-display uppercase text-xl font-bold tracking-wide" id="judul-form-keluar">Catat pengeluaran</h2>
+          <p class="text-sm text-neutral-400 mt-1">Pengeluaran otomatis mengurangi saldo kas dan menjadi kas awal sesi berikutnya.</p>
+        </div>
+        <button type="button" id="btn-toggle-keluar" onclick="bukaFormKeluar()" class="export-btn sm">+ Pengeluaran</button>
+      </div>
+
+      <div id="form-keluar" class="hidden space-y-4 mt-5">
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label for="input-tgl-keluar" class="text-xs text-neutral-400 uppercase tracking-widest block mb-1">Tanggal</label>
+            <input type="date" id="input-tgl-keluar" onchange="previewSaldoKeluar()" class="w-full rounded-xl px-4 py-3 text-white">
+          </div>
+          <div>
+            <label for="input-jumlah-keluar" class="text-xs text-neutral-400 uppercase tracking-widest block mb-1">Jumlah</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-sm font-semibold text-neutral-400">Rp</span>
+              <input type="number" id="input-jumlah-keluar" min="0" inputmode="numeric" placeholder="0" oninput="previewSaldoKeluar()" class="w-full pl-11 pr-4 py-3 rounded-xl text-white font-semibold">
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="text-xs text-neutral-400 uppercase tracking-widest mb-2">Kategori</p>
+          <div id="kat-keluar" class="flex flex-wrap gap-2"></div>
+        </div>
+        <div>
+          <label for="input-ket-keluar" class="text-xs text-neutral-400 uppercase tracking-widest block mb-1">Keterangan</label>
+          <input type="text" id="input-ket-keluar" maxlength="120" autocomplete="off" placeholder="Contoh: beli 2 slop kok Yonex" class="w-full rounded-xl px-4 py-3 text-white text-sm">
+        </div>
+        <p id="preview-saldo-keluar" class="sk-preview"></p>
+        <p id="err-keluar" class="hidden text-xs text-rose-400 font-semibold"></p>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <button type="button" id="btn-simpan-keluar" onclick="simpanPengeluaran()" class="export-btn w-full py-3.5 !rounded-xl">Simpan pengeluaran</button>
+          <button type="button" onclick="tutupFormKeluar()" class="ghost-btn w-full py-3.5 !rounded-xl">Batal</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass-card overflow-hidden">
+      <div class="sk-tbl-head">
+        <div>
+          <h2 class="font-display uppercase text-xl font-bold tracking-wide">Buku mutasi kas</h2>
+          <span id="mutasi-count" class="text-xs text-neutral-400">0 baris</span>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <select id="filter-bulan" onchange="ubahFilterMutasi()" class="sk-sel" aria-label="Filter bulan"><option value="">Semua bulan</option></select>
+          <select id="filter-jenis" onchange="ubahFilterMutasi()" class="sk-sel" aria-label="Filter jenis">
+            <option value="semua">Semua jenis</option><option value="masuk">Pemasukan</option><option value="keluar">Pengeluaran</option>
+          </select>
+        </div>
+      </div>
+      <div class="sk-tblwrap">
+        <table class="sk-tbl">
+          <thead><tr><th>Tanggal</th><th>Keterangan</th><th class="r c-m">Masuk</th><th class="r c-k">Keluar</th><th class="r c-s">Saldo</th><th class="c-a"></th></tr></thead>
+          <tbody id="mutasi-body"><tr><td colspan="6" class="sk-empty">Memuat...</td></tr></tbody>
+          <tfoot id="mutasi-foot"></tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+
         </div>
     </div>
 
@@ -1538,7 +1676,7 @@ html body #sirekapApp .kok-row{box-shadow:var(--sh)}
 
     function initialsAvatar(name, size = 256) {
         const c = document.createElement('canvas'); c.width = c.height = size; const g = c.getContext('2d');
-        g.fillStyle = '#1c1c1c'; g.fillRect(0, 0, size, size);
+        g.fillStyle = '#FFE4E8'; g.fillRect(0, 0, size, size);
         const parts = str(name).split(/\s+/).filter(Boolean);
         const ini = ((parts[0] || '?')[0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
         g.fillStyle = '#D6455D'; g.font = `700 ${size * 0.42}px Oswald, sans-serif`;
@@ -1569,7 +1707,7 @@ html body #sirekapApp .kok-row{box-shadow:var(--sh)}
             const s = Math.min(img.width, img.height);
             const sx = (img.width - s) / 2; const sy = (img.height - s) * 0.2;
             ctx.drawImage(img, sx, sy, s, s, cx - r, cy - r, r * 2, r * 2);
-        } else { ctx.fillStyle = '#1c1c1c'; ctx.fillRect(cx - r, cy - r, r * 2, r * 2); }
+        } else { ctx.fillStyle = '#F3E3E6'; ctx.fillRect(cx - r, cy - r, r * 2, r * 2); }
         ctx.restore();
     }
 
@@ -1592,11 +1730,11 @@ html body #sirekapApp .kok-row{box-shadow:var(--sh)}
         const cw = x1 - x0, ch = y1 - y0, net = y0 + ch / 2;
         const side = cw * 0.075, svc = (ch / 2) * 0.295, back = (ch / 2) * 0.114;
         ctx.save(); ctx.lineJoin = 'round';
-        ctx.strokeStyle = 'rgba(251,191,36,.30)'; ctx.lineWidth = 3;
-        ctx.shadowColor = 'rgba(251,191,36,.55)'; ctx.shadowBlur = 12 * sc;
+        ctx.strokeStyle = 'rgba(245,158,11,.24)'; ctx.lineWidth = 3;
+        ctx.shadowColor = 'rgba(245,158,11,.28)'; ctx.shadowBlur = 12 * sc;
         ctx.strokeRect(x0, y0, cw, ch);
-        ctx.strokeStyle = 'rgba(255,92,116,.26)'; ctx.lineWidth = 3;
-        ctx.shadowColor = 'rgba(255,70,100,.6)'; ctx.shadowBlur = 12 * sc;
+        ctx.strokeStyle = 'rgba(228,64,95,.17)'; ctx.lineWidth = 3;
+        ctx.shadowColor = 'rgba(228,64,95,.28)'; ctx.shadowBlur = 12 * sc;
         ctx.beginPath();
         ctx.moveTo(x0 + side, y0); ctx.lineTo(x0 + side, y1); ctx.moveTo(x1 - side, y0); ctx.lineTo(x1 - side, y1);
         ctx.moveTo(x0, net - svc); ctx.lineTo(x1, net - svc); ctx.moveTo(x0, net + svc); ctx.lineTo(x1, net + svc);
@@ -1604,8 +1742,8 @@ html body #sirekapApp .kok-row{box-shadow:var(--sh)}
         ctx.moveTo(W / 2, y0); ctx.lineTo(W / 2, net - svc); ctx.moveTo(W / 2, net + svc); ctx.lineTo(W / 2, y1);
         ctx.stroke();
         ctx.shadowBlur = 0; ctx.setLineDash([14, 10]);
-        ctx.strokeStyle = 'rgba(255,255,255,.14)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x0 - 8, net + 7); ctx.lineTo(x1 + 8, net + 7); ctx.stroke();
-        ctx.strokeStyle = 'rgba(255,255,255,.34)'; ctx.lineWidth = 4; ctx.shadowColor = 'rgba(255,255,255,.5)'; ctx.shadowBlur = 10 * sc;
+        ctx.strokeStyle = 'rgba(43,27,34,.10)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x0 - 8, net + 7); ctx.lineTo(x1 + 8, net + 7); ctx.stroke();
+        ctx.strokeStyle = 'rgba(43,27,34,.20)'; ctx.lineWidth = 4; ctx.shadowColor = 'rgba(43,27,34,.12)'; ctx.shadowBlur = 10 * sc;
         ctx.beginPath(); ctx.moveTo(x0 - 8, net - 7); ctx.lineTo(x1 + 8, net - 7); ctx.stroke();
         ctx.restore();
     }
@@ -1619,32 +1757,27 @@ html body #sirekapApp .kok-row{box-shadow:var(--sh)}
         rr(ctx, 3, 3, 18, 18, 5); ctx.stroke(); ctx.beginPath(); ctx.arc(12, 12, 4, 0, Math.PI * 2); ctx.stroke();
         ctx.beginPath(); ctx.arc(17.5, 6.5, 1.1, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill(); ctx.restore();
     }
-    function drawSpotlight(ctx, cx, bottomY, spread) {
-        ctx.save(); ctx.globalCompositeOperation = 'screen';
-        for (let i = 0; i < 6; i++) {
-            const k = 0.55 + i * 0.09, gr = ctx.createLinearGradient(0, 0, 0, bottomY);
-            gr.addColorStop(0, 'rgba(255,236,205,.033)'); gr.addColorStop(.6, 'rgba(255,222,180,.02)'); gr.addColorStop(1, 'rgba(255,205,150,0)');
-            ctx.fillStyle = gr; ctx.beginPath(); ctx.moveTo(cx - 70 * k, 0); ctx.lineTo(cx + 70 * k, 0); ctx.lineTo(cx + spread * k, bottomY); ctx.lineTo(cx - spread * k, bottomY); ctx.closePath(); ctx.fill();
-        }
+function drawSpotlight(ctx, cx, bottomY, spread) {   // cahaya putih-hangat lembut di belakang konten (tema terang)
+        ctx.save();
+        const rx = spread * 1.25, ry = spread * .55, cy = bottomY - spread * .5;
+        ctx.translate(cx, cy); ctx.scale(1, ry / rx);
+        const rg = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
+        rg.addColorStop(0, 'rgba(255,255,255,.55)'); rg.addColorStop(.6, 'rgba(255,255,255,.18)'); rg.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = rg; ctx.beginPath(); ctx.arc(0, 0, rx, 0, Math.PI * 2); ctx.fill();
         ctx.restore();
     }
-    // Blur latar (turun-skala berulang, jalan di semua browser termasuk Safari) untuk efek kaca buram
+        // Blur latar (turun-skala berulang, jalan di semua browser termasuk Safari) untuk efek kaca buram
     function blurred(src) {
         let c = src;
         for (let i = 0; i < 3; i++) { const n = document.createElement('canvas'); n.width = Math.max(8, c.width >> 1); n.height = Math.max(8, c.height >> 1); const g = n.getContext('2d'); g.imageSmoothingQuality = 'high'; g.drawImage(c, 0, 0, n.width, n.height); c = n; }
         return c;
     }
-    // Kartu kaca: latar yang diburamkan + lapisan putih transparan + tepi bercahaya
-    function glass(ctx, blur, W, H, SC, x, y, w, h, r, tint = .10, edge = .30) {
-        ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = 30 * SC; ctx.shadowOffsetY = 12 * SC; rr(ctx, x, y, w, h, r); ctx.fillStyle = '#12060a'; ctx.fill(); ctx.restore();
-        ctx.save(); rr(ctx, x, y, w, h, r); ctx.clip(); ctx.drawImage(blur, 0, 0, W, H);
-        const g = ctx.createLinearGradient(x, y, x + w, y + h); g.addColorStop(0, `rgba(255,255,255,${tint + .07})`); g.addColorStop(1, `rgba(255,255,255,${tint * .35})`);
-        ctx.fillStyle = g; ctx.fillRect(x, y, w, h); ctx.restore();
-        ctx.save(); rr(ctx, x + .75, y + .75, w - 1.5, h - 1.5, r);
-        const b = ctx.createLinearGradient(x, y, x, y + h); b.addColorStop(0, `rgba(255,255,255,${edge + .2})`); b.addColorStop(.5, `rgba(255,255,255,${edge * .5})`); b.addColorStop(1, `rgba(255,255,255,${edge * .7})`);
-        ctx.strokeStyle = b; ctx.lineWidth = 1.5; ctx.stroke(); ctx.restore();
+    // Kartu putih bersih (tema terang)
+    function glass(ctx, blur, W, H, SC, x, y, w, h, r, tint = .10, edge = .30) {   // kartu putih bersih (tema terang)
+        ctx.save(); ctx.shadowColor = 'rgba(214,69,93,.26)'; ctx.shadowBlur = 34 * SC; ctx.shadowOffsetY = 12 * SC; rr(ctx, x, y, w, h, r); ctx.fillStyle = '#fff'; ctx.fill(); ctx.restore();
+        ctx.save(); rr(ctx, x + .75, y + .75, w - 1.5, h - 1.5, r); ctx.strokeStyle = 'rgba(43,27,34,.07)'; ctx.lineWidth = 1.5; ctx.stroke(); ctx.restore();
     }
-    const photoCache = new Map();
+        const photoCache = new Map();
     function posterImg(name) {
         const k = norm(name);
         if (!photoMap.get(k)) return loadImage(initialsAvatar(name));   // roster belum ada: jangan disimpan, coba lagi nanti
@@ -1656,6 +1789,13 @@ html body #sirekapApp .kok-row{box-shadow:var(--sh)}
         return photoCache.get(k);
     }
 
+    function paintLightBg(g, W, H) {   // latar tema terang: krem + semburat rose/peach (sama dengan web)
+        const base = g.createLinearGradient(0, 0, W * .6, H); base.addColorStop(0, '#FFF9F6'); base.addColorStop(.5, '#FFF2EC'); base.addColorStop(1, '#FFE7E3');
+        g.fillStyle = base; g.fillRect(0, 0, W, H);
+        [[W * .95, H * .05, 580, 255, 122, 89, .42], [0, H * .30, 620, 228, 64, 95, .20], [W, H * .55, 540, 255, 160, 140, .30], [W * .05, H * .80, 540, 251, 191, 36, .20], [W * .92, H * .97, 620, 228, 64, 95, .26]]
+            .forEach(([x, y, r, R, G, B, a]) => { const q = g.createRadialGradient(x, y, 0, x, y, r); q.addColorStop(0, `rgba(${R},${G},${B},${a})`); q.addColorStop(1, `rgba(${R},${G},${B},0)`); g.fillStyle = q; g.fillRect(0, 0, W, H); });
+    }
+    
     async function renderPoster(day, list, part, parts, SC) {
         await rosterReady;
         const W = 1080, H = 1920, PX = 60, CW = W - PX * 2, GAP = 18, TOP = 520, BOT = H - 250;   // Story 9:16, area aman UI Instagram
@@ -1668,13 +1808,9 @@ html body #sirekapApp .kok-row{box-shadow:var(--sh)}
 
         // Latar: radial #0A0A0A -> #2B0A11, tekstur, cahaya warna (agar efek kaca terlihat), garis lapangan, spotlight
         const [bgc, bg] = mk();
-        const gr = bg.createRadialGradient(W / 2, H * .28, 0, W / 2, H * .28, Math.hypot(W / 2, H * .8)); gr.addColorStop(0, '#0A0A0A'); gr.addColorStop(.45, '#13070A'); gr.addColorStop(1, '#2B0A11');
-        bg.fillStyle = gr; bg.fillRect(0, 0, W, H);
-        drawTexture(bg, W, H);
-        [[W * .95, H * .06, 520, 'rgba(214,69,93,.50)'], [0, H * .30, 560, 'rgba(122,16,32,.80)'], [W, H * .52, 480, 'rgba(155,28,75,.42)'], [W * .05, H * .78, 480, 'rgba(251,191,36,.20)'], [W * .92, H * .96, 560, 'rgba(122,16,32,.75)']]
-            .forEach(([x, y, r, col]) => { const g = bg.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, col); g.addColorStop(1, 'rgba(0,0,0,0)'); bg.fillStyle = g; bg.fillRect(0, 0, W, H); });
-        drawCourt(bg, W, H); drawSpotlight(bg, W / 2, TOP - 20, 380);
-        const blur = blurred(bgc);
+        paintLightBg(bg, W, H);
+        drawCourt(bg, W, H); drawSpotlight(bg, W / 2, TOP + 160, 420);
+        const blur = bgc;
         const [cv, ctx] = mk(); ctx.drawImage(bgc, 0, 0, W, H);
 
         // Header
@@ -1682,45 +1818,46 @@ html body #sirekapApp .kok-row{box-shadow:var(--sh)}
         ctx.font = `700 44px ${FD}`; const wPB = spacedW(ctx, 'PB ', 4), wJG = spacedW(ctx, 'JGEER', 4), lw = logo ? logoH * logo.width / logo.height : 0;
         let bx = (W - (lw + (logo ? 18 : 0) + wPB + 4 + wJG)) / 2;
         if (logo) { ctx.drawImage(logo, bx, top, lw, logoH); bx += lw + 18; }
-        ctx.textAlign = 'left'; ctx.fillStyle = '#fff'; spaced(ctx, 'PB ', bx, top + logoH / 2 + 15, 4); ctx.fillStyle = '#D6455D'; spaced(ctx, 'JGEER', bx + wPB + 4, top + logoH / 2 + 15, 4);
+        ctx.textAlign = 'left'; ctx.fillStyle = '#2B1B22'; spaced(ctx, 'PB ', bx, top + logoH / 2 + 15, 4); ctx.fillStyle = '#E4405F'; spaced(ctx, 'JGEER', bx + wPB + 4, top + logoH / 2 + 15, 4);
         const ts = fitFont(ctx, 'MATCH RECAP', 860, 120, 700), wM = ctx.measureText('MATCH ').width, wR = ctx.measureText('RECAP').width, tb = top + logoH + 14 + Math.round(ts * .85);
-        ctx.save(); ctx.shadowColor = 'rgba(214,69,93,.55)'; ctx.shadowBlur = 30 * SC; ctx.fillStyle = '#fff'; ctx.fillText('MATCH ', (W - wM - wR) / 2, tb); ctx.fillStyle = '#D6455D'; ctx.fillText('RECAP', (W - wM - wR) / 2 + wM, tb); ctx.restore();
+        ctx.save(); ctx.shadowColor = 'rgba(228,64,95,.22)'; ctx.shadowBlur = 18 * SC; ctx.shadowOffsetY = 6 * SC; ctx.fillStyle = '#2B1B22'; ctx.fillText('MATCH ', (W - wM - wR) / 2, tb);
+        { const gx = (W - wM - wR) / 2 + wM, tg = ctx.createLinearGradient(gx, 0, gx + wR, 0); tg.addColorStop(0, '#E4405F'); tg.addColorStop(1, '#FF7A59'); ctx.fillStyle = tg; ctx.fillText('RECAP', gx, tb); } ctx.restore();
         const dTxt = day.label.toUpperCase(); ctx.font = `600 28px ${FD}`;
         const cw = spacedW(ctx, dTxt, 5) + 72, cx0 = (W - cw) / 2, cy0 = tb + 28;
-        glass(ctx, blur, W, H, SC, cx0, cy0, cw, 56, 28, .12, .34); ctx.fillStyle = '#fff'; ctx.textAlign = 'left'; spaced(ctx, dTxt, cx0 + 36, cy0 + 38, 5);
+        ctx.save(); ctx.shadowColor = 'rgba(228,64,95,.38)'; ctx.shadowBlur = 24 * SC; ctx.shadowOffsetY = 8 * SC; rr(ctx, cx0, cy0, cw, 56, 28); { const pg = ctx.createLinearGradient(cx0, cy0, cx0 + cw, cy0 + 56); pg.addColorStop(0, '#E4405F'); pg.addColorStop(1, '#FF7A59'); ctx.fillStyle = pg; } ctx.fill(); ctx.restore(); ctx.fillStyle = '#fff'; ctx.textAlign = 'left'; spaced(ctx, dTxt, cx0 + 36, cy0 + 38, 5);
         const sum = `${day.matches.length} PERTANDINGAN  ·  ${day.players} PEMAIN` + (parts > 1 ? `  ·  PART ${part}/${parts}` : '');
-        ctx.font = `500 24px ${FB}`; ctx.fillStyle = 'rgba(255,255,255,.75)'; spaced(ctx, sum, (W - spacedW(ctx, sum, 3)) / 2, cy0 + 56 + 44, 3);
+        ctx.font = `500 24px ${FB}`; ctx.fillStyle = '#85727B'; spaced(ctx, sum, (W - spacedW(ctx, sum, 3)) / 2, cy0 + 56 + 44, 3);
 
         // Kartu pertandingan
         const y0 = TOP + Math.max(0, (BOT - TOP - content) / 2), cy = i => y0 + i * (CH + GAP);
-        const WIN = '#4ade80', DRAW = '#fbbf24';
+        const WIN = '#16A34A', DRAW = '#D97706', NEU = '#D9C3CA', INK = '#2B1B22';
         const avatarAt = (im, x, y, r, col) => {
-            ctx.save(); ctx.shadowColor = col === '#fff' ? 'rgba(214,69,93,.35)' : col + '66'; ctx.shadowBlur = 22 * SC; ctx.beginPath(); ctx.arc(x, y, r + 3, 0, Math.PI * 2); ctx.fillStyle = '#12060a'; ctx.fill(); ctx.restore();
+            ctx.save(); ctx.shadowColor = col === NEU ? 'rgba(214,69,93,.18)' : col + '55'; ctx.shadowBlur = 22 * SC; ctx.beginPath(); ctx.arc(x, y, r + 3, 0, Math.PI * 2); ctx.fillStyle = '#fff'; ctx.fill(); ctx.restore();
             drawCircleImage(ctx, im, x, y, r); ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.lineWidth = 4; ctx.strokeStyle = col; ctx.stroke();
         };
         list.forEach((m, i) => {
             const x = PX, y = cy(i), mid = y + CH / 2, a = m.a, b = m.b, aw = a > b, bw = b > a, dr = a === b;
-            const cA = aw ? WIN : dr ? DRAW : '#fff', cB = bw ? WIN : dr ? DRAW : '#fff';
+            const cA = aw ? WIN : dr ? DRAW : NEU, cB = bw ? WIN : dr ? DRAW : NEU;
             glass(ctx, blur, W, H, SC, x, y, CW, CH, 32, .10, .30);
             if (!dr) {   // semburat hijau di sisi pemenang
                 ctx.save(); rr(ctx, x, y, CW, CH, 32); ctx.clip();
-                const wx = aw ? x : x + CW, wg = ctx.createLinearGradient(wx, 0, x + CW / 2, 0); wg.addColorStop(0, 'rgba(74,222,128,.20)'); wg.addColorStop(1, 'rgba(74,222,128,0)'); ctx.fillStyle = wg; ctx.fillRect(x, y, CW, CH); ctx.restore();
+                const wx = aw ? x : x + CW, wg = ctx.createLinearGradient(wx, 0, x + CW / 2, 0); wg.addColorStop(0, 'rgba(34,197,94,.16)'); wg.addColorStop(1, 'rgba(34,197,94,0)'); ctx.fillStyle = wg; ctx.fillRect(x, y, CW, CH); ctx.restore();
             }
             const ar = 34 * kf, ax = 68 * kf, ad = 62 * kf, nx = 186 * kf;
             avatarAt(img(m.A1), x + ax, mid, ar, cA); avatarAt(img(m.A2), x + ax + ad, mid, ar, cA);
             avatarAt(img(m.B1), x + CW - ax - ad, mid, ar, cB); avatarAt(img(m.B2), x + CW - ax, mid, ar, cB);
             const nameMax = CW / 2 - 90 - nx;
             [[m.A1, 'left', x + nx, cA, aw], [m.A2, 'left', x + nx, cA, aw], [m.B1, 'right', x + CW - nx, cB, bw], [m.B2, 'right', x + CW - nx, cB, bw]].forEach(([n, al, nx, col, won], k) => {
-                const t = String(n).toUpperCase(); fitFont(ctx, t, nameMax, 28 * kf, 600); ctx.textAlign = al; ctx.fillStyle = won ? col : 'rgba(255,255,255,.92)'; ctx.fillText(t, nx, mid + (k % 2 ? 34 * kf : -6 * kf));
+                const t = String(n).toUpperCase(); fitFont(ctx, t, nameMax, 28 * kf, 600); ctx.textAlign = al; ctx.fillStyle = won ? col : INK; ctx.fillText(t, nx, mid + (k % 2 ? 34 * kf : -6 * kf));
             });
-            ctx.textAlign = 'center'; ctx.font = `600 15px ${FB}`; ctx.fillStyle = 'rgba(255,255,255,.55)'; const lb = `MATCH ${pad(i + 1)}`; spaced(ctx, lb, x + CW / 2 - spacedW(ctx, lb, 3) / 2, y + 38 * kf, 3);
-            ctx.textAlign = 'left'; ctx.font = `700 ${Math.round(66 * kf)}px ${FD}`; const segs = [[String(a), cA], [' – ', '#D6455D'], [String(b), cB]], tw = segs.reduce((s, [t]) => s + ctx.measureText(t).width, 0);
-            let sx = x + CW / 2 - tw / 2; ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 8 * SC; segs.forEach(([t, c]) => { ctx.fillStyle = c; ctx.fillText(t, sx, y + 108 * kf); sx += ctx.measureText(t).width; }); ctx.restore();
+            ctx.textAlign = 'center'; ctx.font = `600 15px ${FB}`; ctx.fillStyle = '#9C8A92'; const lb = `MATCH ${pad(i + 1)}`; spaced(ctx, lb, x + CW / 2 - spacedW(ctx, lb, 3) / 2, y + 38 * kf, 3);
+            ctx.textAlign = 'left'; ctx.font = `700 ${Math.round(66 * kf)}px ${FD}`; const segs = [[String(a), aw ? WIN : dr ? DRAW : INK], [' – ', '#E4405F'], [String(b), bw ? WIN : dr ? DRAW : INK]], tw = segs.reduce((s, [t]) => s + ctx.measureText(t).width, 0);
+            let sx = x + CW / 2 - tw / 2; ctx.save(); ctx.shadowColor = 'rgba(43,27,34,.14)'; ctx.shadowBlur = 8 * SC; segs.forEach(([t, c]) => { ctx.fillStyle = c; ctx.fillText(t, sx, y + 108 * kf); sx += ctx.measureText(t).width; }); ctx.restore();
         });
 
         // Footer (jauh dari tepi bawah agar tidak tertutup kolom balasan Story)
         ctx.font = `600 26px ${FB}`; const user = 'jgeer_badminton', uw = ctx.measureText(user).width, fx = (W - (30 + 12 + uw)) / 2, fy = H - 200;
-        drawInstagram(ctx, fx, fy - 15, 30, '#D6455D'); ctx.fillStyle = '#d4d4d8'; ctx.textAlign = 'left'; ctx.fillText(user, fx + 42, fy + 9);
+        drawInstagram(ctx, fx, fy - 15, 30, '#E4405F'); ctx.fillStyle = '#85727B'; ctx.textAlign = 'left'; ctx.fillText(user, fx + 42, fy + 9);
         return cv;
     }
 
@@ -1969,7 +2106,7 @@ async function loadSheet6() {
         }
         sheetDays = days; sheetState = 'ok';
     } catch (e) {
-        console.warn(' gagal dimuat:', e);
+        console.warn('Sheet 6 gagal dimuat:', e);
         sheetState = 'error';
     }
 }
@@ -2029,9 +2166,9 @@ function ubahTanggal() {
     if (idSesiEditing) {   // mode revisi: tanggal diganti tanpa mengisi ulang
         tanggalAktif = ymd; kokAuto = hitungAuto(ymd).counts; renderAll(); simpanDataKeStorage(); return;
     }
-    const jalankan = () => { terapkanOtomatis(ymd, 'ganti'); renderAll(); simpanDataKeStorage(); simpanKokKeStorage(); };
+    const jalankan = () => { terapkanOtomatis(ymd, 'ganti'); setKasAwalOtomatis(); renderAll(); simpanDataKeStorage(); simpanKokKeStorage(); };
     if (pristine()) { jalankan(); return; }
-    showConfirm('Ganti Tanggal', 'Kehadiran dan kok yang sudah Anda ubah akan diganti dengan data pertandingan tanggal ini. Lanjutkan?', jalankan, () => { inputTanggalSesi.value = tanggalAktif; });
+    showConfirm('Ganti Tanggal', 'Kehadiran dan kok yang sudah Anda ubah akan diganti dengan data pertandingan tanggal ini dari Sheet 6. Lanjutkan?', jalankan, () => { inputTanggalSesi.value = tanggalAktif; });
 }
 
 async function muatUlangDariSheet() {
@@ -2040,7 +2177,7 @@ async function muatUlangDariSheet() {
     if (sheetState !== 'ok') { renderAll(); return; }
     const jalankan = () => { terapkanOtomatis(ymd, 'gabung'); renderAll(); simpanDataKeStorage(); simpanKokKeStorage(); };
     if (pristine()) { jalankan(); return; }
-    showConfirm('Muat data', 'Jumlah kok pemain yang ada akan ditimpa sesuai data terbaru. Pemain yang Anda tambah manual tetap dipertahankan.', jalankan);
+    showConfirm('Muat dari Sheet 6', 'Jumlah kok pemain yang ada di Sheet 6 akan ditimpa sesuai data terbaru. Pemain yang Anda tambah manual tetap dipertahankan.', jalankan);
 }
 
 // =====================================================================
@@ -2050,15 +2187,15 @@ function updateSheetStatus() {
     const el = document.getElementById('sheet-status'); if (!el) return;
     const ymd = inputTanggalSesi.value;
     let t = '';
-    if (sheetState === 'loading') t = 'Memuat data...';
-    else if (sheetState === 'error') t = '<span class="text-rose-400">Gagal dimuat.</span> Pilih pemain secara manual atau tekan Muat.';
+    if (sheetState === 'loading') t = 'Memuat data Sheet 6...';
+    else if (sheetState === 'error') t = '<span class="text-rose-400">Sheet 6 gagal dimuat.</span> Pilih pemain secara manual atau tekan Muat dari Sheet 6.';
     else {
         const day = sheetDays.get(ymd);
-        if (!day) t = 'Belum ada pertandingan pada tanggal ini. Pilih pemain dan isi kok secara manual.';
+        if (!day) t = 'Belum ada pertandingan pada tanggal ini di Sheet 6. Pilih pemain dan isi kok secara manual.';
         else {
             const a = Object.keys(kokAuto);
             const tamu = a.filter(n => !canon(n));
-            t = `<span class="text-brand-rose font-semibold">${day.matches.length}</span> pertandingan, ${a.length} pemain terbaca.` + (tamu.length ? ` Guest: ${esc(tamu.join(', '))}.` : '');
+            t = `<span class="text-brand-rose font-semibold">${day.matches.length}</span> pertandingan di Sheet 6, ${a.length} pemain terbaca.` + (tamu.length ? ` Guest: ${esc(tamu.join(', '))}.` : '');
         }
     }
     if (rosterSource === 'fallback') t += ' <span class="text-amber-300">Roster Sheet1 gagal dimuat, memakai daftar cadangan tanpa foto.</span>';
@@ -2094,9 +2231,9 @@ function renderHadir() {
 
 function metaKok(n) {
     const a = kokAuto[n], v = kokVal[n] || 0;
-    if (a === undefined) return 'Tidak ada data, diisi manual';
-    if (v === a) return `${a} match`;
-    return `${a} match <span class="text-amber-300 font-semibold">diubah</span> <button type="button" data-act="reset" data-n="${esc(n)}" class="underline text-neutral-300 hover:text-white">kembalikan</button>`;
+    if (a === undefined) return 'Tidak ada di Sheet 6, diisi manual';
+    if (v === a) return `Sheet 6: ${a} match`;
+    return `Sheet 6: ${a} match <span class="text-amber-300 font-semibold">diubah</span> <button type="button" data-act="reset" data-n="${esc(n)}" class="underline text-neutral-300 hover:text-white">kembalikan</button>`;
 }
 function rowKokHTML(h) {
     const n = h.nama, v = kokVal[n] || 0;
@@ -2243,12 +2380,12 @@ function kembaliKeAbsen() {
     renderHadir();
 }
 function gantiTab(tab) {
-    const rekap = tab === 'rekap';
-    document.getElementById('view-rekap').classList.toggle('hidden', !rekap);
-    document.getElementById('view-riwayat').classList.toggle('hidden', rekap);
-    document.getElementById('tab-rekap').setAttribute('aria-selected', rekap);
-    document.getElementById('tab-riwayat').setAttribute('aria-selected', !rekap);
-    if (!rekap) renderRiwayatList();
+    ['rekap', 'riwayat', 'mutasi'].forEach(t => {
+        document.getElementById('view-' + t).classList.toggle('hidden', t !== tab);
+        document.getElementById('tab-' + t).setAttribute('aria-selected', t === tab);
+    });
+    if (tab === 'riwayat') renderRiwayatList();
+    if (tab === 'mutasi') renderMutasi();
 }
 
 // =====================================================================
@@ -2370,7 +2507,7 @@ function simpanSesiKeRiwayat() {
     riwayatTransaksi.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
 
     simpanRiwayatKeStorage();
-    if (window.simpanKeFirebaseDoc) window.simpanKeFirebaseDoc(dataSesi);
+    kirimKeCloud(KOL_RIWAYAT, dataSesi);
     gantiTab('riwayat');
 }
 
@@ -2445,9 +2582,10 @@ function keluarModeEdit() {
 function batalEditSesi() { keluarModeEdit(); }
 
 function hapusSesiRiwayat(id) {
-    showConfirm("Hapus Sesi Transaksi", "Apakah Anda yakin ingin menghapus catatan transaksi ini dari riwayat?", () => {
+    showConfirm("Hapus Sesi Transaksi", "Apakah Anda yakin ingin menghapus catatan transaksi ini dari riwayat dan cloud? Saldo kas di Mutasi akan dihitung ulang.", () => {
         riwayatTransaksi = riwayatTransaksi.filter(item => item.id !== id);
-        simpanRiwayatKeStorage(); renderRiwayatList(); setKasAwalOtomatis();
+        simpanRiwayatKeStorage(); hapusDiCloud(KOL_RIWAYAT, id);
+        renderRiwayatList(); setKasAwalOtomatis(); renderMutasiBila();
     });
 }
 function salinWAById(id) {
@@ -2457,13 +2595,11 @@ function salinWAById(id) {
 
 function setKasAwalOtomatis() {
     if (idSesiEditing !== null) return;   // jangan menimpa saat revisi
-    if (riwayatTransaksi && riwayatTransaksi.length > 0) {
-        const t = riwayatTransaksi[0];
-        if (t && t.kasAkhir !== undefined) {
-            inputKasTerakhir.value = t.kasAkhir;
-            simpanDataKeStorage();
-            if (inStep2()) hitungTotal();
-        }
+    if ((riwayatTransaksi && riwayatTransaksi.length > 0) || (pengeluaranList && pengeluaranList.length > 0)) {
+        // saldo kas = pemasukan sesi - pengeluaran, pada posisi tanggal sesi yang sedang diisi
+        inputKasTerakhir.value = fmtNum(saldoPadaTanggal(inputTanggalSesi.value || ''));
+        simpanDataKeStorage();
+        if (inStep2()) hitungTotal();
     }
 }
 
@@ -2512,7 +2648,7 @@ function muatDataTersimpan() {
 // RESET, KONFIRMASI, SALIN WA
 // =====================================================================
 function mintaResetHariIni() {
-    showConfirm("Reset Hari Ini", "Kosongkan kehadiran, guest, dan kok, lalu muat ulang otomatis untuk hari ini?", () => {
+    showConfirm("Reset Hari Ini", "Kosongkan kehadiran, guest, dan kok, lalu muat ulang otomatis dari Sheet 6 untuk hari ini?", () => {
         if (idSesiEditing) { idSesiEditing = null; document.getElementById('banner-mode-edit').classList.add('hidden'); document.getElementById('text-btn-simpan').innerText = "Simpan transaksi ke riwayat"; }
         localStorage.removeItem(STORAGE_KEY + "_kok");
         hadir = []; kokVal = {}; kokAuto = {};
@@ -2566,6 +2702,7 @@ window.__skStart = async () => {
     if (skStarted) return; skStarted = true;
     skInitFirebase();
     muatRiwayatTersimpan();
+    muatPengeluaranTersimpan();
     muatDataTersimpan();
     if (!inputTanggalSesi.value) setTanggalHariIni();
     tanggalAktif = inputTanggalSesi.value;
@@ -2584,7 +2721,231 @@ window.__skStart = async () => {
 };
 
 // =====================================================================
-// FIREBASE (sama seperti sebelumnya; dimuat setelah admin membuka kunci)
+// MUTASI: pemasukan (dari sesi) + pengeluaran, dengan saldo berjalan
+// =====================================================================
+const PENGELUARAN_KEY = 'badminton_pengeluaran_v1';
+const KOL_RIWAYAT = 'riwayat_transaksi';
+const KOL_KELUAR = 'pengeluaran_kas';
+const PENDING_KEY = 'sk_pending_sync_v1';
+const KATEGORI_KELUAR = ['Beli kok', 'Sewa lapangan', 'Konsumsi', 'Perlengkapan', 'Lainnya'];
+let pengeluaranList = [];
+let idPengeluaranEditing = null;
+let kategoriKeluar = '';
+let filterBulan = '', filterJenis = 'semua';
+
+const tsId = id => { const m = /_(\d{10,})/.exec(String(id || '')); return m ? +m[1] : 0; };
+const urutPengeluaran = l => [...l].sort((a, b) => String(b.tanggal).localeCompare(String(a.tanggal)) || tsId(b.id) - tsId(a.id));
+function tanggalLokal() { const t = new Date(); return `${t.getFullYear()}-${pad(t.getMonth() + 1)}-${pad(t.getDate())}`; }
+function tglPendek(ymd) { const d = new Date(ymd + 'T00:00:00'); return isNaN(d) ? { a: ymd, b: '' } : { a: d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }), b: d.toLocaleDateString('id-ID', { weekday: 'long' }) }; }
+function labelBulan(ym) { const [y, m] = ym.split('-'); return `${BLN[+m - 1]} ${y}`; }
+
+// ---------- toast kecil ----------
+function skToast(msg) {
+    let t = document.getElementById('sk-toast');
+    if (!t) { t = document.createElement('div'); t.id = 'sk-toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
+    t.textContent = msg; t.className = 'sk-toast show';
+    clearTimeout(t._h); t._h = setTimeout(() => { t.className = 'sk-toast'; }, 4800);
+}
+
+// ---------- antrean sinkron cloud (agar tak ada data hilang / hidup lagi) ----------
+const pendGet = () => { try { return JSON.parse(localStorage.getItem(PENDING_KEY) || '{}') || {}; } catch (e) { return {}; } };
+const pendSet = p => { try { localStorage.setItem(PENDING_KEY, JSON.stringify(p)); } catch (e) {} };
+function pendAdd(key, id) { const p = pendGet(); p[key] = p[key] || []; if (!p[key].includes(id)) p[key].push(id); pendSet(p); }
+function pendDel(key, id) { const p = pendGet(); if (p[key]) { p[key] = p[key].filter(x => x !== id); pendSet(p); } }
+
+async function kirimKeCloud(col, data) {
+    pendAdd(col, data.id);                       // tandai dulu; dihapus setelah cloud menerima
+    if (!window.cloudSet) return false;
+    const ok = await window.cloudSet(col, data);
+    if (ok) pendDel(col, data.id);
+    return ok;
+}
+async function hapusDiCloud(col, id) {
+    pendDel(col, id); pendAdd('del:' + col, id);
+    if (!window.cloudDelete) { skToast('Terhapus di HP. Cloud belum terhubung, akan dihapus saat tersambung.'); return false; }
+    const ok = await window.cloudDelete(col, id);
+    if (ok) pendDel('del:' + col, id);
+    else skToast('Gagal menghapus di cloud. Akan dicoba lagi saat halaman dibuka.');
+    return ok;
+}
+// Gabungkan snapshot cloud dengan antrean lokal: hapus yang sudah dihapus, kirim yang belum terkirim
+function terapkanSnapshot(col, snapshot, ambilLokal) {
+    const dataFB = []; snapshot.forEach(d => dataFB.push(d.data()));
+    const p = pendGet(), delIds = p['del:' + col] || [], upIds = p[col] || [];
+    dataFB.filter(x => delIds.includes(x.id)).forEach(x => { if (window.cloudDelete) window.cloudDelete(col, x.id).then(ok => { if (ok) pendDel('del:' + col, x.id); }); });
+    const list = dataFB.filter(x => !delIds.includes(x.id));
+    const ada = new Set(dataFB.map(x => x.id));
+    ambilLokal().filter(x => upIds.includes(x.id) && !ada.has(x.id) && !delIds.includes(x.id)).forEach(x => { list.push(x); if (window.cloudSet) window.cloudSet(col, x); });
+    return list;
+}
+
+// ---------- penyimpanan lokal pengeluaran ----------
+function simpanPengeluaranKeStorage() { try { localStorage.setItem(PENGELUARAN_KEY, JSON.stringify(pengeluaranList)); } catch (e) { console.error('Gagal menyimpan pengeluaran:', e); } }
+function muatPengeluaranTersimpan() {
+    try { const s = JSON.parse(localStorage.getItem(PENGELUARAN_KEY) || '[]'); pengeluaranList = urutPengeluaran(Array.isArray(s) ? s : []); }
+    catch (e) { pengeluaranList = []; }
+    renderMutasi();
+}
+
+// ---------- buku mutasi: urut tanggal, saldo berjalan ----------
+function bangunMutasi(excludeId) {
+    const items = [];
+    riwayatTransaksi.forEach(s => { if (s.id !== excludeId) items.push({ k: 'masuk', id: s.id, tanggal: String(s.tanggal), ts: tsId(s.id), ref: s }); });
+    pengeluaranList.forEach(e => { if (e.id !== excludeId) items.push({ k: 'keluar', id: e.id, tanggal: String(e.tanggal), ts: tsId(e.id), ref: e }); });
+    items.sort((a, b) => a.tanggal.localeCompare(b.tanggal) || a.ts - b.ts);
+    let saldo = 0; const rows = [];
+    items.forEach(it => {
+        if (it.k === 'masuk') {
+            const s = it.ref, awal = Number(s.kasAwal) || 0;
+            if (Math.abs(awal - saldo) > 0.5) {   // kas awal sesi diisi manual / berbeda dari saldo berjalan
+                rows.push({ jenis: 'adj', tanggal: it.tanggal, delta: awal - saldo, saldo: awal, ket: rows.length ? 'Penyesuaian saldo (kas awal sesi diubah manual)' : 'Saldo awal' });
+                saldo = awal;
+            }
+            const m = Number(s.pemasukanKas) || 0; saldo += m;
+            rows.push({ jenis: 'masuk', tanggal: it.tanggal, jumlah: m, saldo, id: s.id, ref: s });
+        } else {
+            const e = it.ref, j = Number(e.jumlah) || 0; saldo -= j;
+            rows.push({ jenis: 'keluar', tanggal: it.tanggal, jumlah: j, saldo, id: e.id, ref: e });
+        }
+    });
+    return { rows, saldo };
+}
+function saldoPadaTanggal(ymd, excludeId) {
+    const { rows } = bangunMutasi(excludeId); let s = 0;
+    rows.forEach(r => { if (!ymd || r.tanggal <= ymd) s = r.saldo; });
+    return s;
+}
+
+function renderMutasi() {
+    const body = document.getElementById('mutasi-body'); if (!body) return;
+    const { rows, saldo } = bangunMutasi();
+    // pilihan bulan
+    const bulan = [...new Set(rows.map(r => r.tanggal.slice(0, 7)))].sort().reverse();
+    const sel = document.getElementById('filter-bulan');
+    if (filterBulan && !bulan.includes(filterBulan)) filterBulan = '';
+    sel.innerHTML = '<option value="">Semua bulan</option>' + bulan.map(b => `<option value="${b}" ${b === filterBulan ? 'selected' : ''}>${esc(labelBulan(b))}</option>`).join('');
+    document.getElementById('filter-jenis').value = filterJenis;
+
+    const periode = rows.filter(r => !filterBulan || r.tanggal.startsWith(filterBulan));
+    const masuk = periode.filter(r => r.jenis === 'masuk'), keluar = periode.filter(r => r.jenis === 'keluar');
+    const totMasuk = masuk.reduce((a, r) => a + r.jumlah, 0), totKeluar = keluar.reduce((a, r) => a + r.jumlah, 0);
+    document.getElementById('sum-saldo').textContent = formatRupiah(saldo);
+    document.getElementById('sum-masuk').textContent = formatRupiah(totMasuk);
+    document.getElementById('sum-keluar').textContent = formatRupiah(totKeluar);
+    document.getElementById('sum-masuk-sub').textContent = `${masuk.length} sesi${filterBulan ? ' · ' + labelBulan(filterBulan) : ''}`;
+    document.getElementById('sum-keluar-sub').textContent = `${keluar.length} pengeluaran${filterBulan ? ' · ' + labelBulan(filterBulan) : ''}`;
+
+    const tampil = periode.filter(r => filterJenis === 'semua' || r.jenis === filterJenis);   // urut lama -> baru, terbaru di bawah
+    document.getElementById('mutasi-count').textContent = `${tampil.length} baris`;
+    if (!tampil.length) {
+        body.innerHTML = `<tr><td colspan="6" class="sk-empty">Belum ada mutasi pada pilihan ini.</td></tr>`;
+    } else {
+        body.innerHTML = tampil.map(r => {
+            const t = tglPendek(r.tanggal);
+            let chip, ket, mob = '', cM = '', cK = '', aksi = '<span class="sk-dash">—</span>';
+            if (r.jenis === 'masuk') {
+                const s = r.ref, n = (s.pemainHadir || []).length;
+                chip = '<span class="sk-chip in">Pemasukan</span>';
+                ket = `<b>Sesi main</b> · ${n} pemain · ${fmtNum(s.totalKok || 0)} kok` + (s.alasanPemasukan ? `<small>Disesuaikan: ${esc(s.alasanPemasukan)}</small>` : '');
+                cM = `<span class="sk-in">+ ${formatRupiah(r.jumlah)}</span>`; mob = `<span class="sk-mob-amt sk-in">+ ${formatRupiah(r.jumlah)}</span>`;
+            } else if (r.jenis === 'keluar') {
+                const e = r.ref;
+                chip = '<span class="sk-chip out">Pengeluaran</span>';
+                ket = `<b>${esc(e.kategori || 'Lainnya')}</b><small>${esc(e.keterangan || '')}</small>`;
+                cK = `<span class="sk-out">&minus; ${formatRupiah(r.jumlah)}</span>`; mob = `<span class="sk-mob-amt sk-out">&minus; ${formatRupiah(r.jumlah)}</span>`;
+                aksi = `<button type="button" class="sk-act" onclick="editPengeluaran('${esc(e.id)}')">Ubah</button><button type="button" class="sk-act del" onclick="hapusPengeluaran('${esc(e.id)}')">Hapus</button>`;
+            } else {
+                chip = '<span class="sk-chip adj">Penyesuaian</span>'; ket = esc(r.ket);
+                if (r.delta >= 0) cM = `<span class="sk-adj">+ ${formatRupiah(r.delta)}</span>`; else cK = `<span class="sk-adj">&minus; ${formatRupiah(-r.delta)}</span>`;
+                mob = `<span class="sk-mob-amt sk-adj">${r.delta >= 0 ? '+' : '&minus;'} ${formatRupiah(Math.abs(r.delta))}</span>`;
+            }
+            return `<tr class="sk-row ${r.jenis}"><td class="sk-tgl"><b>${esc(t.a)}</b><small>${esc(t.b)}</small></td><td class="sk-ket">${chip}<div>${ket}</div>${mob}<div class="sk-mob-act">${aksi}</div></td><td class="r c-m">${cM}</td><td class="r c-k">${cK}</td><td class="r sk-saldo c-s">${formatRupiah(r.saldo)}</td><td class="sk-aksi c-a">${aksi}</td></tr>`;
+        }).join('');
+    }
+    document.getElementById('mutasi-foot').innerHTML = `<tr><td colspan="2">Selisih ${filterBulan ? esc(labelBulan(filterBulan)) : 'semua periode'}</td><td class="r sk-in c-m">+ ${formatRupiah(totMasuk)}</td><td class="r sk-out c-k">&minus; ${formatRupiah(totKeluar)}</td><td class="r sk-saldo c-s">${formatRupiah(totMasuk - totKeluar)}</td><td class="c-a"></td></tr>`;
+    const wrap = document.querySelector('.sk-tblwrap'); if (wrap) wrap.scrollTop = wrap.scrollHeight;   // tampilkan data terbaru (paling bawah)
+}
+function renderMutasiBila() { const v = document.getElementById('view-mutasi'); if (v && !v.classList.contains('hidden')) renderMutasi(); }
+function ubahFilterMutasi() {
+    filterBulan = document.getElementById('filter-bulan').value;
+    filterJenis = document.getElementById('filter-jenis').value;
+    renderMutasi();
+}
+
+// ---------- form pengeluaran ----------
+function tampilFormKeluar(on) {
+    document.getElementById('form-keluar').classList.toggle('hidden', !on);
+    document.getElementById('btn-toggle-keluar').classList.toggle('hidden', on);
+}
+function isiKategoriChips() {
+    document.getElementById('kat-keluar').innerHTML = KATEGORI_KELUAR.map(k => `<button type="button" class="sk-kat ${k === kategoriKeluar ? 'on' : ''}" onclick="pilihKategoriKeluar('${k}')">${k}</button>`).join('');
+}
+function pilihKategoriKeluar(k) { kategoriKeluar = (kategoriKeluar === k ? '' : k); isiKategoriChips(); }
+function bukaFormKeluar() {
+    idPengeluaranEditing = null; kategoriKeluar = '';
+    document.getElementById('input-tgl-keluar').value = tanggalLokal();
+    document.getElementById('input-jumlah-keluar').value = '';
+    document.getElementById('input-ket-keluar').value = '';
+    document.getElementById('err-keluar').classList.add('hidden');
+    document.getElementById('judul-form-keluar').textContent = 'Catat pengeluaran';
+    document.getElementById('btn-simpan-keluar').textContent = 'Simpan pengeluaran';
+    isiKategoriChips(); tampilFormKeluar(true); previewSaldoKeluar();
+    document.getElementById('form-keluar').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+function tutupFormKeluar() { idPengeluaranEditing = null; tampilFormKeluar(false); }
+function previewSaldoKeluar() {
+    const tgl = document.getElementById('input-tgl-keluar').value || tanggalLokal();
+    const j = parseFloat(document.getElementById('input-jumlah-keluar').value) || 0;
+    const sebelum = saldoPadaTanggal(tgl, idPengeluaranEditing);
+    document.getElementById('preview-saldo-keluar').innerHTML = `Saldo kas pada tanggal ini <b>${formatRupiah(sebelum)}</b> &rarr; setelah pengeluaran <b class="${sebelum - j < 0 ? 'sk-out' : ''}">${formatRupiah(sebelum - j)}</b>`;
+}
+function simpanPengeluaran() {
+    const tanggal = document.getElementById('input-tgl-keluar').value;
+    const jumlah = Math.round(parseFloat(document.getElementById('input-jumlah-keluar').value) || 0);
+    const ket = document.getElementById('input-ket-keluar').value.trim();
+    const err = document.getElementById('err-keluar');
+    let pesan = '';
+    if (!tanggal) pesan = 'Pilih tanggal pengeluaran.';
+    else if (jumlah <= 0) pesan = 'Isi jumlah pengeluaran lebih dari 0.';
+    else if (ket.length < 3) pesan = 'Isi keterangan pengeluaran (minimal 3 huruf).';
+    if (pesan) { err.textContent = pesan; err.classList.remove('hidden'); return; }
+    err.classList.add('hidden');
+
+    const lama = idPengeluaranEditing ? pengeluaranList.find(x => x.id === idPengeluaranEditing) : null;
+    const now = new Date().toISOString();
+    const data = { id: lama ? lama.id : 'keluar_' + Date.now(), jenis: 'pengeluaran', tanggal, jumlah, kategori: kategoriKeluar || 'Lainnya', keterangan: ket, createdAt: lama ? (lama.createdAt || now) : now, updatedAt: now };
+    if (lama) pengeluaranList = pengeluaranList.map(x => x.id === lama.id ? data : x); else pengeluaranList.unshift(data);
+    pengeluaranList = urutPengeluaran(pengeluaranList);
+    simpanPengeluaranKeStorage();
+    kirimKeCloud(KOL_KELUAR, data);
+    tampilFormKeluar(false); idPengeluaranEditing = null;
+    setKasAwalOtomatis(); renderMutasi();
+    skToast(lama ? 'Pengeluaran diperbarui' : 'Pengeluaran tersimpan');
+}
+function editPengeluaran(id) {
+    const e = pengeluaranList.find(x => x.id === id); if (!e) return;
+    idPengeluaranEditing = id; kategoriKeluar = e.kategori === 'Lainnya' ? 'Lainnya' : (KATEGORI_KELUAR.includes(e.kategori) ? e.kategori : '');
+    document.getElementById('input-tgl-keluar').value = e.tanggal;
+    document.getElementById('input-jumlah-keluar').value = e.jumlah;
+    document.getElementById('input-ket-keluar').value = e.keterangan || '';
+    document.getElementById('err-keluar').classList.add('hidden');
+    document.getElementById('judul-form-keluar').textContent = 'Ubah pengeluaran';
+    document.getElementById('btn-simpan-keluar').textContent = 'Simpan perubahan';
+    isiKategoriChips(); tampilFormKeluar(true); previewSaldoKeluar();
+    document.getElementById('form-keluar').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+function hapusPengeluaran(id) {
+    const e = pengeluaranList.find(x => x.id === id); if (!e) return;
+    showConfirm('Hapus Pengeluaran', `Hapus pengeluaran "${e.keterangan}" sebesar ${formatRupiah(e.jumlah)} dari HP dan cloud? Saldo kas akan dihitung ulang.`, () => {
+        pengeluaranList = pengeluaranList.filter(x => x.id !== id);
+        simpanPengeluaranKeStorage(); hapusDiCloud(KOL_KELUAR, id);
+        if (idPengeluaranEditing === id) tutupFormKeluar();
+        setKasAwalOtomatis(); renderMutasi();
+    });
+}
+
+// =====================================================================
+// FIREBASE (dimuat setelah admin membuka kunci)
 // =====================================================================
 const FIREBASE_CONFIG = {
     apiKey: "AIzaSyAmQ7JJQ32Ir7f4qKKVjk2tSOX8V0gl0i4",
@@ -2611,24 +2972,46 @@ async function skInitFirebase() {
         window.db = db; window.auth = auth; window.isFirebaseActive = true;
         skStatus('bg-emerald-400', 'Firebase Terhubung');
 
-        window.simpanKeFirebaseDoc = async function (dataSesi) {
-            try { await FS.setDoc(FS.doc(db, 'riwayat_transaksi', dataSesi.id), dataSesi, { merge: true }); }
-            catch (err) { console.warn("Data tersimpan aman di penyimpanan lokal HP:", err.message); }
+        // simpan / hapus dokumen di cloud (true = diterima cloud)
+        window.cloudSet = async (col, data) => {
+            try { await FS.setDoc(FS.doc(db, col, data.id), data, { merge: true }); return true; }
+            catch (err) { console.warn("Cloud menolak simpan, tersimpan di HP:", err.message); skStatus('bg-amber-400', 'Cloud menolak simpan (tersimpan di HP)'); return false; }
         };
+        window.cloudDelete = async (col, id) => {
+            try { await FS.deleteDoc(FS.doc(db, col, id)); return true; }
+            catch (err) { console.warn("Cloud menolak hapus:", err.message); skStatus('bg-amber-400', 'Cloud menolak hapus'); return false; }
+        };
+        window.simpanKeFirebaseDoc = d => window.cloudSet(KOL_RIWAYAT, d);
 
-        FS.onSnapshot(FS.collection(db, 'riwayat_transaksi'), snapshot => {
-            const dataFB = [];
-            snapshot.forEach(d => dataFB.push(d.data()));
-            if (dataFB.length > 0) {
-                dataFB.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-                riwayatTransaksi = dataFB;
-                localStorage.setItem(RIWAYAT_KEY, JSON.stringify(dataFB));
+        // riwayat transaksi
+        FS.onSnapshot(FS.collection(db, KOL_RIWAYAT), snapshot => {
+            const list = terapkanSnapshot(KOL_RIWAYAT, snapshot, () => riwayatTransaksi);
+            if (list.length > 0) {
+                list.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+                riwayatTransaksi = list;
+                localStorage.setItem(RIWAYAT_KEY, JSON.stringify(list));
                 renderRiwayatList();
                 setKasAwalOtomatis();   // paksa update kolom kas setelah data dari cloud masuk
+                renderMutasiBila();
             }
         }, error => {
             console.warn("Menggunakan penyimpanan lokal HP/Browser:", error.message);
             skStatus('bg-amber-400', 'Tersimpan di HP (Lokal)');
+        });
+
+        // pengeluaran kas
+        FS.onSnapshot(FS.collection(db, KOL_KELUAR), snapshot => {
+            const list = terapkanSnapshot(KOL_KELUAR, snapshot, () => pengeluaranList);
+            const dariServer = !(snapshot.metadata && snapshot.metadata.fromCache);
+            if (list.length > 0 || dariServer) {          // cloud kosong dari server = memang tidak ada pengeluaran
+                pengeluaranList = urutPengeluaran(list);
+                simpanPengeluaranKeStorage();
+                setKasAwalOtomatis();
+                renderMutasiBila();
+            }
+        }, error => {
+            console.warn("Pengeluaran: cloud tidak dapat dibaca:", error.message);
+            skStatus('bg-amber-400', 'Pengeluaran tersimpan di HP (cek aturan Firestore)');
         });
     } catch (e) {
         console.error("Gagal koneksi Firebase", e);
@@ -2637,7 +3020,7 @@ async function skInitFirebase() {
     }
 }
 
-Object.assign(window, { batalEditSesi, bukaModalPemain, editRevisiSesi, gantiTab, hapusSesiRiwayat, hitungTotal, simpanDataKeStorage, kembaliKeAbsen, kembalikanSemuaKokOtomatis, lanjutKeHitung, mintaResetHariIni, muatUlangDariSheet, pilihSemua, resetPemasukan, salinKeWA, salinWAById, simpanSesiKeRiwayat, tambahGuest, tutupModalPemain, ubahPemasukan, ubahTanggal });
+Object.assign(window, { batalEditSesi, bukaModalPemain, editRevisiSesi, gantiTab, hapusSesiRiwayat, hitungTotal, simpanDataKeStorage, kembaliKeAbsen, kembalikanSemuaKokOtomatis, lanjutKeHitung, mintaResetHariIni, muatUlangDariSheet, pilihSemua, resetPemasukan, salinKeWA, salinWAById, simpanSesiKeRiwayat, tambahGuest, tutupModalPemain, ubahPemasukan, ubahTanggal, bukaFormKeluar, tutupFormKeluar, pilihKategoriKeluar, previewSaldoKeluar, simpanPengeluaran, editPengeluaran, hapusPengeluaran, ubahFilterMutasi });
 })();
 </script>
 <!-- TEMA-TERANG-JS -->

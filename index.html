@@ -115,6 +115,12 @@
       .pod-meta { font-size: .8rem; }
     }
 
+    /* Penanda perubahan peringkat */
+    .mv { display: inline-flex; align-items: center; gap: .12rem; font: 700 .65rem/1 'Inter', Arial, sans-serif; letter-spacing: .02em; white-space: nowrap; }
+    .mv-up { color: #16a34a; } .mv-down { color: #e11d48; } .mv-same { color: #9ca3af; }
+    .mv-new { color: #0284c7; background: rgba(2,132,199,.12); padding: .18rem .4rem; border-radius: 9999px; font-size: .55rem; letter-spacing: .06em; }
+    .mv-lg { font-size: .7rem; } .mv-lg.mv-new { font-size: .6rem; }
+    @media (min-width: 640px) { .mv { font-size: .75rem; } .mv-new { font-size: .62rem; } .mv-lg { font-size: .85rem; } .mv-lg.mv-new { font-size: .68rem; } }
     .lb-row { transition: background .2s; }
     .lb-row:hover { background: rgba(255,255,255,.04); }
     .lb-row td:first-child { box-shadow: inset 3px 0 0 transparent; transition: box-shadow .2s; }
@@ -1167,6 +1173,8 @@ html body a.sp-card:hover{transform:translateY(-5px);box-shadow:var(--sh2);borde
     const SHEET_ROSTER  = { gid: '0' };
     const SHEET_BULANAN = { gid: '1721494674' };
     const SHEET_TAHUNAN = { gid: '1795527929' };
+    // Sheet4 (log poin per tanggal: tanggal | nama | bulan | tahun | win | lose). Dipakai untuk panah naik/turun peringkat.
+    const SHEET_POIN = { name: ['Sheet4', 'Sheet 4'] };
     // Sheet 7 (Hall of Fame). Jika nama tab berbeda, ganti dengan gid: { gid: '123456789' } (angka setelah gid= di URL sheet)
     const SHEET_HOF = { name: ['Sheet7', 'Sheet 7', 'Hall of Fame', 'HallOfFame'] };
     // Sheet 9 (Galeri: foto & video). Jika nama tab berbeda, ganti dengan gid: { gid: '123456789' }
@@ -1657,7 +1665,72 @@ let evTimer;
     const state = {
       bulanan: { boards: [], idx: 0, ranked: [] },
       tahunan: { boards: [], idx: 0, ranked: [] },
+      poin: [],
     };
+
+    // Sheet4 -> baris { d: Date, key: 'YYYY-MM-DD', m: bulan(0-11), y: tahun, nama, win, lose }
+    function parsePoin(grid) {
+      if (!grid || grid.length < 2) return [];
+      const h = grid[0].map(norm);
+      const ix = (re, def) => { const i = h.findIndex(x => re.test(x)); return i >= 0 ? i : def; };
+      const cT = ix(/^tanggal|^tgl|^date/, 0), cN = ix(/^nama|^name/, 1), cW = ix(/^win|^menang/, 4), cL = ix(/^lose|^kalah/, 5);
+      const out = [];
+      for (let i = 1; i < grid.length; i++) {
+        const r = grid[i]; if (!r) continue;
+        const d = parseTglHof(r[cT]); const nama = str(r[cN]);
+        if (!d || !nama) continue;
+        out.push({ d, key: d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate(), t: d.getTime(), m: d.getMonth(), y: d.getFullYear(), nama: norm(nama), win: toNum(r[cW]), lose: toNum(r[cL]) });
+      }
+      return out;
+    }
+
+    // Hitung perubahan peringkat. Bulanan: dibanding sebelum sesi main terakhir bulan itu.
+    // Tahunan: dibanding akhir bulan sebelumnya (total tahun dikurangi data bulan terbaru).
+    // Tanpa data pembanding -> tidak ada penanda sama sekali.
+    function computeMoves(kind, players, board) {
+      players.forEach(p => { p.mv = null; });
+      if (!board || !players.length || !state.poin.length) return;
+      let delta;
+      if (kind === 'bulanan') {
+        const lbl = String(board.label).toLowerCase();
+        const mi = BULAN.findIndex(b => lbl.includes(b) || lbl.includes(b.slice(0, 3)));
+        if (mi < 0) return;
+        let rows = state.poin.filter(r => r.m === mi);
+        if (!rows.length) return;
+        const yMax = Math.max(...rows.map(r => r.y)); rows = rows.filter(r => r.y === yMax);
+        const dates = [...new Set(rows.map(r => r.t))].sort((a, b) => a - b);
+        if (dates.length < 2) return;                       // baru satu sesi -> belum ada pembanding
+        delta = rows.filter(r => r.t === dates[dates.length - 1]);
+      } else {
+        const yr = parseInt(String(board.label).match(/\d{4}/)?.[0], 10);
+        if (!yr) return;
+        const rows = state.poin.filter(r => r.y === yr);
+        if (!rows.length) return;
+        const mMax = Math.max(...rows.map(r => r.m));
+        delta = rows.filter(r => r.m === mMax);
+      }
+      const dW = new Map(), dL = new Map();
+      delta.forEach(r => { dW.set(r.nama, (dW.get(r.nama) || 0) + r.win); dL.set(r.nama, (dL.get(r.nama) || 0) + r.lose); });
+      const prev = players.map((p, i) => {
+        const k = norm(p.nama), w = Math.max(0, p.menang - (dW.get(k) || 0)), l = Math.max(0, p.kalah - (dL.get(k) || 0));
+        return { p, i, w, l };
+      }).filter(x => x.w + x.l > 0)
+        .sort((a, b) => ((b.w - b.l) - (a.w - a.l)) || (b.w - a.w) || (a.i - b.i));
+      if (!prev.length) return;                              // tidak ada peringkat sebelumnya
+      const prevRank = new Map(prev.map((x, j) => [x.p, j + 1]));
+      players.forEach((p, i) => {
+        const pr = prevRank.get(p);
+        if (pr == null) p.mv = { t: 'new', n: 0 };
+        else { const d = pr - (i + 1); p.mv = d > 0 ? { t: 'up', n: d } : d < 0 ? { t: 'down', n: -d } : { t: 'same', n: 0 }; }
+      });
+    }
+
+    function mvHTML(mv, cls = '') {
+      if (!mv) return '';
+      const lbl = { up: `Naik ${mv.n} peringkat`, down: `Turun ${mv.n} peringkat`, same: 'Peringkat tetap', new: 'Baru di klasemen' }[mv.t];
+      const inner = mv.t === 'up' ? `<span aria-hidden="true">▲</span>${mv.n}` : mv.t === 'down' ? `<span aria-hidden="true">▼</span>${mv.n}` : mv.t === 'new' ? 'NEW' : '–';
+      return `<span class="mv mv-${mv.t} ${cls}" title="${lbl}" aria-label="${lbl}">${inner}</span>`;
+    }
 
     function defaultIndex(boards, kind) {
       const now = new Date();
@@ -1688,6 +1761,7 @@ let evTimer;
           <p class="pod-score">${signed(p.selisih)}</p>
           <p class="pod-label">Selisih</p>
           <p class="pod-meta"><span class="g">${p.menang}W</span> · <span class="r">${p.kalah}L</span> · ${p.winRate}%</p>
+          ${p.mv ? `<p class="mt-1.5">${mvHTML(p.mv, 'mv-lg')}</p>` : ''}
         </article>`;
       }).join('');
       return `<div class="grid items-end gap-2 sm:gap-5 max-w-3xl mx-auto" style="grid-template-columns:repeat(${slots.length},minmax(0,1fr))">${cards}</div>`;
@@ -1699,7 +1773,7 @@ let evTimer;
       else if (p.selisih < 0) selisihColor = 'text-rose-500 font-bold';
       return `
         <tr class="lb-row">
-          <td class="px-3 sm:px-6 py-4 text-center"><span class="rank-pill text-neutral-200">${rank}</span></td>
+          <td class="px-3 sm:px-6 py-4 text-center"><span class="rank-pill text-neutral-200">${rank}</span>${p.mv ? `<div class="mt-1 leading-none">${mvHTML(p.mv)}</div>` : ''}</td>
           <td class="px-3 py-4">
             <div class="flex items-center gap-3">
               <img src="${esc(photoFor(p.nama, 96))}" alt="Foto ${esc(p.nama)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${esc(avatar(p.nama, 96))}'" class="shrink-0 w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover ring-2 ring-brand-rose/50 bg-brand-card" />
@@ -1733,6 +1807,7 @@ let evTimer;
         .sort((a, b) => b.selisih - a.selisih || b.menang - a.menang);
 
       st.ranked = players;
+      computeMoves(kind, players, board);
 
       if (!players.length) {
         podEl.innerHTML = `<p class="text-center py-6 text-neutral-400">Belum ada data pertandingan.</p>`;
@@ -1829,6 +1904,36 @@ let evTimer;
       ctx.font = `${weight} ${s}px ${family}`;
       while (ctx.measureText(text).width > maxW && s > 14) { s -= 1; ctx.font = `${weight} ${s}px ${family}`; }
       return s;
+    }
+
+    // Penanda perubahan peringkat di kanvas poster
+    const MV_COL = { up: '#16A34A', down: '#E11D48', new: '#0284C7', same: '#9C8A92' };
+    function moveWidth(ctx, mv, fs) {
+      ctx.save(); ctx.font = `700 ${fs}px ${FONT_B}`;
+      const tw = mv.t === 'new' ? ctx.measureText('NEW').width : mv.t === 'same' ? ctx.measureText('–').width : ctx.measureText(String(mv.n)).width + fs * .75;
+      ctx.restore(); return tw + fs * 1.3;
+    }
+    function drawMove(ctx, mv, x, cy, fs) {
+      const w = moveWidth(ctx, mv, fs), h = fs * 1.7, col = MV_COL[mv.t];
+      ctx.save();
+      rr(ctx, x, cy - h / 2, w, h, h / 2);
+      ctx.fillStyle = 'rgba(255,255,255,.92)'; ctx.fill();
+      ctx.fillStyle = hexA(col, .12); ctx.fill();
+      ctx.lineWidth = 2; ctx.strokeStyle = hexA(col, .6); ctx.stroke();
+      ctx.fillStyle = col; ctx.font = `700 ${fs}px ${FONT_B}`; ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
+      const px = x + fs * .65;
+      if (mv.t === 'new') ctx.fillText('NEW', px, cy + 1);
+      else if (mv.t === 'same') ctx.fillText('–', px, cy + 1);
+      else {
+        const s = fs * .6, up = mv.t === 'up';
+        ctx.beginPath();
+        if (up) { ctx.moveTo(px, cy + s / 2); ctx.lineTo(px + s, cy + s / 2); ctx.lineTo(px + s / 2, cy - s / 2); }
+        else { ctx.moveTo(px, cy - s / 2); ctx.lineTo(px + s, cy - s / 2); ctx.lineTo(px + s / 2, cy + s / 2); }
+        ctx.closePath(); ctx.fill();
+        ctx.fillText(String(mv.n), px + s + fs * .15, cy + 1);
+      }
+      ctx.restore();
+      return w;
     }
 
     // Teks berwarna-warni dalam satu baris: segs = [{t, c}]
@@ -2217,6 +2322,7 @@ let evTimer;
         ctx.fillStyle = k.c; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = '#fff'; ctx.stroke();
         ctx.font = `700 30px ${FONT_D}`; ctx.fillStyle = '#fff'; ctx.textAlign = 'center';
         ctx.fillText(String(rank), k.cx, photoBottom + 10);
+        if (p.mv) drawMove(ctx, p.mv, k.cx + 26 + 12, photoBottom, 22);
         if (rank === 1) drawCrown(ctx, k.cx, cy - R - 4, S(64));
       });
 
@@ -2263,10 +2369,13 @@ let evTimer;
           nameMax = statRight - statW - 20 - nameX;
         }
 
-        // nama (kiri)
+        // nama (kiri) + penanda perubahan peringkat
+        const mvFs = compact ? 16 : 20;
+        if (p.mv) nameMax -= moveWidth(ctx, p.mv, mvFs) + 14;
         ctx.textAlign = 'left'; ctx.fillStyle = '#2B1B22';
         fitFont(ctx, p.nama.toUpperCase(), nameMax, compact ? 26 : 32, 500, FONT_D);
         ctx.fillText(p.nama.toUpperCase(), nameX, mid + (compact ? 9 : 11));
+        if (p.mv) drawMove(ctx, p.mv, nameX + ctx.measureText(p.nama.toUpperCase()).width + 14, mid, mvFs);
       });
 
       // ----- Footer: ikon Instagram + username -----
@@ -2334,7 +2443,7 @@ let evTimer;
     // MUAT SEMUA DATA
     // =====================================================================
     async function loadAll() {
-      const [sRoster, sBulanan, sTahunan, sHof, sEvent, sGaleri, sSponsor] = await Promise.allSettled([
+      const [sRoster, sBulanan, sTahunan, sHof, sEvent, sGaleri, sSponsor, sPoin] = await Promise.allSettled([
         fetchGrid(SHEET_ROSTER),
         fetchGrid(SHEET_BULANAN),
         fetchGrid(SHEET_TAHUNAN),
@@ -2342,7 +2451,10 @@ let evTimer;
         fetchGrid(SHEET_EVENT),
         fetchGrid(SHEET_GALERI),
         fetchGrid(SHEET_SPONSOR),
+        fetchGrid(SHEET_POIN),
       ]);
+      try { state.poin = sPoin.status === 'fulfilled' ? parsePoin(sPoin.value) : []; } catch (e) { state.poin = []; }
+      if (sPoin.status !== 'fulfilled') console.warn('Sheet4 (poin) gagal dimuat, panah peringkat tidak tampil:', sPoin.reason);
 
       // Roster dulu agar peta foto siap sebelum podium dirender
       if (sRoster.status === 'fulfilled') {

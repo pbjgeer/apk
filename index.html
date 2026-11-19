@@ -544,6 +544,98 @@ html body .rv{opacity:0}html body .rv.in{opacity:1;animation:lrvIn .6s cubic-bez
 html body :is(.export-btn,.ghost-btn,.ghost-pill,.tab-btn){position:relative;overflow:hidden}
 </style>
 <!-- /TEMA-TERANG -->
+<style id="mh-css">
+html body .lb-row.mh-click{cursor:pointer}
+html body .lb-row.mh-click:focus-visible{outline:2px solid var(--rose);outline-offset:-2px}
+.mh-chev{display:inline-block;margin-left:.1rem;font-size:.7rem;color:var(--mut);transition:transform .25s ease}
+.lb-row.mh-open .mh-chev,.pod.mh-open .mh-chev{transform:rotate(180deg)}
+html body .pod[data-nama]{cursor:pointer}
+html body .lb-row.mh-open{background:#FFF3F0!important}
+.mh-box{padding:1rem 1rem 1.2rem;background:#FFFBF9;border-top:1px dashed rgba(228,64,95,.3);text-align:left;white-space:normal}
+.mh-pod{max-width:48rem;margin:1rem auto 0;border-radius:1.2rem;overflow:hidden;border:1px solid var(--line);box-shadow:var(--sh)}
+.mh-ttl{display:flex;justify-content:space-between;align-items:center;gap:.5rem;font-weight:800;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);margin-bottom:.6rem}
+.mh-ttl span{color:var(--mut);font-weight:700;text-transform:none;letter-spacing:0}
+.mh-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.45rem}
+.mh-item{display:grid;grid-template-columns:4.3rem 1fr auto;align-items:center;gap:.6rem;padding:.55rem .75rem;border-radius:.9rem;background:#fff;border:1px solid var(--line);color:var(--ink);font-size:.82rem;line-height:1.3}
+.mh-d{font-weight:700;color:var(--mut);font-size:.72rem}
+.mh-m{display:flex;flex-wrap:wrap;align-items:center;gap:.25rem .45rem;min-width:0}
+.mh-m b{font-weight:800}
+.mh-sc{display:inline-flex;align-items:center;padding:.05rem .5rem;border-radius:999px;background:#FFF1F3;color:var(--rose);font-weight:800;font-size:.78rem;white-space:nowrap}
+.mh-vs{color:var(--mut)}
+.mh-p{font-weight:800;font-size:1rem;min-width:2.2rem;text-align:right;color:var(--mut)}
+.mh-p.pos{color:#D97706}.mh-p.neg{color:#E11D48}
+.mh-empty{padding:.4rem 0;color:var(--mut);font-size:.85rem}
+@media(max-width:420px){.mh-item{grid-template-columns:3.4rem 1fr auto;padding:.5rem .6rem;font-size:.78rem}}
+
+/* ===== H2H ===== */
+.h2h{padding:1rem .75rem 1.5rem;color:var(--ink)}
+@media(min-width:640px){.h2h{padding:1.5rem 1.5rem 2rem}}
+.h2h-top{display:grid;grid-template-columns:1fr minmax(6.2rem,9.5rem) 1fr;gap:.4rem;align-items:start}
+.h2h-side{display:flex;flex-direction:column;align-items:center;gap:.45rem;min-width:0}
+.h2h-pick-btn{border:0;background:none;padding:0;cursor:pointer;border-radius:50%;transition:transform .2s ease}
+.h2h-pick-btn:hover{transform:scale(1.04)}
+.h2h-pick-btn:focus-visible,.h2h-partner:focus-visible{outline:2px solid var(--rose);outline-offset:3px}
+.h2h-ph{display:flex;align-items:center;justify-content:center;width:5rem;height:5rem;border-radius:50%;object-fit:cover;border:3px solid var(--rose);background:#fff;box-shadow:var(--sh)}
+@media(min-width:640px){.h2h-ph{width:7.5rem;height:7.5rem}}
+.h2h-empty{border-style:dashed;color:var(--rose);font-size:2rem;font-weight:800;background:#FFF1F3}
+.h2h-name{max-width:100%;font-weight:800;font-size:.9rem;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-transform:uppercase;letter-spacing:.02em}
+.h2h-partner{display:inline-flex;align-items:center;gap:.3rem;max-width:100%;padding:.3rem .7rem;border-radius:999px;border:1px dashed rgba(228,64,95,.5);background:#fff;color:var(--rose);font-weight:700;font-size:.72rem;cursor:pointer;white-space:nowrap}
+.h2h-partner span{overflow:hidden;text-overflow:ellipsis}
+.h2h-partner img{width:1.2rem;height:1.2rem;border-radius:50%;object-fit:cover;flex:none}
+.h2h-partner:disabled{opacity:.4;cursor:not-allowed}
+.h2h-partner.on{border-style:solid;background:#FFF1F3}
+.h2h-mid{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.15rem;padding-top:.2rem}
+.h2h-vs{font-weight:900;font-size:1.4rem;color:var(--rose);letter-spacing:.06em}
+.h2h-cap{font-weight:800;font-size:.62rem;letter-spacing:.12em;color:var(--mut);margin-top:.35rem}
+.h2h-big{font-weight:900;font-size:1.5rem;line-height:1.1}
+.h2h-big.sm{font-size:1.05rem}
+.h2h-name.sub{font-size:.7rem;font-weight:700;color:var(--mut);text-transform:none;letter-spacing:0;margin-top:-.15rem}
+.h2h-pick-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.h2h-pbtn{margin-top:.35rem}
+.h2h-hint{font-size:.72rem;color:var(--mut);max-width:7rem}
+.h2h-sep{opacity:.45;font-weight:700;padding:0 .15rem}
+.h2h-rows{margin-top:1.1rem;display:flex;flex-direction:column;gap:.5rem}
+.h2h-row{display:grid;grid-template-columns:1fr minmax(6.2rem,9.5rem) 1fr;gap:.4rem;align-items:center;padding:.65rem .5rem;border-radius:1rem;background:#fff;border:1px solid var(--line);box-shadow:var(--sh)}
+.h2h-lb{text-align:center;font-weight:800;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.h2h-v{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.25rem;font-weight:900;font-size:1.15rem;min-width:0}
+.h2h-v .g{color:#16A34A}.h2h-v .d{color:#6B7280}.h2h-v .r{color:#E11D48}.h2h-v small{font-size:.65rem;color:var(--mut);font-weight:700}
+.h2h-dot{display:inline-flex;align-items:center;justify-content:center;width:1.45rem;height:1.45rem;border-radius:50%;color:#fff;font-weight:800;font-size:.68rem}
+.h2h-dot.W{background:#16A34A}.h2h-dot.L{background:#E11D48}.h2h-dot.D{background:#9CA3AF}
+.h2h-list{margin-top:1.2rem}
+.h2h-empty-msg{margin-top:1rem;text-align:center;color:var(--mut);font-size:.9rem;padding:1rem}
+.h2h-ov{position:fixed;inset:0;z-index:120;display:flex;align-items:flex-end;justify-content:center;background:rgba(43,27,34,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.h2h-ov[hidden]{display:none}
+@media(min-width:640px){.h2h-ov{align-items:center}}
+.h2h-pn{width:100%;max-width:34rem;max-height:84vh;display:flex;flex-direction:column;gap:.7rem;padding:1rem;border-radius:1.4rem 1.4rem 0 0;background:#FFF8F5;color:var(--ink);box-shadow:0 -10px 40px rgba(43,27,34,.25)}
+@media(min-width:640px){.h2h-pn{border-radius:1.4rem}}
+.h2h-pn-h{display:flex;justify-content:space-between;align-items:center;font-size:.95rem}
+.h2h-pn-h button{border:0;background:#fff;border-radius:50%;width:2rem;height:2rem;cursor:pointer;color:var(--ink);font-weight:800;box-shadow:var(--sh)}
+.h2h-pn input{width:100%;padding:.6rem .9rem;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink);font-size:.9rem}
+.h2h-pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(5.2rem,1fr));gap:.6rem;overflow-y:auto;padding:.2rem .1rem}
+.h2h-pi{display:flex;flex-direction:column;align-items:center;gap:.25rem;padding:.5rem .2rem;border-radius:1rem;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;font-size:.72rem;font-weight:700;min-width:0}
+.h2h-pi img{width:3.4rem;height:3.4rem;border-radius:50%;object-fit:cover;border:2px solid rgba(228,64,95,.5)}
+.h2h-pi span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.h2h-pi:hover:not(:disabled){border-color:var(--rose);background:#FFF1F3}
+.h2h-pi.sel{border-color:var(--rose);background:#FFF1F3}
+.h2h-pi:disabled{opacity:.35;cursor:not-allowed}
+.h2h-clear{border:1px solid var(--line);background:#fff;border-radius:999px;padding:.55rem 1rem;font-weight:700;font-size:.8rem;color:var(--rose);cursor:pointer}
+.pl-ring,.pod-img,.lb-row img{cursor:pointer}
+.pmenu{position:fixed;z-index:130;display:flex;flex-direction:column;gap:.35rem;min-width:9.5rem;padding:.6rem;border-radius:1.1rem;background:#FFF8F5;border:1px solid var(--line);box-shadow:0 14px 40px rgba(43,27,34,.28);color:var(--ink)}
+.pmenu[hidden]{display:none}
+.pmenu-n{max-width:12rem;padding:.1rem .3rem .25rem;font-weight:800;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pmenu button{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:.5rem .9rem;font-weight:800;font-size:.82rem;cursor:pointer;text-align:center}
+.pmenu button[data-act="rank"]:not(:disabled){background:var(--grad)!important;color:#fff!important;border-color:transparent}
+.pmenu button:hover:not(:disabled){border-color:var(--rose)}
+.pmenu button:disabled{opacity:.45;cursor:not-allowed}
+.h2h-rec{width:100%;margin-top:.35rem;text-align:center}
+.h2h-oprec{margin-top:1rem}
+.h2h-rec-l{display:block;font-size:.58rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+.h2h-rec-c{display:flex;flex-wrap:wrap;gap:.3rem;justify-content:center;margin-top:.3rem}
+.h2h-chip{display:inline-flex;align-items:center;gap:.25rem;max-width:100%;padding:.15rem .5rem .15rem .15rem;border-radius:999px;border:1px solid rgba(228,64,95,.4);background:#fff;color:var(--ink);font-weight:700;font-size:.68rem;cursor:pointer}
+.h2h-chip img{width:1.3rem;height:1.3rem;border-radius:50%;object-fit:cover;flex:none}
+.h2h-chip small{color:var(--mut);font-weight:700}
+.h2h-chip:hover{border-color:var(--rose);background:#FFF1F3}
+</style>
 <style id="sponsor-css">
 .sp-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:.9rem}
 html body .sp-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.55rem;width:9.5rem;min-height:7.5rem;padding:1rem .8rem;border-radius:1.3rem;background:#fff;border:1px solid var(--line);box-shadow:var(--sh);text-align:center;text-decoration:none;color:var(--ink);transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .25s}
@@ -812,6 +904,8 @@ html body a.sp-card:hover{transform:translateY(-5px);box-shadow:var(--sh2);borde
                 class="tab-btn flex-1 sm:flex-none px-5 sm:px-8 py-3 rounded-lg font-semibold">Bulanan</button>
         <button role="tab" id="tab-tahunan" data-tab="tahunan" aria-controls="panel-tahunan" aria-selected="false"
                 class="tab-btn flex-1 sm:flex-none px-5 sm:px-8 py-3 rounded-lg font-semibold">Tahunan</button>
+        <button role="tab" id="tab-h2h" data-tab="h2h" aria-controls="panel-h2h" aria-selected="false"
+                class="tab-btn flex-1 sm:flex-none px-5 sm:px-8 py-3 rounded-lg font-semibold">H2H</button>
       </div>
     </section>
 
@@ -837,7 +931,7 @@ html body a.sp-card:hover{transform:translateY(-5px);box-shadow:var(--sh2);borde
                 <th scope="col" class="px-2 py-4 text-center text-green-400" title="Set Menang (Win)">W</th>
                 <th scope="col" class="px-2 py-4 text-center text-rose-500" title="Set Kalah (Lose)">L</th>
                 <th scope="col" class="px-3 py-4 text-center text-sky-400" title="Win Rate (Persentase Kemenangan)">WR %</th>
-                <th scope="col" class="px-3 sm:px-6 py-4 text-right text-brand-rose">Selisih (+/-)</th>
+                <th scope="col" class="px-3 sm:px-6 py-4 text-right text-brand-rose" title="Poin = Total Set Menang dikurangi Total Set Kalah">Poin</th>
               </tr>
             </thead>
             <tbody id="lb-bulanan" class="divide-y divide-white/5"></tbody>
@@ -901,7 +995,7 @@ html body a.sp-card:hover{transform:translateY(-5px);box-shadow:var(--sh2);borde
                 <th scope="col" class="px-2 py-4 text-center text-green-400" title="Set Menang (Win)">W</th>
                 <th scope="col" class="px-2 py-4 text-center text-rose-500" title="Set Kalah (Lose)">L</th>
                 <th scope="col" class="px-3 py-4 text-center text-sky-400" title="Win Rate (Persentase Kemenangan)">WR %</th>
-                <th scope="col" class="px-3 sm:px-6 py-4 text-right text-brand-rose">Selisih (+/-)</th>
+                <th scope="col" class="px-3 sm:px-6 py-4 text-right text-brand-rose" title="Poin = Total Set Menang dikurangi Total Set Kalah">Poin</th>
               </tr>
             </thead>
             <tbody id="lb-tahunan" class="divide-y divide-white/5"></tbody>
@@ -940,6 +1034,16 @@ html body a.sp-card:hover{transform:translateY(-5px);box-shadow:var(--sh2);borde
           </div>
           <p id="status-tahunan" class="mt-3 text-xs text-neutral-400 min-h-[1rem]" aria-live="polite"></p>
         </div>
+      </div>
+    </section>
+
+    <!-- Panel H2H -->
+    <section id="panel-h2h" role="tabpanel" aria-labelledby="tab-h2h" class="hidden max-w-5xl mx-auto px-2 sm:px-6 py-10">
+      <div class="rounded-2xl bg-brand-card border border-white/10 shadow-2xl overflow-hidden">
+        <div class="flex items-center justify-end gap-2 px-4 sm:px-6 pt-4">
+          <button onclick="loadAll()" class="text-xs flex items-center gap-1 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full transition">Refresh Data</button>
+        </div>
+        <div id="h2h-root" class="h2h"></div>
       </div>
     </section>
     </div>
@@ -1175,6 +1279,8 @@ html body a.sp-card:hover{transform:translateY(-5px);box-shadow:var(--sh2);borde
     const SHEET_TAHUNAN = { gid: '1795527929' };
     // Sheet4 (log poin per tanggal: tanggal | nama | bulan | tahun | win | lose). Dipakai untuk panah naik/turun peringkat.
     const SHEET_POIN = { name: ['Sheet4', 'Sheet 4'] };
+    // Sheet6 (data per pertandingan: ID Match | Tanggal | Bulan | Tahun | Tim A1 | Tim A2 | Skor A | Tim B1 | Tim B2 | Skor B). Dipakai untuk riwayat 10 pertandingan terakhir saat nama pemain diklik.
+    const SHEET_MATCH = { name: ['Sheet6', 'Sheet 6'] };
     // Sheet 7 (Hall of Fame). Jika nama tab berbeda, ganti dengan gid: { gid: '123456789' } (angka setelah gid= di URL sheet)
     const SHEET_HOF = { name: ['Sheet7', 'Sheet 7', 'Hall of Fame', 'HallOfFame'] };
     // Sheet 9 (Galeri: foto & video). Jika nama tab berbeda, ganti dengan gid: { gid: '123456789' }
@@ -1246,6 +1352,7 @@ html body a.sp-card:hover{transform:translateY(-5px);box-shadow:var(--sh2);borde
       document.querySelectorAll('.tab-btn').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === name)));
       document.getElementById('panel-bulanan').classList.toggle('hidden', name !== 'bulanan');
       document.getElementById('panel-tahunan').classList.toggle('hidden', name !== 'tahunan');
+      document.getElementById('panel-h2h').classList.toggle('hidden', name !== 'h2h');
     }
 
     function route() {
@@ -1253,6 +1360,7 @@ html body a.sp-card:hover{transform:translateY(-5px);box-shadow:var(--sh2);borde
       let sub = 'bulanan';
       if (hash === 'klasemen') hash = 'leaderboard';
       if (hash === 'leaderboard-tahunan') { hash = 'leaderboard'; sub = 'tahunan'; }
+      if (hash === 'leaderboard-h2h') { hash = 'leaderboard'; sub = 'h2h'; }
       let anchor = null;
       if (hash === 'hof') { hash = 'galeri'; anchor = 'hofSection'; }   // tautan lama #hof -> halaman gabungan
       if (!pages.some(p => p.dataset.page === hash)) hash = 'home';
@@ -1279,7 +1387,7 @@ html body a.sp-card:hover{transform:translateY(-5px);box-shadow:var(--sh2);borde
     });
 
     document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => {
-      location.hash = btn.dataset.tab === 'tahunan' ? '#leaderboard-tahunan' : '#leaderboard';
+      location.hash = btn.dataset.tab === 'tahunan' ? '#leaderboard-tahunan' : btn.dataset.tab === 'h2h' ? '#leaderboard-h2h' : '#leaderboard';
     }));
 
     const toTop = document.getElementById('toTop');
@@ -1518,8 +1626,8 @@ html body a.sp-card:hover{transform:translateY(-5px);box-shadow:var(--sh2);borde
       el.innerHTML = list.map(p => {
         const src = p.foto ? driveThumb(p.foto) : avatar(p.nama, 256);
         return `
-        <article class="pl text-center">
-          <div class="pl-ring mx-auto w-full max-w-[9rem]">
+        <article class="pl text-center" data-nama="${esc(p.nama)}">
+          <div class="pl-ring mx-auto w-full max-w-[9rem]" role="button" tabindex="0" aria-haspopup="true" aria-label="Menu ${esc(p.nama)}: Ranking dan H2H" title="Klik foto untuk Ranking / H2H">
             <img src="${esc(src)}" alt="Foto ${esc(p.nama)}" width="144" height="144" loading="lazy"
                  onerror="this.onerror=null;this.src='${esc(avatar(p.nama, 256))}'" />
           </div>
@@ -1666,6 +1774,8 @@ let evTimer;
       bulanan: { boards: [], idx: 0, ranked: [] },
       tahunan: { boards: [], idx: 0, ranked: [] },
       poin: [],
+      match: [],
+      roster: [],
     };
 
     // Sheet4 -> baris { d: Date, key: 'YYYY-MM-DD', m: bulan(0-11), y: tahun, nama, win, lose }
@@ -1682,6 +1792,352 @@ let evTimer;
         out.push({ d, key: d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate(), t: d.getTime(), m: d.getMonth(), y: d.getFullYear(), nama: norm(nama), win: toNum(r[cW]), lose: toNum(r[cL]) });
       }
       return out;
+    }
+
+    // Sheet6 -> pertandingan { d, id, nama[], a:[A1,A2], b:[B1,B2], sa, sb }
+    function parseMatches(grid) {
+      if (!grid || grid.length < 2) return [];
+      const h = grid[0].map(norm);
+      const ix = (name, def) => { const i = h.indexOf(name); return i >= 0 ? i : def; };
+      const cI = ix('id match', 0), cT = ix('tanggal', 1), cA1 = ix('tim a1', 4), cA2 = ix('tim a2', 5), cSA = ix('skor a', 6), cB1 = ix('tim b1', 7), cB2 = ix('tim b2', 8), cSB = ix('skor b', 9);
+      const out = [];
+      for (let i = 1; i < grid.length; i++) {
+        const r = grid[i]; if (!r) continue;
+        const d = parseTglHof(r[cT]); if (!d) continue;
+        const a = [str(r[cA1]), str(r[cA2])].filter(Boolean), b = [str(r[cB1]), str(r[cB2])].filter(Boolean);
+        if (!a.length || !b.length) continue;
+        const idn = Number(str(r[cI]).replace(/\D/g, '')) || 0;
+        out.push({ d, t: d.getTime(), idn, row: i, a, b, sa: toNum(r[cSA]), sb: toNum(r[cSB]) });
+      }
+      return out;
+    }
+
+    // 10 pertandingan terakhir seorang pemain (terbaru dulu). Poin = skor tim pemain dikurangi skor lawan.
+    function lastMatches(nama, n = 10) {
+      const key = norm(nama), res = [];
+      for (const m of state.match) {
+        const inA = m.a.some(x => norm(x) === key), inB = !inA && m.b.some(x => norm(x) === key);
+        if (!inA && !inB) continue;
+        const own = inA ? m.a : m.b, opp = inA ? m.b : m.a, so = inA ? m.sa : m.sb, sp = inA ? m.sb : m.sa;
+        res.push({ t: m.t, idn: m.idn, row: m.row, own, opp, so, sp, poin: so - sp });
+      }
+      res.sort((x, y) => y.t - x.t || y.idn - x.idn || y.row - x.row);
+      return res.slice(0, n);
+    }
+
+    const tglPendek = d => `${d.getDate()} ${BULAN[d.getMonth()][0].toUpperCase() + BULAN[d.getMonth()].slice(1, 3)} ${d.getFullYear()}`;
+
+    function matchDetailHTML(nama) {
+      const list = lastMatches(nama);
+      const key = norm(nama);
+      const names = arr => arr.map(x => norm(x) === key ? `<b>${esc(x)}</b>` : esc(x)).join(' &amp; ');
+      const body = list.length ? `<ul class="mh-list">${list.map(m => {
+        const cls = m.poin > 0 ? 'pos' : m.poin < 0 ? 'neg' : '';
+        return `<li class="mh-item"><span class="mh-d">${tglPendek(new Date(m.t))}</span><span class="mh-m"><span>${names(m.own)}</span><span class="mh-sc">${m.so} – ${m.sp}</span><span class="mh-vs">vs</span><span>${m.opp.map(esc).join(' &amp; ')}</span></span><span class="mh-p ${cls}" title="Poin">${signed(m.poin)}</span></li>`;
+      }).join('')}</ul>` : `<p class="mh-empty">Belum ada data pertandingan untuk pemain ini.</p>`;
+      return `<div class="mh-ttl">${list.length} Pertandingan Terakhir · ${esc(nama)}<span>Poin = skor tim − skor lawan</span></div>${body}`;
+    }
+
+    function toggleTableDetail(tr, nama, colspan) {
+      const tbody = tr.parentNode, next = tr.nextElementSibling;
+      const wasOpen = next && next.classList.contains('lb-detail');
+      tbody.querySelectorAll('tr.lb-detail').forEach(x => x.remove());
+      tbody.querySelectorAll('tr.mh-open').forEach(x => { x.classList.remove('mh-open'); x.setAttribute('aria-expanded', 'false'); });
+      if (wasOpen) return;
+      const d = document.createElement('tr');
+      d.className = 'lb-detail';
+      d.innerHTML = `<td colspan="${colspan}" class="p-0"><div class="mh-box">${matchDetailHTML(nama)}</div></td>`;
+      tr.after(d);
+      tr.classList.add('mh-open'); tr.setAttribute('aria-expanded', 'true');
+    }
+
+    function togglePodiumDetail(card, podEl) {
+      const panel = podEl.querySelector('.mh-pod'); if (!panel) return;
+      const nama = card.dataset.nama;
+      const same = panel.dataset.nama === nama && !panel.hidden;
+      podEl.querySelectorAll('.pod.mh-open').forEach(x => x.classList.remove('mh-open'));
+      if (same) { panel.hidden = true; panel.dataset.nama = ''; return; }
+      panel.innerHTML = `<div class="mh-box">${matchDetailHTML(nama)}</div>`;
+      panel.dataset.nama = nama; panel.hidden = false;
+      card.classList.add('mh-open');
+    }
+
+    // =====================================================================
+    // H2H: bandingkan dua pemain (opsional dengan partner) dari Sheet6
+    // =====================================================================
+    const h2h = { L: '', R: '', PL: '', PR: '' };
+    const H2H_FORM_N = 5;          // jumlah dot W/L "pertandingan terakhir" per pemain
+    let h2hPickSlot = null;
+
+    function h2hPlayers() {
+      const seen = new Set(), out = [];
+      const add = n => { const k = norm(n); if (!k || seen.has(k)) return; seen.add(k); out.push(n); };
+      state.roster.forEach(add);
+      state.match.forEach(m => m.a.concat(m.b).forEach(add));
+      return out.sort((a, b) => a.localeCompare(b, 'id'));
+    }
+
+    // Pertandingan di mana kiri (L) dan kanan (R) berada di tim berlawanan. Partner kosong = partner siapa pun; terisi = pasangan persis.
+    function h2hMatches() {
+      const kL = norm(h2h.L), kR = norm(h2h.R), kPL = norm(h2h.PL), kPR = norm(h2h.PR), res = [];
+      const has = (arr, k) => arr.some(x => norm(x) === k);
+      for (const m of state.match) {
+        let own, opp, so, sp;
+        if (has(m.a, kL) && has(m.b, kR)) { own = m.a; opp = m.b; so = m.sa; sp = m.sb; }
+        else if (has(m.b, kL) && has(m.a, kR)) { own = m.b; opp = m.a; so = m.sb; sp = m.sa; }
+        else continue;
+        if (kPL && !(own.length === 2 && has(own, kPL))) continue;
+        if (kPR && !(opp.length === 2 && has(opp, kPR))) continue;
+        res.push({ t: m.t, idn: m.idn, row: m.row, own, opp, so, sp, poin: so - sp });
+      }
+      res.sort((x, y) => y.t - x.t || y.idn - x.idn || y.row - x.row);
+      return res;
+    }
+
+    function h2hRecord(nama, yearOnly) {
+      const yr = new Date().getFullYear(), r = { w: 0, l: 0, d: 0 };
+      lastMatches(nama, Infinity).forEach(m => {
+        if (yearOnly && new Date(m.t).getFullYear() !== yr) return;
+        if (m.so > m.sp) r.w++; else if (m.so < m.sp) r.l++; else r.d++;
+      });
+      return r;
+    }
+
+    const h2hWL = r => `<span class="g">${r.w}</span><span class="h2h-sep">-</span><span class="d">${r.d}</span><span class="h2h-sep">-</span><span class="r">${r.l}</span>`;
+    const h2hDots = n => {
+      const l = lastMatches(n, H2H_FORM_N);
+      return l.length ? l.map(m => { const c = m.so > m.sp ? 'W' : m.so < m.sp ? 'L' : 'D'; return `<span class="h2h-dot ${c}" title="${c === 'W' ? 'Menang' : c === 'L' ? 'Kalah' : 'Seri'}">${c}</span>`; }).join('') : '–';
+    };
+
+    // Rekomendasi: 3 teratas. kind 'opp' = lawan yang paling sering dihadapi, 'par' = rekan yang paling sering berpasangan (Sheet6).
+    function h2hRec(nama, kind) {
+      const k = norm(nama), mp = new Map();
+      const used = new Set(Object.values(h2h).filter(Boolean).map(norm));
+      for (const m of state.match) {
+        const inA = m.a.some(x => norm(x) === k), inB = !inA && m.b.some(x => norm(x) === k);
+        if (!inA && !inB) continue;
+        const grp = kind === 'opp' ? (inA ? m.b : m.a) : (inA ? m.a : m.b);
+        grp.forEach(x => {
+          const key = norm(x); if (!key || key === k || used.has(key)) return;
+          const e = mp.get(key) || { n: x, c: 0 }; e.c++; mp.set(key, e);
+        });
+      }
+      return [...mp.values()].sort((a, b) => b.c - a.c || a.n.localeCompare(b.n, 'id')).slice(0, 3);
+    }
+    function h2hRecHTML(label, list, slot, cls = '') {
+      if (!list.length) return '';
+      return `<div class="h2h-rec ${cls}"><span class="h2h-rec-l">${label}</span><div class="h2h-rec-c">${list.map(e =>
+        `<button type="button" class="h2h-chip" data-rec="${slot}" data-name="${esc(e.n)}" title="${e.c}×"><img src="${esc(photoFor(e.n, 48))}" alt="" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${esc(avatar(e.n, 48))}'" /><span>${esc(e.n)}</span><small>${e.c}×</small></button>`).join('')}</div></div>`;
+    }
+
+    function h2hSideHTML(slot, pslot) {
+      const n = h2h[slot], p = h2h[pslot];
+      const photo = n
+        ? `<img class="h2h-ph" src="${esc(photoFor(n, 320))}" alt="Foto ${esc(n)}" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${esc(avatar(n, 320))}'" />`
+        : `<span class="h2h-ph h2h-empty" aria-hidden="true">+</span>`;
+      const pphoto = p
+        ? `<img class="h2h-ph part" src="${esc(photoFor(p, 320))}" alt="Foto ${esc(p)}" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${esc(avatar(p, 320))}'" />`
+        : `<span class="h2h-ph h2h-empty part" aria-hidden="true">+</span>`;
+      return `<div class="h2h-side">
+        <button type="button" class="h2h-pick-btn" data-slot="${slot}" aria-label="${n ? 'Ganti pemain ' + esc(n) : 'Pilih pemain'}">${photo}</button>
+        <div class="h2h-name" title="${esc(n)}">${n ? esc(n) : 'Pilih Pemain'}</div>
+        <button type="button" class="h2h-pick-btn h2h-pbtn" data-slot="${pslot}" ${n ? '' : 'disabled'} aria-label="${p ? 'Ganti partner ' + esc(p) : 'Pilih partner (opsional)'}">${pphoto}</button>
+        <div class="h2h-name sub" title="${esc(p)}">${p ? esc(p) : 'Partner (opsional)'}</div>
+        ${n && !p ? h2hRecHTML('Rekomendasi partner', h2hRec(n, 'par'), pslot) : ''}
+      </div>`;
+    }
+
+    function renderH2H() {
+      const root = document.getElementById('h2h-root'); if (!root) return;
+      const both = h2h.L && h2h.R;
+      let mid, list = [];
+      if (both) {
+        list = h2hMatches();
+        const wL = list.filter(m => m.so > m.sp).length, wR = list.filter(m => m.so < m.sp).length, dr = list.length - wL - wR;
+        const pL = list.reduce((a, m) => a + m.so, 0), pR = list.reduce((a, m) => a + m.sp, 0);   // Poin = total skor set
+        mid = `<div class="h2h-vs">VS</div>
+          <div class="h2h-cap">WIN</div><div class="h2h-big">${wL}<span class="h2h-sep">:</span>${wR}</div>
+          <div class="h2h-cap">DRAW</div><div class="h2h-big sm">${dr}</div>
+          <div class="h2h-cap">POIN</div><div class="h2h-big sm">${pL}<span class="h2h-sep">:</span>${pR}</div>`;
+      } else {
+        mid = `<div class="h2h-vs">VS</div><p class="h2h-hint">Pilih pemain kiri dan kanan</p>`;
+      }
+      const row = (label, l, r) => `<div class="h2h-row"><div class="h2h-v">${l}</div><div class="h2h-lb">${label}</div><div class="h2h-v">${r}</div></div>`;
+      const sv = (n, fn) => n ? fn(n) : '–';
+      const rows = (h2h.L || h2h.R) ? `<div class="h2h-rows">
+        ${row('All-time W-D-L', sv(h2h.L, n => h2hWL(h2hRecord(n, false))), sv(h2h.R, n => h2hWL(h2hRecord(n, false))))}
+        ${row('This year W-D-L', sv(h2h.L, n => h2hWL(h2hRecord(n, true))), sv(h2h.R, n => h2hWL(h2hRecord(n, true))))}
+        ${row('Pertandingan terakhir', sv(h2h.L, h2hDots), sv(h2h.R, h2hDots))}
+      </div>` : '';
+
+      let listHTML = '';
+      if (both) {
+        const kL = norm(h2h.L), kR = norm(h2h.R);
+        const nm = (arr, k) => arr.map(x => norm(x) === k ? `<b>${esc(x)}</b>` : esc(x)).join(' &amp; ');
+        const lbl = `${esc(h2h.L)}${h2h.PL ? ' &amp; ' + esc(h2h.PL) : ''} vs ${esc(h2h.R)}${h2h.PR ? ' &amp; ' + esc(h2h.PR) : ''}`;
+        const body = list.length ? `<ul class="mh-list">${list.slice(0, 10).map(m => {
+          const c = m.so > m.sp ? 'W' : m.so < m.sp ? 'L' : 'D';
+          return `<li class="mh-item"><span class="mh-d">${tglPendek(new Date(m.t))}</span><span class="mh-m"><span>${nm(m.own, kL)}</span><span class="mh-sc">${m.so} – ${m.sp}</span><span class="mh-vs">vs</span><span>${nm(m.opp, kR)}</span></span><span class="h2h-dot ${c}">${c}</span></li>`;
+        }).join('')}</ul>` : `<p class="mh-empty">Belum pernah bertemu${(h2h.PL || h2h.PR) ? ' dengan susunan pasangan ini' : ''}.</p>`;
+        listHTML = `<div class="h2h-list"><div class="mh-ttl">${Math.min(list.length, 10)} Pertandingan Terakhir H2H<span>${lbl} · hasil dari sisi kiri</span></div>${body}</div>`;
+      } else {
+        listHTML = `<p class="h2h-empty-msg">Pilih dua pemain untuk melihat riwayat pertemuan mereka.</p>`;
+      }
+      const opRec = (h2h.L && !h2h.R) ? h2hRecHTML('Rekomendasi lawan', h2hRec(h2h.L, 'opp'), 'R', 'h2h-oprec')
+        : (h2h.R && !h2h.L) ? h2hRecHTML('Rekomendasi lawan', h2hRec(h2h.R, 'opp'), 'L', 'h2h-oprec') : '';
+      root.innerHTML = `<div class="h2h-top">${h2hSideHTML('L', 'PL')}<div class="h2h-mid">${mid}</div>${h2hSideHTML('R', 'PR')}</div>${opRec}${rows}${listHTML}`;
+    }
+
+    function renderH2HPicker() {
+      const slot = h2hPickSlot; if (!slot) return;
+      const q = norm(document.getElementById('h2hQ').value);
+      const used = new Set(Object.entries(h2h).filter(([k, v]) => k !== slot && v).map(([, v]) => norm(v)));
+      const grid = document.getElementById('h2hGrid');
+      const list = h2hPlayers().filter(n => !q || norm(n).includes(q));
+      grid.innerHTML = list.length ? list.map(n => `<button type="button" class="h2h-pi ${norm(n) === norm(h2h[slot]) ? 'sel' : ''}" data-name="${esc(n)}" ${used.has(norm(n)) ? 'disabled' : ''}><img src="${esc(photoFor(n, 120))}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${esc(avatar(n, 120))}'" /><span>${esc(n)}</span></button>`).join('')
+        : '<p class="mh-empty" style="grid-column:1/-1">Nama tidak ditemukan.</p>';
+    }
+
+    function openH2HPicker(slot) {
+      h2hPickSlot = slot;
+      const ttl = { L: 'Pilih pemain kiri', R: 'Pilih pemain kanan', PL: 'Pilih partner ' + h2h.L, PR: 'Pilih partner ' + h2h.R }[slot];
+      document.getElementById('h2hPickT').textContent = ttl;
+      document.getElementById('h2hClear').textContent = (slot === 'PL' || slot === 'PR') ? 'Tanpa partner (lawan dengan partner siapa pun)' : 'Kosongkan pilihan';
+      document.getElementById('h2hClear').hidden = !h2h[slot];
+      const q = document.getElementById('h2hQ'); q.value = '';
+      document.getElementById('h2hPick').hidden = false;
+      renderH2HPicker();
+      setTimeout(() => q.focus({ preventScroll: true }), 30);
+    }
+    function closeH2HPicker() { h2hPickSlot = null; document.getElementById('h2hPick').hidden = true; }
+    function setH2H(slot, name) {
+      h2h[slot] = name;
+      if (slot === 'L') h2h.PL = ''; if (slot === 'R') h2h.PR = '';   // ganti pemain utama -> partner direset
+      if (!name && slot === 'L') h2h.PL = ''; if (!name && slot === 'R') h2h.PR = '';
+      closeH2HPicker(); renderH2H();
+    }
+
+    function initH2H() {
+      const ov = document.createElement('div');
+      ov.id = 'h2hPick'; ov.className = 'h2h-ov'; ov.hidden = true;
+      ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'Pilih pemain');
+      ov.innerHTML = `<div class="h2h-pn"><div class="h2h-pn-h"><b id="h2hPickT"></b><button type="button" data-close aria-label="Tutup">✕</button></div>
+        <input id="h2hQ" type="search" placeholder="Cari nama…" autocomplete="off" aria-label="Cari nama pemain" />
+        <div id="h2hGrid" class="h2h-pg"></div>
+        <button type="button" id="h2hClear" class="h2h-clear"></button></div>`;
+      document.body.appendChild(ov);
+      ov.addEventListener('click', e => {
+        if (e.target === ov || e.target.closest('[data-close]')) { closeH2HPicker(); return; }
+        const it = e.target.closest('.h2h-pi'); if (it && !it.disabled) { setH2H(h2hPickSlot, it.dataset.name); return; }
+        if (e.target.closest('#h2hClear')) setH2H(h2hPickSlot, '');
+      });
+      document.getElementById('h2hQ').addEventListener('input', renderH2HPicker);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && h2hPickSlot) closeH2HPicker(); });
+      document.getElementById('h2h-root').addEventListener('click', e => {
+        const c = e.target.closest('[data-rec]'); if (c) { setH2H(c.dataset.rec, c.dataset.name); return; }
+        const b = e.target.closest('[data-slot]'); if (b && !b.disabled) openH2HPicker(b.dataset.slot);
+      });
+      renderH2H();
+    }
+
+    // =====================================================================
+    // MENU FOTO PLAYER: klik foto -> tombol Ranking & H2H
+    // =====================================================================
+    function goLb(sub) {
+      const h = sub === 'tahunan' ? '#leaderboard-tahunan' : sub === 'h2h' ? '#leaderboard-h2h' : '#leaderboard';
+      if (location.hash === h) route(); else location.hash = h;
+    }
+    // Bulanan dulu; jika pemain tidak ada di papan bulanan yang tampil, pakai Tahunan.
+    function rankKindFor(nama) {
+      const k = norm(nama), has = kind => (state[kind].ranked || []).some(p => norm(p.nama) === k);
+      return has('bulanan') ? 'bulanan' : has('tahunan') ? 'tahunan' : null;
+    }
+    function goRank(nama) {
+      const kind = rankKindFor(nama); if (!kind) return;
+      goLb(kind);
+      setTimeout(() => {
+        const key = norm(nama), pod = document.getElementById('pod-' + kind), tbody = document.getElementById('lb-' + kind);
+        let target = [...pod.querySelectorAll('.pod[data-nama]')].find(c => norm(c.dataset.nama) === key);
+        if (target) {
+          const panel = pod.querySelector('.mh-pod');
+          if (!(panel && !panel.hidden && norm(panel.dataset.nama) === key)) togglePodiumDetail(target, pod);
+        } else {
+          target = [...tbody.querySelectorAll('tr.lb-row')].find(r => norm(r.dataset.nama) === key);
+          const nx = target && target.nextElementSibling;
+          if (target && !(nx && nx.classList.contains('lb-detail'))) toggleTableDetail(target, target.dataset.nama, 7);
+        }
+        if (target) { target.style.scrollMarginTop = '6rem'; target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      }, 220);
+    }
+    function goH2H(nama) {
+      h2h.L = nama; h2h.R = ''; h2h.PL = ''; h2h.PR = '';
+      closeH2HPicker(); renderH2H(); goLb('h2h');
+      setTimeout(() => { const r = document.getElementById('h2h-root'); r.style.scrollMarginTop = '7rem'; r.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 220);
+    }
+    function initPlayerMenu() {
+      const menu = document.createElement('div');
+      menu.id = 'pmenu'; menu.className = 'pmenu'; menu.hidden = true; menu.setAttribute('role', 'menu');
+      menu.innerHTML = '<div class="pmenu-n"></div><button type="button" role="menuitem" data-act="rank">🏆 Ranking</button><button type="button" role="menuitem" data-act="h2h">⚔️ H2H</button>';
+      document.body.appendChild(menu);
+      let cur = null, anchor = null;
+      const close = () => { menu.hidden = true; cur = anchor = null; };
+      const open = (nama, el) => {
+        cur = nama; anchor = el;
+        menu.querySelector('.pmenu-n').textContent = nama;
+        const rb = menu.querySelector('[data-act="rank"]'), has = !!rankKindFor(nama);
+        rb.disabled = !has; rb.title = has ? '' : 'Belum ada di leaderboard';
+        menu.hidden = false;
+        const r = el.getBoundingClientRect(), w = menu.offsetWidth, h = menu.offsetHeight;
+        const left = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), innerWidth - w - 8);
+        let top = r.bottom + 8; if (top + h > innerHeight - 8) top = Math.max(8, r.top - h - 8);
+        menu.style.left = left + 'px'; menu.style.top = top + 'px';
+      };
+      const find = t => {
+        let el = t.closest('#rosterGrid .pl-ring'); if (el) return { el, nama: el.closest('.pl').dataset.nama };
+        el = t.closest('.pod-img'); if (el) { const c = el.closest('.pod[data-nama]'); if (c) return { el, nama: c.dataset.nama }; }
+        el = t.closest('tr.lb-row img'); if (el) return { el, nama: el.closest('tr.lb-row').dataset.nama };
+        return null;
+      };
+      document.addEventListener('click', e => {
+        if (menu.contains(e.target)) {
+          const b = e.target.closest('[data-act]'); if (!b || b.disabled) return;
+          const n = cur; close(); if (b.dataset.act === 'rank') goRank(n); else goH2H(n);
+          return;
+        }
+        const f = find(e.target);
+        if (f && f.nama) {
+          e.preventDefault(); e.stopPropagation();   // foto tidak ikut membuka/menutup riwayat pertandingan
+          if (anchor === f.el && !menu.hidden) close(); else open(f.nama, f.el);
+          return;
+        }
+        if (!menu.hidden) close();
+      }, true);
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && !menu.hidden) { const a = anchor; close(); if (a && a.focus) a.focus(); return; }
+        if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('#rosterGrid .pl-ring')) {
+          e.preventDefault(); open(e.target.closest('.pl').dataset.nama, e.target);
+        }
+      });
+      addEventListener('scroll', () => { if (!menu.hidden) close(); }, { passive: true });
+      addEventListener('resize', close);
+    }
+
+    function initMatchHistory() {
+      ['bulanan', 'tahunan'].forEach(kind => {
+        const tbody = document.getElementById('lb-' + kind), podEl = document.getElementById('pod-' + kind);
+        const onTable = e => {
+          if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
+          const tr = e.target.closest('tr.lb-row'); if (!tr || !tr.dataset.nama) return;
+          e.preventDefault(); toggleTableDetail(tr, tr.dataset.nama, 7);
+        };
+        tbody.addEventListener('click', onTable); tbody.addEventListener('keydown', onTable);
+        const onPod = e => {
+          if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
+          const card = e.target.closest('.pod[data-nama]'); if (!card) return;
+          e.preventDefault(); togglePodiumDetail(card, podEl);
+        };
+        podEl.addEventListener('click', onPod); podEl.addEventListener('keydown', onPod);
+      });
     }
 
     // Hitung perubahan peringkat. Bulanan: dibanding sebelum sesi main terakhir bulan itu.
@@ -1751,15 +2207,15 @@ let evTimer;
       const cards = slots.map(([p, rank]) => {
         const c = PODIUM[rank];
         return `
-        <article class="pod ${c.cls}">
+        <article class="pod ${c.cls}" data-nama="${esc(p.nama)}" role="button" tabindex="0" aria-label="Lihat 10 pertandingan terakhir ${esc(p.nama)}">
           <span class="pod-rank" aria-hidden="true">${rank}</span>
           <span class="pod-medal" aria-hidden="true">${c.medal}</span>
           ${rank === 1 ? '<span class="pod-crown" aria-hidden="true">👑</span>' : ''}
           <img class="pod-img" src="${esc(photoFor(p.nama, 400))}" alt="Foto ${esc(p.nama)}" loading="lazy" referrerpolicy="no-referrer"
                onerror="this.onerror=null;this.src='${esc(avatar(p.nama, 400))}'" />
-          <h3 class="pod-name ${c.txt}" title="${esc(p.nama)}">${esc(p.nama)}</h3>
+          <h3 class="pod-name ${c.txt}" title="${esc(p.nama)}">${esc(p.nama)} <span class="mh-chev" aria-hidden="true">▼</span></h3>
           <p class="pod-score">${signed(p.selisih)}</p>
-          <p class="pod-label">Selisih</p>
+          <p class="pod-label">Poin</p>
           <p class="pod-meta"><span class="g">${p.menang}W</span> · <span class="r">${p.kalah}L</span> · ${p.winRate}%</p>
           ${p.mv ? `<p class="mt-1.5">${mvHTML(p.mv, 'mv-lg')}</p>` : ''}
         </article>`;
@@ -1772,12 +2228,12 @@ let evTimer;
       if (p.selisih > 0) selisihColor = 'text-amber-400 font-bold';
       else if (p.selisih < 0) selisihColor = 'text-rose-500 font-bold';
       return `
-        <tr class="lb-row">
+        <tr class="lb-row mh-click" data-nama="${esc(p.nama)}" tabindex="0" role="button" aria-expanded="false" title="Klik untuk melihat 10 pertandingan terakhir">
           <td class="px-3 sm:px-6 py-4 text-center"><span class="rank-pill text-neutral-200">${rank}</span>${p.mv ? `<div class="mt-1 leading-none">${mvHTML(p.mv)}</div>` : ''}</td>
           <td class="px-3 py-4">
             <div class="flex items-center gap-3">
               <img src="${esc(photoFor(p.nama, 96))}" alt="Foto ${esc(p.nama)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${esc(avatar(p.nama, 96))}'" class="shrink-0 w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover ring-2 ring-brand-rose/50 bg-brand-card" />
-              <span class="font-display uppercase tracking-wide text-base sm:text-lg font-medium">${esc(p.nama)}</span>
+              <span class="font-display uppercase tracking-wide text-base sm:text-lg font-medium">${esc(p.nama)}</span><span class="mh-chev" aria-hidden="true">▼</span>
             </div>
           </td>
           <td class="px-2 py-4 text-center font-semibold text-neutral-300">${p.pertandingan}</td>
@@ -1816,7 +2272,7 @@ let evTimer;
         return;
       }
 
-      podEl.innerHTML = podiumHTML(players.slice(0, 3));
+      podEl.innerHTML = podiumHTML(players.slice(0, 3)) + '<div class="mh-pod" hidden></div>';
       const rest = players.slice(3);
       wrapEl.classList.toggle('hidden', rest.length === 0);
       tbody.innerHTML = rest.map((p, i) => rowHTML(p, i + 4)).join('');
@@ -2442,8 +2898,12 @@ let evTimer;
     // =====================================================================
     // MUAT SEMUA DATA
     // =====================================================================
+    initMatchHistory();
+    initH2H();
+    initPlayerMenu();
+
     async function loadAll() {
-      const [sRoster, sBulanan, sTahunan, sHof, sEvent, sGaleri, sSponsor, sPoin] = await Promise.allSettled([
+      const [sRoster, sBulanan, sTahunan, sHof, sEvent, sGaleri, sSponsor, sPoin, sMatch] = await Promise.allSettled([
         fetchGrid(SHEET_ROSTER),
         fetchGrid(SHEET_BULANAN),
         fetchGrid(SHEET_TAHUNAN),
@@ -2452,16 +2912,23 @@ let evTimer;
         fetchGrid(SHEET_GALERI),
         fetchGrid(SHEET_SPONSOR),
         fetchGrid(SHEET_POIN),
+        fetchGrid(SHEET_MATCH),
       ]);
       try { state.poin = sPoin.status === 'fulfilled' ? parsePoin(sPoin.value) : []; } catch (e) { state.poin = []; }
       if (sPoin.status !== 'fulfilled') console.warn('Sheet4 (poin) gagal dimuat, panah peringkat tidak tampil:', sPoin.reason);
 
+      try { state.match = sMatch.status === 'fulfilled' ? parseMatches(sMatch.value) : []; } catch (e) { state.match = []; }
+      if (sMatch.status !== 'fulfilled') console.warn('Sheet6 (pertandingan) gagal dimuat, riwayat pertandingan kosong:', sMatch.reason);
+
+      renderH2H();
       // Roster dulu agar peta foto siap sebelum podium dirender
       if (sRoster.status === 'fulfilled') {
         const list = extractRoster(sRoster.value);
+        state.roster = list.map(p => p.nama);
         photoMap.clear();
         list.forEach(p => { if (p.foto) photoMap.set(norm(p.nama), p.foto); });
         renderRoster(list);
+        renderH2H();
       } else {
         console.error('Roster error:', sRoster.reason);
         document.getElementById('rosterGrid').innerHTML = `<p class="col-span-full text-center py-10 text-rose-500">Gagal mengambil data player (${esc(sRoster.reason.message)}).</p>`;

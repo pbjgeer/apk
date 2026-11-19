@@ -460,7 +460,7 @@ html body .sk-mob-act{display:none}
     <p class="font-display uppercase tracking-[0.25em] text-xs sm:text-sm text-brand-rose">Season 2026</p>
     <h1 class="mt-2 font-display font-bold uppercase text-4xl sm:text-6xl leading-tight">Input &amp; <span class="text-brand-rose">Recap</span></h1>
     <div class="mt-4 h-1 w-20 bg-brand-maroon rounded mx-auto sm:mx-0"></div>
-    <p class="mt-5 max-w-2xl text-neutral-300 sm:text-lg mx-auto sm:mx-0">Catat skor harian, verifikasi, rekap kok &amp; kas (Sirekap), lalu unduh poster recap seluruh pertandingan per hari.</p>
+    <p class="mt-5 max-w-2xl text-neutral-300 sm:text-lg mx-auto sm:mx-0">Catat skor harian, verifikasi, rekap kok &amp; kas, lalu unduh poster recap seluruh pertandingan per hari.</p>
   </div>
 </section>
 <div class="max-w-5xl mx-auto px-4 sm:px-6 py-10 w-full">
@@ -471,7 +471,7 @@ html body .sk-mob-act{display:none}
             <button role="tab" id="btnPlayer" onclick="switchTab('player')" aria-selected="true" class="tab-btn px-4 sm:px-6 py-2.5 font-semibold">Pemain</button>
             <button role="tab" id="btnRecap" onclick="switchTab('recap')" aria-selected="false" class="tab-btn px-4 sm:px-6 py-2.5 font-semibold">Match Recap</button>
             <button role="tab" id="btnAdmin" onclick="switchTab('admin')" aria-selected="false" class="tab-btn px-4 sm:px-6 py-2.5 font-semibold">Admin</button>
-            <button role="tab" id="btnSirekap" onclick="switchTab('sirekap')" aria-selected="false" class="tab-btn px-4 sm:px-6 py-2.5 font-semibold">Sirekap<span class="lock-ic" aria-hidden="true"> 🔒</span></button>
+            <button role="tab" id="btnSirekap" onclick="switchTab('sirekap')" aria-selected="false" class="tab-btn px-4 sm:px-6 py-2.5 font-semibold">Kok<span class="lock-ic" aria-hidden="true"> 🔒</span></button>
         </div>
     </div>
     
@@ -569,7 +569,7 @@ html body .sk-mob-act{display:none}
     <div id="sirekapView" class="hidden space-y-8">
         <div id="sirekapLogin" class="max-w-md mx-auto glass-card p-8 text-center">
             <span class="text-4xl mb-4 block" aria-hidden="true">🔒</span>
-            <h2 class="font-display uppercase text-2xl font-bold tracking-wide mb-2">Sirekap Admin</h2>
+            <h2 class="font-display uppercase text-2xl font-bold tracking-wide mb-2">Kok Admin</h2>
             <p class="text-sm text-neutral-400 mb-6">Rekap kok dan kas hanya bisa dibuka admin. Password sama dengan tab Admin.</p>
             <input type="password" id="sirekapPwd" placeholder="Masukkan Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')checkAdmin('sirekap')" class="w-full rounded-xl px-4 py-3 text-white text-center tracking-widest mb-4 outline-none">
             <button onclick="checkAdmin('sirekap')" class="export-btn w-full py-3 block text-center !rounded-xl border-0">Buka Kunci</button>
@@ -605,7 +605,7 @@ html body .sk-mob-act{display:none}
       <div class="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 class="font-display uppercase text-2xl font-bold tracking-wide text-brand-rose">Langkah 1 &middot; Kehadiran</h2>
-          <p class="text-sm text-neutral-400 mt-1">Pilih tanggal. Pemain yang main di hari itu (Sheet 6) otomatis tercatat hadir.</p>
+          <p class="text-sm text-neutral-400 mt-1">Pilih tanggal. Pemain yang main di hari itu otomatis tercatat hadir.</p>
         </div>
         <button onclick="mintaResetHariIni()" class="ghost-btn sm">Reset hari ini</button>
       </div>
@@ -621,8 +621,8 @@ html body .sk-mob-act{display:none}
       </div>
 
       <div class="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-white/5 px-4 py-3">
-        <p id="sheet-status" class="text-xs text-neutral-300 min-h-[1rem] flex-1" aria-live="polite">Memuat data Sheet 6...</p>
-        <button onclick="muatUlangDariSheet()" class="ghost-btn sm">Muat dari Sheet 6</button>
+        <p id="sheet-status" class="text-xs text-neutral-300 min-h-[1rem] flex-1" aria-live="polite">Memuat data pertandingan...</p>
+        <button onclick="muatUlangDariSheet()" class="ghost-btn sm">Muat ulang data</button>
       </div>
 
       <div>
@@ -828,7 +828,7 @@ html body .sk-mob-act{display:none}
                 <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
                     <div>
                         <h2 class="font-display uppercase text-2xl font-bold tracking-wide">Kelola Match Recap</h2>
-                        <p class="text-xs text-neutral-400 mt-1">Ubah pemain, skor, atau tanggal, atau hapus match. Setiap perubahan otomatis menarik kembali poin lama dari klasemen.</p>
+                        <p class="text-xs text-neutral-400 mt-1">Ubah pemain (nama bisa diketik manual), skor, atau tanggal, geser urutan, atau hapus match. Setiap perubahan otomatis menarik kembali poin lama dari klasemen.</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-2">
                         <input type="date" id="mgDate" class="rounded-lg px-3 py-1.5 text-white outline-none text-sm">
@@ -898,6 +898,7 @@ html body .sk-mob-act{display:none}
                             <input type="number" id="a_scoreB" class="w-full bg-black/50 border border-white/5 rounded-lg px-3 py-2 text-neutral-400 font-bold outline-none cursor-not-allowed text-center" readonly required placeholder="Klik skor di atas">
                         </div>
                     </div>
+                    <button type="button" id="btnSingle_a_" onclick="toggleSingle('a_')" aria-pressed="false" class="ghost-btn w-full !rounded-xl">Kondisi khusus: hanya 1 game (1 – 0 tetap valid)</button>
                     <button type="submit" class="export-btn w-full py-4 text-center block !text-lg !rounded-xl shadow-lg border-0 bg-brand-maroon hover:bg-brand-rose">Input Langsung ke Valid</button>
                 </form>
             </div>
@@ -947,8 +948,16 @@ html body .sk-mob-act{display:none}
                 <h3 class="font-display uppercase text-xl font-bold tracking-wide text-white">Pilih Pemain</h3>
                 <button onclick="closePlayerModal()" class="text-neutral-400 hover:text-brand-rose text-3xl font-bold transition">&times;</button>
             </div>
-            <div id="playerGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 overflow-y-auto pr-2 pb-4">
+            <div id="playerGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 overflow-y-auto pr-2 pb-4 flex-1 min-h-0 content-start">
                 <!-- Grid diisi JS -->
+            </div>
+            <div id="guestPrompt" class="hidden border-t border-white/10 pt-3 mt-2 space-y-3">
+                <p class="text-sm text-neutral-300">Nama untuk <b id="guestPromptLabel" class="text-amber-300">Fulan 1</b> <span class="text-neutral-500 text-xs">(opsional, tetap berstatus tamu dan tidak masuk leaderboard)</span></p>
+                <input type="text" id="guestNameInput" maxlength="24" autocomplete="off" placeholder="Ketik nama tamu, atau kosongkan" onkeydown="if(event.key==='Enter'){event.preventDefault();confirmGuestName();}" class="w-full rounded-xl px-4 py-2.5 text-white text-sm outline-none">
+                <div class="flex gap-2 justify-end">
+                    <button type="button" onclick="cancelGuestName()" class="ghost-btn sm">Batal</button>
+                    <button type="button" onclick="confirmGuestName()" class="export-btn sm">Pakai</button>
+                </div>
             </div>
         </div>
     </div>
@@ -962,6 +971,7 @@ html body .sk-mob-act{display:none}
   </div>
 </footer>
 <!-- MODAL PILIH PEMAIN -->
+<datalist id="dlPlayers"></datalist>
 <div id="skPlayerModal" class="hidden fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4 backdrop-blur-md">
   <div class="glass-card w-full max-w-2xl p-6 flex flex-col h-[82vh]">
     <div class="flex justify-between items-center mb-3 border-b border-white/10 pb-3">
@@ -1057,6 +1067,33 @@ html body .sk-mob-act{display:none}
     let recapMatches = [];
     let ADMIN_PASS = '';
 
+    // Tamu dengan nama manual: statusnya tetap tamu (dikirim lewat data.tamu), tidak masuk leaderboard.
+    const GUEST_KEY = 'jgeer_guest_names_v1';
+    const guestSet = new Set();
+    try { JSON.parse(localStorage.getItem(GUEST_KEY) || '[]').forEach(n => guestSet.add(n)); } catch (e) {}
+    function rememberGuest(n) { guestSet.add(norm(n)); try { localStorage.setItem(GUEST_KEY, JSON.stringify([...guestSet].slice(-200))); } catch (e) {} }
+    const isRosterMember = n => globalPlayers.some(p => norm(p.name) === norm(n)) || photoMap.has(norm(n));
+    function isGuestName(n) { n = str(n); if (!n) return false; if (GUEST_NAMES.includes(n)) return true; return !isRosterMember(n) && guestSet.has(norm(n)); }
+    function fillPlayerDatalist() {
+        const dl = document.getElementById('dlPlayers'); if (!dl) return;
+        dl.innerHTML = [...new Set([...globalPlayers.map(p => p.name), ...GUEST_NAMES])].map(n => `<option value="${esc(n)}"></option>`).join('');
+    }
+    // Menentukan status nama yang diketik manual (edit admin): roster = pemain, selain itu = tamu
+    function resolveName(raw) {
+        const n = str(raw).replace(/\s+/g, ' ').slice(0, 24);
+        if (!n) return { err: 'Nama pemain tidak boleh kosong.' };
+        const g = GUEST_NAMES.find(x => norm(x) === norm(n)); if (g) return { name: g, guest: true, unfamiliar: false };
+        const m = globalPlayers.find(x => norm(x.name) === norm(n)); if (m) return { name: m.name, guest: false, unfamiliar: false };
+        if (!globalPlayers.length) return { err: 'Daftar pemain belum termuat. Muat ulang halaman lalu coba lagi.' };
+        return { name: n, guest: true, unfamiliar: !guestSet.has(norm(n)) };
+    }
+    function konfirmasiTamu(res) {
+        const unf = res.filter(x => x.unfamiliar).map(x => x.name);
+        if (unf.length && !confirm(`Nama berikut tidak ada di daftar pemain dan akan disimpan sebagai TAMU (tidak masuk leaderboard):\n${[...new Set(unf)].join(', ')}\n\nLanjutkan?`)) return false;
+        res.forEach(x => { if (x.guest && !GUEST_NAMES.includes(x.name)) rememberGuest(x.name); });
+        return true;
+    }
+
     function showLoading(show) { document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none'; }
     
     // Inisialisasi
@@ -1076,7 +1113,7 @@ html body .sk-mob-act{display:none}
         });
     }
 
-    function populateSelects(playersData) { globalPlayers = playersData; }   // foto diambil dari roster (GitHub), bukan dari Drive
+    function populateSelects(playersData) { globalPlayers = playersData; fillPlayerDatalist(); }   // foto diambil dari roster (GitHub), bukan dari Drive
 
     function findTables(grid) {
         const tables = [];
@@ -1097,7 +1134,7 @@ html body .sk-mob-act{display:none}
         try {
             const list = extractRoster(await fetchGrid({ gid: '0' }));
             photoMap.clear(); list.forEach(p => { if (p.foto) photoMap.set(norm(p.nama), p.foto); });
-            if (!globalPlayers.length) globalPlayers = list.map(p => ({ name: p.nama }));
+            if (!globalPlayers.length) { globalPlayers = list.map(p => ({ name: p.nama })); fillPlayerDatalist(); }
         } catch (e) { console.warn('Roster gagal dimuat:', e); }
     }
 
@@ -1107,11 +1144,13 @@ html body .sk-mob-act{display:none}
     function openPlayerModal(targetId) {
         currentSelectTarget = targetId;
         renderPlayerGrid();
+        document.getElementById('guestPrompt').classList.add('hidden');
         document.getElementById('playerModal').classList.remove('hidden');
     }
 
     function closePlayerModal() {
         document.getElementById('playerModal').classList.add('hidden');
+        document.getElementById('guestPrompt').classList.add('hidden');
         currentSelectTarget = "";
     }
 
@@ -1129,13 +1168,13 @@ html body .sk-mob-act{display:none}
 
         const listAll = [...globalPlayers, ...GUEST_NAMES.map(n => ({ name: n, guest: true }))];
         listAll.forEach((p, idx) => {
-            if (p.guest && (idx === 0 || !listAll[idx - 1].guest)) grid.innerHTML += `<p class="col-span-full font-display uppercase tracking-widest text-xs text-amber-300 pt-2 border-t border-white/10">Tamu <span class="text-neutral-400 normal-case tracking-normal">(hasil tamu tidak dicatat)</span></p>`;
+            if (p.guest && (idx === 0 || !listAll[idx - 1].guest)) grid.innerHTML += `<p class="col-span-full font-display uppercase tracking-widest text-xs text-amber-300 pt-2 border-t border-white/10">Tamu <span class="text-neutral-400 normal-case tracking-normal">(ketuk untuk isi nama sendiri · hasil tamu tidak dicatat)</span></p>`;
             const isSelected = selectedNames.includes(p.name);
             const bgClass = isSelected ? "bg-black/80 opacity-40 cursor-not-allowed border-white/5" : "bg-black/40 hover:bg-brand-maroon/50 cursor-pointer border-white/10 hover:border-brand-rose";
             const src = p.guest ? avatar(p.name, 256) : photoFor(p.name, 256);
             
             const cardHtml = `
-                <div onclick="${isSelected ? '' : `selectPlayer('${p.name}', '${src}')`}" 
+                <div onclick="${isSelected ? '' : p.guest ? `askGuestName('${p.name}')` : `selectPlayer('${p.name}', '${src}')`}" 
                      class="flex flex-col items-center p-3 border rounded-xl transition ${bgClass} ${p.guest ? 'border-dashed' : ''}">
                     <img src="${esc(src)}" loading="lazy" referrerpolicy="no-referrer" class="w-14 h-14 rounded-full object-cover mb-2 border border-white/20 shadow-lg bg-black">
                     <span class="font-display uppercase tracking-wider text-xs text-center font-bold ${isSelected ? 'text-neutral-500' : 'text-white'} leading-tight">${esc(p.name)}</span>
@@ -1153,11 +1192,51 @@ html body .sk-mob-act{display:none}
         closePlayerModal();
     }
 
+    function askGuestName(base) {
+        document.getElementById('guestPromptLabel').textContent = base;
+        const inp = document.getElementById('guestNameInput'); inp.value = '';
+        inp.dataset.base = base;
+        document.getElementById('guestPrompt').classList.remove('hidden');
+        setTimeout(() => inp.focus(), 50);
+    }
+    function cancelGuestName() { document.getElementById('guestPrompt').classList.add('hidden'); }
+    function confirmGuestName() {
+        const inp = document.getElementById('guestNameInput');
+        let n = inp.value.replace(/\s+/g, ' ').trim().slice(0, 24);
+        if (!n) n = inp.dataset.base || 'Fulan 1';
+        else if (!GUEST_NAMES.includes(n) && isRosterMember(n)) { alert(`"${n}" sudah ada di daftar pemain. Pilih dari daftar pemain supaya masuk leaderboard, atau pakai nama lain untuk tamu.`); return; }
+        const prefix = currentSelectTarget.substring(0, 2);
+        const others = ['tA_p1', 'tA_p2', 'tB_p1', 'tB_p2'].map(id => prefix + id).filter(id => id !== currentSelectTarget).map(id => document.getElementById(id).value);
+        if (others.some(o => norm(o) === norm(n))) { alert('Nama ini sudah dipakai di match ini.'); return; }
+        if (!GUEST_NAMES.includes(n)) rememberGuest(n);
+        selectPlayer(n, avatar(n, 256));
+    }
+
+    // Kondisi khusus (admin): hanya 1 game, skor 1 - 0 / 0 - 1 tetap valid
+    const singleMode = { p_: false, a_: false };
+    function setSingle(prefix, on) {
+        singleMode[prefix] = on;
+        ['A', 'B'].forEach(t => {
+            document.getElementById(prefix + 'score' + t).value = '';
+            const b2 = document.getElementById(`btn-${prefix}${t}-2`); if (b2) b2.style.display = on ? 'none' : '';
+        });
+        resetScoreButtons(prefix);
+        const btn = document.getElementById('btnSingle_' + prefix);
+        if (btn) {
+            btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+            btn.textContent = on ? '✓ Kondisi khusus aktif: 1 game saja (1 – 0)' : 'Kondisi khusus: hanya 1 game (1 – 0 tetap valid)';
+            btn.style.background = on ? '#D6455D' : ''; btn.style.color = on ? '#fff' : ''; btn.style.borderColor = on ? '#D6455D' : '';
+        }
+    }
+    function toggleSingle(prefix) { setSingle(prefix, !singleMode[prefix]); }
+
     function setScore(prefix, team, val) {
         const opponent = team === 'A' ? 'B' : 'A';
+        if (singleMode[prefix] && val === 2) val = 1;
         document.getElementById(prefix + 'score' + team).value = val;
         
-        if (val === 2) document.getElementById(prefix + 'score' + opponent).value = 0;
+        if (singleMode[prefix]) document.getElementById(prefix + 'score' + opponent).value = val === 1 ? 0 : 1;
+        else if (val === 2) document.getElementById(prefix + 'score' + opponent).value = 0;
         else if (val === 1) document.getElementById(prefix + 'score' + opponent).value = 1;
         else if (val === 0) document.getElementById(prefix + 'score' + opponent).value = 2;
         
@@ -1198,7 +1277,7 @@ html body .sk-mob-act{display:none}
     function renderHistory(data) {
         const tbody = document.getElementById('historyTableBody');
         tbody.innerHTML = "";
-        const validData = data.filter(row => row[1] && row[1].trim() !== "" && !GUEST_NAMES.includes(row[1].trim()));
+        const validData = data.filter(row => row[1] && row[1].trim() !== "" && !isGuestName(row[1].trim()));
 
         if(validData.length === 0) { 
             tbody.innerHTML = "<tr><td colspan='3' class='text-center py-8 text-neutral-500 italic'>Belum ada pertandingan terverifikasi pada tanggal ini</td></tr>"; 
@@ -1247,8 +1326,9 @@ html body .sk-mob-act{display:none}
             }
         };
 
-        const tamu = [payload.data.tA_p1, payload.data.tA_p2, payload.data.tB_p1, payload.data.tB_p2].filter(n => GUEST_NAMES.includes(n));
-        if (tamu.length) payload.data.tamu = tamu;   // penanda untuk server: pemain ini hanya tamu
+        const tamu = [payload.data.tA_p1, payload.data.tA_p2, payload.data.tB_p1, payload.data.tB_p2].filter(isGuestName);
+        if (tamu.length) payload.data.tamu = tamu;
+        if (singleMode[prefix]) payload.data.satuGame = true;   // 1 game saja: 1 - 0 / 0 - 1 tetap valid   // penanda untuk server: pemain ini hanya tamu
 
         fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify(payload) })
         .then(res => res.json()).then(res => {
@@ -1257,7 +1337,7 @@ html body .sk-mob-act{display:none}
             if(actionType === 'submitPending') fetchHistory(); 
             
             document.getElementById(prefix === 'p_' ? 'playerForm' : 'adminDirectForm').reset();
-            document.getElementById(prefix+'tanggal').value = dateVal; resetScoreButtons(prefix); 
+            document.getElementById(prefix+'tanggal').value = dateVal; resetScoreButtons(prefix); if (singleMode[prefix]) setSingle(prefix, false); 
             
             ['tA_p1', 'tA_p2', 'tB_p1', 'tB_p2'].forEach(id => {
                 document.getElementById(prefix + id).value = "";
@@ -1344,7 +1424,7 @@ html body .sk-mob-act{display:none}
     }
 
     function adminKeluar() {
-        if (!confirm('Keluar dari mode admin di HP ini? Admin dan Sirekap akan terkunci lagi.')) return;
+        if (!confirm('Keluar dari mode admin di HP ini? Admin dan Kok akan terkunci lagi.')) return;
         try { localStorage.removeItem(ADMIN_KEY); } catch (e) {}
         ADMIN_PASS = ''; adminDataLoaded = false;
         terapkanStatusAdmin();
@@ -1467,35 +1547,47 @@ html body .sk-mob-act{display:none}
             return `<p class="font-display uppercase text-[11px] tracking-[0.2em] text-brand-rose pt-3 pb-1 sticky top-0 bg-[#140a0d]/90 backdrop-blur z-10">${esc(lb)} · ${ms.length} match</p>` +
                 ms.map((r, k) => mgRowHTML(r, k + 1)).join('');
         }).join('');
+        refreshMoveButtons();
     }
 
     function mgRowHTML(r, no) {
         const [id, , , , a1, a2, sa, b1, b2, sb] = r, aw = sa > sb, bw = sb > sa;
         const nm = (x, y) => `${esc(x)} &amp; ${esc(y)}`;
+        const mv = 'px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-[10px] leading-none';
         return `<div class="mg-row flex items-center gap-2 py-2 border-b border-white/5 text-sm" data-id="${esc(id)}" data-no="${no}">
             <span class="w-6 flex-none text-center text-[11px] text-neutral-500 font-display">${pad(no)}</span>
             <div class="min-w-0 flex-1">
                 <div class="flex justify-between gap-2"><span class="truncate ${aw ? 'text-emerald-400 font-semibold' : 'text-white'}">${nm(a1, a2)}</span><b class="${aw ? 'text-emerald-400' : 'text-white'}">${sa}</b></div>
                 <div class="flex justify-between gap-2"><span class="truncate ${bw ? 'text-emerald-400 font-semibold' : 'text-white'}">${nm(b1, b2)}</span><b class="${bw ? 'text-emerald-400' : 'text-white'}">${sb}</b></div>
             </div>
+            <div class="flex-none flex flex-col gap-1">
+                <button data-act="up" data-id="${esc(id)}" class="mv-up ${mv}" title="Geser ke atas" aria-label="Geser ke atas">▲</button>
+                <button data-act="down" data-id="${esc(id)}" class="mv-down ${mv}" title="Geser ke bawah" aria-label="Geser ke bawah">▼</button>
+            </div>
             <button data-act="edit" data-id="${esc(id)}" class="flex-none px-2.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs" title="Ubah">✎</button>
             <button data-act="del" data-id="${esc(id)}" class="flex-none px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-brand-rose text-xs" title="Hapus">🗑</button>
         </div>`;
     }
 
+    const SINGLE_ON = 'px-3 py-1.5 rounded-lg bg-brand-rose text-white text-xs font-semibold', SINGLE_OFF = 'px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs';
+
     function mgEditHTML(r, no) {
         const [id, ymd, , , a1, a2, sa, b1, b2, sb] = r;
-        const names = [...new Set([...globalPlayers.map(p => p.name), ...GUEST_NAMES])];
-        const opts = sel => (names.includes(sel) ? names : [...names, sel]).map(n => `<option value="${esc(n)}" ${n === sel ? 'selected' : ''}>${esc(n)}</option>`).join('');
-        const sc = v => [0, 1, 2].map(n => `<option ${n === +v ? 'selected' : ''}>${n}</option>`).join('');
+        const single = (+sa + +sb) === 1;
+        const sc = v => [0, 1, 2].map(n => `<option value="${n}" ${n === +v ? 'selected' : ''} ${single && n === 2 ? 'disabled' : ''}>${n}</option>`).join('');
         const cls = 'w-full min-w-0 rounded-lg px-2 py-1.5 text-white text-sm outline-none';
+        const nin = (f, v) => `<input type="text" list="dlPlayers" data-f="${f}" value="${esc(v)}" maxlength="24" autocomplete="off" placeholder="Nama pemain" class="${cls}">`;
         return `<div class="mg-row py-3 border-b border-white/10 bg-white/5 rounded-xl px-3 my-1" data-id="${esc(id)}" data-no="${no}">
-            <div class="grid grid-cols-[1fr_1fr_3.5rem] gap-2 mb-2">
-                <select class="${cls}" data-f="a1">${opts(a1)}</select><select class="${cls}" data-f="a2">${opts(a2)}</select><select class="${cls} text-center" data-f="sa">${sc(sa)}</select>
-                <select class="${cls}" data-f="b1">${opts(b1)}</select><select class="${cls}" data-f="b2">${opts(b2)}</select><select class="${cls} text-center" data-f="sb">${sc(sb)}</select>
+            <div class="grid grid-cols-[1fr_1fr_3.5rem] gap-2 mb-1">
+                ${nin('a1', a1)}${nin('a2', a2)}<select class="${cls} text-center" data-f="sa">${sc(sa)}</select>
+                ${nin('b1', b1)}${nin('b2', b2)}<select class="${cls} text-center" data-f="sb">${sc(sb)}</select>
             </div>
+            <p class="text-[11px] text-neutral-500 mb-2">Ketik nama bebas. Nama yang tidak ada di daftar pemain disimpan sebagai tamu (tidak masuk leaderboard).</p>
             <div class="flex flex-wrap items-center justify-between gap-2">
-                <input type="date" data-f="tgl" value="${esc(ymd)}" max="${todayYMD}" class="rounded-lg px-2 py-1.5 text-white text-sm outline-none">
+                <div class="flex flex-wrap items-center gap-2">
+                    <input type="date" data-f="tgl" value="${esc(ymd)}" max="${todayYMD}" class="rounded-lg px-2 py-1.5 text-white text-sm outline-none">
+                    <button type="button" data-act="single" data-on="${single ? 1 : 0}" class="${single ? SINGLE_ON : SINGLE_OFF}" title="Kondisi khusus: hanya 1 game, skor 1 - 0 tetap valid">1 game saja</button>
+                </div>
                 <div class="flex gap-2">
                     <button data-act="cancel" data-id="${esc(id)}" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs">Batal</button>
                     <button data-act="save" data-id="${esc(id)}" class="px-4 py-1.5 rounded-lg bg-green-600 hover:bg-green-500 text-white text-xs font-semibold">Simpan</button>
@@ -1503,11 +1595,59 @@ html body .sk-mob-act{display:none}
             </div></div>`;
     }
 
+    // Tombol geser hanya tampil bila ada match tetangga di hari yang sama
+    function refreshMoveButtons() {
+        document.querySelectorAll('#mgList .mg-row').forEach(row => {
+            const up = row.querySelector('.mv-up'), dn = row.querySelector('.mv-down'); if (!up || !dn) return;
+            const pv = row.previousElementSibling, nx = row.nextElementSibling;
+            up.style.visibility = pv && pv.classList.contains('mg-row') ? '' : 'hidden';
+            dn.style.visibility = nx && nx.classList.contains('mg-row') ? '' : 'hidden';
+        });
+    }
+
+    // Menggeser urutan = menukar isi dua baris bersebelahan (memakai aksi updateMatch yang sudah ada)
+    async function moveMatch(row, dir) {
+        const sib = dir < 0 ? row.previousElementSibling : row.nextElementSibling;
+        if (!sib || !sib.classList.contains('mg-row') || sib.querySelector('[data-f]') || row.querySelector('[data-f]')) return;
+        const r1 = mgRows.get(row.dataset.id), r2 = mgRows.get(sib.dataset.id); if (!r1 || !r2) return;
+        const info = r => r.slice(4, 10).filter((_, i) => i !== 2 && i !== 5).map(n => ({ name: n, guest: GUEST_NAMES.includes(n) || (globalPlayers.length > 0 && !isRosterMember(n)), unfamiliar: !GUEST_NAMES.includes(n) && globalPlayers.length > 0 && !isRosterMember(n) && !guestSet.has(norm(n)) }));
+        if (!konfirmasiTamu([...info(r1), ...info(r2)])) return;
+        const data = r => {
+            const [, ymd, , , a1, a2, sa, b1, b2, sb] = r, [y, m] = String(ymd).split('-').map(Number);
+            const tamu = [a1, a2, b1, b2].filter(n => GUEST_NAMES.includes(n) || (globalPlayers.length > 0 && !isRosterMember(n)));
+            return { tanggal: ymd, bulan: BLN[m - 1], tahun: y, tA_p1: a1, tA_p2: a2, scoreA: sa, tB_p1: b1, tB_p2: b2, scoreB: sb, ...(tamu.length ? { tamu } : {}), ...((+sa + +sb) === 1 ? { satuGame: true } : {}) };
+        };
+        showLoading(true);
+        try {
+            await adminCall({ action: 'updateMatch', id: r1[0], data: data(r2) });
+            try { await adminCall({ action: 'updateMatch', id: r2[0], data: data(r1) }); }
+            catch (e2) { try { await adminCall({ action: 'updateMatch', id: r1[0], data: data(r1) }); } catch (_) {} throw e2; }   // gagal di tengah: kembalikan baris pertama
+            afterManageChange();
+        } catch (err) { alert('Gagal menggeser urutan: ' + err.message); showLoading(false); loadManage(lastManageAll); }
+    }
+
+    document.getElementById('mgList').addEventListener('change', e => {
+        const sel = e.target.closest('select[data-f="sa"], select[data-f="sb"]'); if (!sel) return;
+        const row = sel.closest('.mg-row'), tg = row.querySelector('[data-act="single"]'); if (!tg || tg.dataset.on !== '1') return;
+        row.querySelector(sel.dataset.f === 'sa' ? '[data-f="sb"]' : '[data-f="sa"]').value = sel.value === '1' ? '0' : '1';
+    });
+
     document.getElementById('mgList').addEventListener('click', async e => {
         const b = e.target.closest('button[data-act]'); if (!b) return;
-        const id = b.dataset.id, row = b.closest('.mg-row'), r = mgRows.get(id); if (!r) return;
+        const row = b.closest('.mg-row'), id = b.dataset.id || (row && row.dataset.id), r = mgRows.get(id); if (!r) return;
+        if (b.dataset.act === 'up') { moveMatch(row, -1); return; }
+        if (b.dataset.act === 'down') { moveMatch(row, 1); return; }
         if (b.dataset.act === 'edit') { row.outerHTML = mgEditHTML(r, +row.dataset.no); return; }
-        if (b.dataset.act === 'cancel') { row.outerHTML = mgRowHTML(r, +row.dataset.no); return; }
+        if (b.dataset.act === 'cancel') { row.outerHTML = mgRowHTML(r, +row.dataset.no); refreshMoveButtons(); return; }
+        if (b.dataset.act === 'single') {
+            const on = b.dataset.on !== '1'; b.dataset.on = on ? '1' : '0'; b.className = on ? SINGLE_ON : SINGLE_OFF;
+            const sa = row.querySelector('[data-f="sa"]'), sb = row.querySelector('[data-f="sb"]');
+            [sa, sb].forEach(x => { const o = x.querySelector('option[value="2"]'); if (o) o.disabled = on; });
+            const va = +sa.value, vb = +sb.value;
+            if (on) { if (va >= vb) { sa.value = '1'; sb.value = '0'; } else { sa.value = '0'; sb.value = '1'; } }
+            else if (va + vb === 1) { if (va === 1) { sa.value = '2'; sb.value = '0'; } else { sa.value = '0'; sb.value = '2'; } }
+            return;
+        }
         if (b.dataset.act === 'del') {
             if (!confirm(`Hapus match ini?\n${r[4]} & ${r[5]} (${r[6]}) vs ${r[7]} & ${r[8]} (${r[9]})\n\nPoin para pemain akan dikurangi kembali dari klasemen.`)) return;
             showLoading(true);
@@ -1517,14 +1657,19 @@ html body .sk-mob-act{display:none}
         }
         if (b.dataset.act === 'save') {
             const f = k => row.querySelector(`[data-f="${k}"]`).value;
-            const p = [f('a1'), f('a2'), f('b1'), f('b2')];
-            const real = p.filter(n => !GUEST_NAMES.includes(n));
-            if (new Set(real).size !== real.length) { alert('Satu pemain tidak boleh dipilih dua kali dalam satu match.'); return; }
+            const res = ['a1', 'a2', 'b1', 'b2'].map(k => resolveName(f(k)));
+            const bad = res.find(x => x.err); if (bad) { alert(bad.err); return; }
+            const p = res.map(x => x.name);
+            if (new Set(p.map(norm)).size !== 4) { alert('Satu pemain tidak boleh dipilih dua kali dalam satu match.'); return; }
+            const single = row.querySelector('[data-act="single"]').dataset.on === '1';
+            if (single && (+f('sa') + +f('sb')) !== 1) { alert('Mode 1 game: skor harus 1 – 0 atau 0 – 1.'); return; }
             const ymd = f('tgl'); if (!ymd) { alert('Tanggal wajib diisi.'); return; }
+            if (!konfirmasiTamu(res)) return;
+            const tamu = res.filter(x => x.guest).map(x => x.name);
             const [y, m] = ymd.split('-').map(Number);
             showLoading(true);
             try {
-                await adminCall({ action: 'updateMatch', id, data: { tanggal: ymd, bulan: BLN[m - 1], tahun: y, tA_p1: p[0], tA_p2: p[1], scoreA: f('sa'), tB_p1: p[2], tB_p2: p[3], scoreB: f('sb') } });
+                await adminCall({ action: 'updateMatch', id, data: { tanggal: ymd, bulan: BLN[m - 1], tahun: y, tA_p1: p[0], tA_p2: p[1], scoreA: f('sa'), tB_p1: p[2], tB_p2: p[3], scoreB: f('sb'), ...(tamu.length ? { tamu } : {}), ...(single ? { satuGame: true } : {}) } });
                 afterManageChange();
             } catch (err) { alert(err.message); showLoading(false); }
         }
@@ -1536,7 +1681,7 @@ html body .sk-mob-act{display:none}
     }
 
     // =====================================================================
-    // FITUR UNDUH POSTER MATCH RECAP (DARI SPREADSHEET SHEET 6)
+    // FITUR UNDUH POSTER MATCH RECAP
     // =====================================================================
     
     // Fetch CSV helper
@@ -1591,7 +1736,7 @@ html body .sk-mob-act{display:none}
             try { const g = await fetchCSV(`${base}/gviz/tq?tqx=out:csv&${tg}`); if (g.length) return g; } catch(e){}
             try { const g = await jsonpGrid(`${base}/gviz/tq?${tg}`); if (g.length) return g; } catch(e){}
         }
-        throw new Error("Gagal load data Spreadsheet.");
+        throw new Error("Gagal memuat data.");
     }
 
     const HARI = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
@@ -1627,7 +1772,7 @@ html body .sk-mob-act{display:none}
             recapDays = [...days.values()].sort((x, y) => y.date - x.date).map(d => ({ ...d,
                 label: `${HARI[d.date.getDay()]}, ${d.date.getDate()} ${BLN[d.date.getMonth()]} ${d.date.getFullYear()}`,
                 players: new Set(d.matches.flatMap(m => [m.A1, m.A2, m.B1, m.B2]).filter(Boolean)).size }));
-            if (!recapDays.length) { st.textContent = 'Tidak ada pertandingan terbaca. Header sheet: ' + grid[0].join(' | '); return; }
+            if (!recapDays.length) { st.textContent = 'Belum ada pertandingan terbaca.'; return; }
             st.textContent = `${recapDays.length} hari pertandingan ditemukan.`;
             list.innerHTML = recapDays.map((d, i) => `
                 <button type="button" class="date-btn" data-i="${i}" aria-pressed="false" onclick="selectDay(${i}, true)">
@@ -1825,7 +1970,8 @@ function drawSpotlight(ctx, cx, bottomY, spread) {   // cahaya putih-hangat lemb
         const dTxt = day.label.toUpperCase(); ctx.font = `600 28px ${FD}`;
         const cw = spacedW(ctx, dTxt, 5) + 72, cx0 = (W - cw) / 2, cy0 = tb + 28;
         ctx.save(); ctx.shadowColor = 'rgba(228,64,95,.38)'; ctx.shadowBlur = 24 * SC; ctx.shadowOffsetY = 8 * SC; rr(ctx, cx0, cy0, cw, 56, 28); { const pg = ctx.createLinearGradient(cx0, cy0, cx0 + cw, cy0 + 56); pg.addColorStop(0, '#E4405F'); pg.addColorStop(1, '#FF7A59'); ctx.fillStyle = pg; } ctx.fill(); ctx.restore(); ctx.fillStyle = '#fff'; ctx.textAlign = 'left'; spaced(ctx, dTxt, cx0 + 36, cy0 + 38, 5);
-        const sum = `${day.matches.length} PERTANDINGAN  ·  ${day.players} PEMAIN` + (parts > 1 ? `  ·  PART ${part}/${parts}` : '');
+        const pagePlayers = new Set(list.flatMap(m => [m.A1, m.A2, m.B1, m.B2]).filter(Boolean)).size;   // hitung per halaman; nomor match juga mulai dari 01 di tiap halaman
+        const sum = `${list.length} PERTANDINGAN  ·  ${pagePlayers} PEMAIN` + (parts > 1 ? `  ·  PART ${part}/${parts}` : '');
         ctx.font = `500 24px ${FB}`; ctx.fillStyle = '#85727B'; spaced(ctx, sum, (W - spacedW(ctx, sum, 3)) / 2, cy0 + 56 + 44, 3);
 
         // Kartu pertandingan
@@ -2045,7 +2191,7 @@ async function fetchGrid(cfg) {
         try { const g = await fetchCSV(`${base}/gviz/tq?tqx=out:csv&${tg}`); if (g.length) return g; } catch (e) {}
         try { const g = await jsonpGrid(`${base}/gviz/tq?${tg}`); if (g.length) return g; } catch (e) {}
     }
-    throw new Error('Gagal load data Spreadsheet.');
+    throw new Error('Gagal memuat data.');
 }
 function parseTgl(v) {
     // Sheet kadang menyimpan tanggal sebagai teks berawalan kutip, mis. '2026-11-14
@@ -2168,7 +2314,7 @@ function ubahTanggal() {
     }
     const jalankan = () => { terapkanOtomatis(ymd, 'ganti'); setKasAwalOtomatis(); renderAll(); simpanDataKeStorage(); simpanKokKeStorage(); };
     if (pristine()) { jalankan(); return; }
-    showConfirm('Ganti Tanggal', 'Kehadiran dan kok yang sudah Anda ubah akan diganti dengan data pertandingan tanggal ini dari Sheet 6. Lanjutkan?', jalankan, () => { inputTanggalSesi.value = tanggalAktif; });
+    showConfirm('Ganti Tanggal', 'Kehadiran dan kok yang sudah Anda ubah akan diganti dengan data pertandingan tanggal ini. Lanjutkan?', jalankan, () => { inputTanggalSesi.value = tanggalAktif; });
 }
 
 async function muatUlangDariSheet() {
@@ -2177,7 +2323,7 @@ async function muatUlangDariSheet() {
     if (sheetState !== 'ok') { renderAll(); return; }
     const jalankan = () => { terapkanOtomatis(ymd, 'gabung'); renderAll(); simpanDataKeStorage(); simpanKokKeStorage(); };
     if (pristine()) { jalankan(); return; }
-    showConfirm('Muat dari Sheet 6', 'Jumlah kok pemain yang ada di Sheet 6 akan ditimpa sesuai data terbaru. Pemain yang Anda tambah manual tetap dipertahankan.', jalankan);
+    showConfirm('Muat Ulang Data', 'Jumlah kok pemain akan ditimpa sesuai data pertandingan terbaru. Pemain yang Anda tambah manual tetap dipertahankan.', jalankan);
 }
 
 // =====================================================================
@@ -2187,18 +2333,18 @@ function updateSheetStatus() {
     const el = document.getElementById('sheet-status'); if (!el) return;
     const ymd = inputTanggalSesi.value;
     let t = '';
-    if (sheetState === 'loading') t = 'Memuat data Sheet 6...';
-    else if (sheetState === 'error') t = '<span class="text-rose-400">Sheet 6 gagal dimuat.</span> Pilih pemain secara manual atau tekan Muat dari Sheet 6.';
+    if (sheetState === 'loading') t = 'Memuat data pertandingan...';
+    else if (sheetState === 'error') t = '<span class="text-rose-400">Data pertandingan gagal dimuat.</span> Pilih pemain secara manual atau tekan Muat ulang data.';
     else {
         const day = sheetDays.get(ymd);
-        if (!day) t = 'Belum ada pertandingan pada tanggal ini di Sheet 6. Pilih pemain dan isi kok secara manual.';
+        if (!day) t = 'Belum ada pertandingan pada tanggal ini. Pilih pemain dan isi kok secara manual.';
         else {
             const a = Object.keys(kokAuto);
             const tamu = a.filter(n => !canon(n));
-            t = `<span class="text-brand-rose font-semibold">${day.matches.length}</span> pertandingan di Sheet 6, ${a.length} pemain terbaca.` + (tamu.length ? ` Guest: ${esc(tamu.join(', '))}.` : '');
+            t = `<span class="text-brand-rose font-semibold">${day.matches.length}</span> pertandingan, ${a.length} pemain terbaca.` + (tamu.length ? ` Guest: ${esc(tamu.join(', '))}.` : '');
         }
     }
-    if (rosterSource === 'fallback') t += ' <span class="text-amber-300">Roster Sheet1 gagal dimuat, memakai daftar cadangan tanpa foto.</span>';
+    if (rosterSource === 'fallback') t += ' <span class="text-amber-300">Daftar pemain gagal dimuat, memakai daftar cadangan tanpa foto.</span>';
     el.innerHTML = t;
 }
 
@@ -2231,9 +2377,9 @@ function renderHadir() {
 
 function metaKok(n) {
     const a = kokAuto[n], v = kokVal[n] || 0;
-    if (a === undefined) return 'Tidak ada di Sheet 6, diisi manual';
-    if (v === a) return `Sheet 6: ${a} match`;
-    return `Sheet 6: ${a} match <span class="text-amber-300 font-semibold">diubah</span> <button type="button" data-act="reset" data-n="${esc(n)}" class="underline text-neutral-300 hover:text-white">kembalikan</button>`;
+    if (a === undefined) return 'Diisi manual';
+    if (v === a) return `${a} match`;
+    return `${a} match <span class="text-amber-300 font-semibold">diubah</span> <button type="button" data-act="reset" data-n="${esc(n)}" class="underline text-neutral-300 hover:text-white">kembalikan</button>`;
 }
 function rowKokHTML(h) {
     const n = h.nama, v = kokVal[n] || 0;
@@ -2648,7 +2794,7 @@ function muatDataTersimpan() {
 // RESET, KONFIRMASI, SALIN WA
 // =====================================================================
 function mintaResetHariIni() {
-    showConfirm("Reset Hari Ini", "Kosongkan kehadiran, guest, dan kok, lalu muat ulang otomatis dari Sheet 6 untuk hari ini?", () => {
+    showConfirm("Reset Hari Ini", "Kosongkan kehadiran, guest, dan kok, lalu muat ulang otomatis untuk hari ini?", () => {
         if (idSesiEditing) { idSesiEditing = null; document.getElementById('banner-mode-edit').classList.add('hidden'); document.getElementById('text-btn-simpan').innerText = "Simpan transaksi ke riwayat"; }
         localStorage.removeItem(STORAGE_KEY + "_kok");
         hadir = []; kokVal = {}; kokAuto = {};

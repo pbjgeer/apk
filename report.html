@@ -1970,8 +1970,8 @@ function drawSpotlight(ctx, cx, bottomY, spread) {   // cahaya putih-hangat lemb
         const dTxt = day.label.toUpperCase(); ctx.font = `600 28px ${FD}`;
         const cw = spacedW(ctx, dTxt, 5) + 72, cx0 = (W - cw) / 2, cy0 = tb + 28;
         ctx.save(); ctx.shadowColor = 'rgba(228,64,95,.38)'; ctx.shadowBlur = 24 * SC; ctx.shadowOffsetY = 8 * SC; rr(ctx, cx0, cy0, cw, 56, 28); { const pg = ctx.createLinearGradient(cx0, cy0, cx0 + cw, cy0 + 56); pg.addColorStop(0, '#E4405F'); pg.addColorStop(1, '#FF7A59'); ctx.fillStyle = pg; } ctx.fill(); ctx.restore(); ctx.fillStyle = '#fff'; ctx.textAlign = 'left'; spaced(ctx, dTxt, cx0 + 36, cy0 + 38, 5);
-        const pagePlayers = new Set(list.flatMap(m => [m.A1, m.A2, m.B1, m.B2]).filter(Boolean)).size;   // hitung per halaman; nomor match juga mulai dari 01 di tiap halaman
-        const sum = `${list.length} PERTANDINGAN  ·  ${pagePlayers} PEMAIN` + (parts > 1 ? `  ·  PART ${part}/${parts}` : '');
+        const startNo = Math.max(0, day.matches.indexOf(list[0]));   // nomor match lanjut dari halaman sebelumnya
+        const sum = `${day.matches.length} PERTANDINGAN  ·  ${day.players} PEMAIN` + (parts > 1 ? `  ·  PART ${part}/${parts}` : '');
         ctx.font = `500 24px ${FB}`; ctx.fillStyle = '#85727B'; spaced(ctx, sum, (W - spacedW(ctx, sum, 3)) / 2, cy0 + 56 + 44, 3);
 
         // Kartu pertandingan
@@ -1996,7 +1996,7 @@ function drawSpotlight(ctx, cx, bottomY, spread) {   // cahaya putih-hangat lemb
             [[m.A1, 'left', x + nx, cA, aw], [m.A2, 'left', x + nx, cA, aw], [m.B1, 'right', x + CW - nx, cB, bw], [m.B2, 'right', x + CW - nx, cB, bw]].forEach(([n, al, nx, col, won], k) => {
                 const t = String(n).toUpperCase(); fitFont(ctx, t, nameMax, 28 * kf, 600); ctx.textAlign = al; ctx.fillStyle = won ? col : INK; ctx.fillText(t, nx, mid + (k % 2 ? 34 * kf : -6 * kf));
             });
-            ctx.textAlign = 'center'; ctx.font = `600 15px ${FB}`; ctx.fillStyle = '#9C8A92'; const lb = `MATCH ${pad(i + 1)}`; spaced(ctx, lb, x + CW / 2 - spacedW(ctx, lb, 3) / 2, y + 38 * kf, 3);
+            ctx.textAlign = 'center'; ctx.font = `600 15px ${FB}`; ctx.fillStyle = '#9C8A92'; const lb = `MATCH ${pad(startNo + i + 1)}`; spaced(ctx, lb, x + CW / 2 - spacedW(ctx, lb, 3) / 2, y + 38 * kf, 3);
             ctx.textAlign = 'left'; ctx.font = `700 ${Math.round(66 * kf)}px ${FD}`; const segs = [[String(a), aw ? WIN : dr ? DRAW : INK], [' – ', '#E4405F'], [String(b), bw ? WIN : dr ? DRAW : INK]], tw = segs.reduce((s, [t]) => s + ctx.measureText(t).width, 0);
             let sx = x + CW / 2 - tw / 2; ctx.save(); ctx.shadowColor = 'rgba(43,27,34,.14)'; ctx.shadowBlur = 8 * SC; segs.forEach(([t, c]) => { ctx.fillStyle = c; ctx.fillText(t, sx, y + 108 * kf); sx += ctx.measureText(t).width; }); ctx.restore();
         });
